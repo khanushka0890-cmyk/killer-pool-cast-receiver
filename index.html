@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Killer Pool — Cast Receiver</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700;900&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 100%; height: 100%;
+    background: #0c1117;
+    color: #e8edf2;
+    font-family: 'Barlow', sans-serif;
+    overflow: hidden;
+  }
+  .stage {
+    width: 100vw; height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 4vh 6vw;
+  }
+  .idle .stage { gap: 24px; }
+  .round-badge {
+    font-size: 2.2vw;
+    letter-spacing: 0.4vw;
+    color: #7a6010;
+    font-weight: 700;
+    background: #1a1508;
+    border: 1px solid #3a2e0f;
+    border-radius: 100px;
+    padding: 0.8vh 2vw;
+    margin-bottom: 3vh;
+  }
+  .up-now-label {
+    font-size: 1.8vw;
+    letter-spacing: 0.5vw;
+    color: #7a6010;
+    font-weight: 700;
+    margin-bottom: 1vh;
+  }
+  .player-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 12vw;
+    letter-spacing: 0.4vw;
+    line-height: 1;
+    color: #FFD700;
+    text-shadow: 0 0 60px rgba(255,215,0,0.25);
+    margin-bottom: 3vh;
+    word-break: break-word;
+  }
+  .pips { display: flex; gap: 1.2vw; justify-content: center; margin-bottom: 2vh; }
+  .pip {
+    width: 3vw; height: 3vw; border-radius: 50%;
+    background: #1e2530; border: 3px solid #3a4250;
+  }
+  .pip.on { background: #FFD700; border-color: #b8942a; }
+  .status-line {
+    font-size: 1.6vw;
+    color: #78909c;
+    margin-top: 2vh;
+  }
+  .status-line b { color: #e8edf2; }
+  .idle-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 8vw;
+    letter-spacing: 0.5vw;
+    color: #FFD700;
+  }
+  .idle-sub {
+    font-size: 1.6vw;
+    letter-spacing: 0.3vw;
+    color: #4a5568;
+    margin-top: 2vh;
+  }
+  .pool-ball {
+    width: 8vw; height: 8vw;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #3a3a3a, #0a0a0a 70%);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3vw;
+    color: #fff;
+    margin-bottom: 3vh;
+  }
+</style>
+</head>
+<body>
+  <div class="stage" id="stage">
+    <div class="pool-ball">8</div>
+    <div class="idle-title">KILLER POOL</div>
+    <div class="idle-sub">WAITING FOR ORGANISER TO START A GAME…</div>
+  </div>
+
+<script src="//www.gstatic.com/cast/sdk/libs/caf_receiver/v3/cast_receiver_framework.js"></script>
+<script>
+  // Custom message namespace the phone app (sender) publishes state on.
+  // Must match CAST_NAMESPACE in the app's Chromecast integration.
+  const NAMESPACE = 'urn:x-cast:com.killerpool.state';
+  const stage = document.getElementById('stage');
+
+  function renderIdle() {
+    stage.className = 'stage idle';
+    stage.innerHTML = `
+      <div class="pool-ball">8</div>
+      <div class="idle-title">KILLER POOL</div>
+      <div class="idle-sub">WAITING FOR ORGANISER TO START A GAME…</div>
+    `;
+  }
+
+  function renderGame(state) {
+    // Expected shape (kept intentionally small — see capacitorSetup.js):
+    // { round, currentPlayerName, lives, defaultLives, aliveCount, totalPlayers }
+    stage.className = 'stage game';
+    const total = Math.max(state.defaultLives || 3, state.lives || 0);
+    const pips = Array.from({ length: total }, (_, i) =>
+      `<div class="pip ${i < state.lives ? 'on' : ''}"></div>`
+    ).join('');
+    stage.innerHTML = `
+      <div class="round-badge">ROUND ${state.round ?? 1}</div>
+      <div class="up-now-label">UP NOW</div>
+      <div class="player-name">${escapeHtml(state.currentPlayerName ?? '')}</div>
+      <div class="pips">${pips}</div>
+      <div class="status-line"><b>${state.aliveCount ?? '–'}</b> of <b>${state.totalPlayers ?? '–'}</b> players remaining</div>
+    `;
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+  }
+
+  // Guarded: this file is previewed in a plain browser during development
+  // (no `cast` global there), and only actually runs inside the Cast SDK
+  // runtime when loaded on a real Chromecast device.
+  if (typeof cast !== 'undefined' && cast.framework) {
+    const context = cast.framework.CastReceiverContext.getInstance();
+
+    context.addCustomMessageListener(NAMESPACE, (event) => {
+      const data = event.data;
+      if (!data || data.type === 'idle') { renderIdle(); return; }
+      if (data.type === 'game') { renderGame(data); return; }
+    });
+
+    const options = new cast.framework.CastReceiverOptions();
+    options.disableIdleTimeout = true; // keep the receiver alive between rounds
+    context.start(options);
+  } else {
+    console.warn('Cast SDK not available — showing idle state (expected in a plain browser preview).');
+  }
+</script>
+</body>
+</html>
