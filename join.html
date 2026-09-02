@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Killer Pool — Follow Along</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700;900&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 100%; min-height: 100%;
+    background: #0c1117;
+    color: #e8edf2;
+    font-family: 'Barlow', sans-serif;
+  }
+  .stage {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 8vh 8vw;
+  }
+  .round-badge {
+    font-size: 14px;
+    letter-spacing: 3px;
+    color: #677515;
+    font-weight: 700;
+    background: #161d0e;
+    border: 1px solid #3e470b;
+    border-radius: 100px;
+    padding: 6px 16px;
+    margin-bottom: 24px;
+  }
+  .up-now-label {
+    font-size: 13px;
+    letter-spacing: 3px;
+    color: #677515;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .player-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(48px, 16vw, 96px);
+    letter-spacing: 3px;
+    line-height: 1;
+    color: #D0F30D;
+    text-shadow: 0 0 60px rgba(208,243,13,0.25);
+    margin-bottom: 20px;
+    word-break: break-word;
+  }
+  .pips { display: flex; gap: 10px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap; }
+  .pip {
+    width: 20px; height: 20px; border-radius: 50%;
+    background: #1e2530; border: 2px solid #3a4250;
+  }
+  .pip.on { background: #D0F30D; border-color: #9EB231; }
+  .status-line {
+    font-size: 15px;
+    color: #78909c;
+    margin-top: 12px;
+  }
+  .status-line b { color: #e8edf2; }
+  .idle-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(36px, 10vw, 56px);
+    letter-spacing: 4px;
+    color: #D0F30D;
+  }
+  .idle-sub {
+    font-size: 14px;
+    letter-spacing: 2px;
+    color: #4a5568;
+    margin-top: 16px;
+    max-width: 320px;
+  }
+  .pool-ball {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #3a3a3a, #0a0a0a 70%);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: #fff;
+    margin-bottom: 20px;
+  }
+  .footer-note {
+    position: fixed; bottom: 16px; left: 0; right: 0;
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: #2a3545;
+  }
+</style>
+</head>
+<body>
+  <div class="stage" id="stage">
+    <div class="pool-ball">8</div>
+    <div class="idle-title">CONNECTING…</div>
+  </div>
+  <div class="footer-note">KILLER POOL — LIVE SPECTATOR VIEW</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+  import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+
+  // Same public config as the app itself (src/firebase.js) - safe to
+  // ship here for the same reason it's safe in the app bundle: access is
+  // restricted by Firestore security rules, not by keeping this object
+  // secret. This page only ever reads (games/{gameId} is open-read for
+  // anyone who knows the id - see firestore.rules) - never writes.
+  const firebaseConfig = {
+    apiKey: "AIzaSyCIJ452REbkJht4QlJwuP3kt8zS6OqdAPs",
+    authDomain: "killer-pool-app.firebaseapp.com",
+    projectId: "killer-pool-app",
+    storageBucket: "killer-pool-app.firebasestorage.app",
+    messagingSenderId: "149372024371",
+    appId: "1:149372024371:web:cdab410678e1f4c6845546",
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const stage = document.getElementById('stage');
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+  }
+
+  function renderMessage(title, sub) {
+    stage.innerHTML = `
+      <div class="pool-ball">8</div>
+      <div class="idle-title">${escapeHtml(title)}</div>
+      <div class="idle-sub">${escapeHtml(sub || '')}</div>
+    `;
+  }
+
+  function renderGame(state) {
+    // Same shape the app sends to the Chromecast receiver (see
+    // Cast.sendGame in KillerPool.jsx / updateGameLiveState in
+    // src/firebase.js): { round, currentPlayerName, lives, defaultLives,
+    // aliveCount, totalPlayers }
+    const total = Math.max(state.defaultLives || 3, state.lives || 0);
+    const pips = Array.from({ length: total }, (_, i) =>
+      `<div class="pip ${i < state.lives ? 'on' : ''}"></div>`
+    ).join('');
+    stage.innerHTML = `
+      <div class="round-badge">ROUND ${state.round ?? 1}</div>
+      <div class="up-now-label">UP NOW</div>
+      <div class="player-name">${escapeHtml(state.currentPlayerName || '')}</div>
+      <div class="pips">${pips}</div>
+      <div class="status-line"><b>${state.aliveCount ?? '–'}</b> of <b>${state.totalPlayers ?? '–'}</b> players remaining</div>
+    `;
+  }
+
+  const params = new URLSearchParams(location.search);
+  const gameId = params.get('game');
+
+  if (!gameId) {
+    renderMessage('NO GAME LINKED', 'This link is missing a game id — ask the organiser to re-share it.');
+  } else {
+    onSnapshot(
+      doc(db, 'games', gameId),
+      (snap) => {
+        if (!snap.exists()) {
+          renderMessage('GAME NOT FOUND', "This game doesn't exist or has ended.");
+          return;
+        }
+        const state = snap.data();
+        if (!state.currentPlayerName) {
+          renderMessage('WAITING FOR THE FIRST SHOT…', '');
+          return;
+        }
+        renderGame(state);
+      },
+      (err) => {
+        console.error('Live game listener failed', err);
+        renderMessage('CONNECTION LOST', "Couldn't reach the game — check your connection and reopen this link.");
+      }
+    );
+  }
+</script>
+</body>
+</html>
