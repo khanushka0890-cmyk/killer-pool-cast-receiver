@@ -20,7 +20,7 @@
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
     text-align: center;
-    padding: 8vh 8vw;
+    padding: 8vh 8vw 130px;
   }
   /* Purple/gold rebrand (was the neon-lime #D0F30D family) - colors
      matched to the app's actual current CSS, not just a hex swap: the
@@ -93,21 +93,69 @@
     color: #fff;
     margin-bottom: 20px;
   }
+  .footer {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+    padding: 16px 8vw calc(16px + env(safe-area-inset-bottom));
+    background: linear-gradient(0deg, #0c1117 40%, transparent);
+  }
   .footer-note {
-    position: fixed; bottom: 16px; left: 0; right: 0;
     text-align: center;
     font-size: 11px;
     letter-spacing: 1px;
     color: #2a3545;
   }
+  /* Live-status row: this page updates itself automatically (a Firestore
+     realtime listener, not polling) - but mobile browsers commonly
+     suspend a backgrounded/locked-screen tab's network activity, and
+     the listener can take a moment to reconnect once it's foregrounded
+     again. Rather than leave that invisible (a viewer just sees a frozen
+     screen with no way to tell "is this stuck or just quiet"), show when
+     the last update landed, plus a manual refresh as a safety net. */
+  .live-status {
+    position: fixed; top: 14px; left: 0; right: 0;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    font-size: 12px; color: #546e7a; letter-spacing: 0.5px;
+  }
+  .live-dot { width: 7px; height: 7px; border-radius: 50%; background: #43a047; flex-shrink: 0; }
+  .live-dot.stale { background: #909AAC; }
+  .refresh-btn {
+    background: transparent; border: 1px solid #253040; color: #909AAC;
+    border-radius: 100px; padding: 3px 10px; font-size: 12px;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    cursor: pointer;
+  }
+  .app-store-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-top: 28px;
+    color: #D99E38; text-decoration: none;
+    font-size: 14px; font-weight: 700; letter-spacing: 0.5px;
+    border: 1px solid #7C5718; border-radius: 100px;
+    padding: 8px 18px;
+  }
 </style>
 </head>
 <body>
+  <div class="live-status" id="liveStatus" hidden>
+    <span class="live-dot" id="liveDot"></span>
+    <span id="liveText">updated just now</span>
+    <button class="refresh-btn" id="refreshBtn" onclick="location.reload()">↻ Refresh</button>
+  </div>
   <div class="stage" id="stage">
     <div class="pool-ball">8</div>
     <div class="idle-title">CONNECTING…</div>
   </div>
-  <div class="footer-note">KILLER POOL — LIVE SPECTATOR VIEW</div>
+  <div class="footer">
+    <!-- Standard App Store URL format (id-only, no name slug needed) -
+         App Apple ID confirmed via App Store Connect (6802345932). A
+         spectator following a game with no app installed is exactly the
+         audience most worth putting this in front of. -->
+    <a class="app-store-link" href="https://apps.apple.com/app/id6802345932" target="_blank" rel="noopener">
+      <svg width="16" height="16" viewBox="0 0 384 512" fill="currentColor"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg>
+      Get Killer Pool on the App Store
+    </a>
+    <div class="footer-note">KILLER POOL — LIVE SPECTATOR VIEW</div>
+  </div>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
@@ -161,6 +209,38 @@
     `;
   }
 
+  // Live-status indicator: this page updates itself via a Firestore
+  // realtime listener, no manual refresh needed in normal use - but
+  // mobile browsers commonly suspend a backgrounded/locked-screen tab's
+  // network activity, and the listener can take a moment to reconnect
+  // once it's foregrounded again. Rather than leave a viewer guessing
+  // "is this frozen or just quiet," track when the last update actually
+  // landed and show it - plus a manual refresh (a full page reload,
+  // guaranteed to force a fresh connection) as a safety net.
+  const liveStatus = document.getElementById('liveStatus');
+  const liveDot = document.getElementById('liveDot');
+  const liveText = document.getElementById('liveText');
+  let lastUpdate = null;
+  function markUpdated() {
+    lastUpdate = Date.now();
+    liveStatus.hidden = false;
+  }
+  function tickLiveStatus() {
+    if (!lastUpdate) return;
+    const secs = Math.round((Date.now() - lastUpdate) / 1000);
+    const stale = secs > 25;
+    liveDot.classList.toggle('stale', stale);
+    if (secs < 5) liveText.textContent = 'updated just now';
+    else if (secs < 60) liveText.textContent = `updated ${secs}s ago`;
+    else liveText.textContent = `updated ${Math.round(secs / 60)}m ago${stale ? ' — try refresh' : ''}`;
+  }
+  setInterval(tickLiveStatus, 1000);
+  // Re-check promptly when the tab comes back to the foreground, rather
+  // than waiting up to a full second for the next tick to reveal a stale
+  // connection - this is the exact moment a suspended listener would
+  // need noticing.
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) tickLiveStatus(); });
+
   const params = new URLSearchParams(location.search);
   const gameId = params.get('game');
 
@@ -170,6 +250,7 @@
     onSnapshot(
       doc(db, 'games', gameId),
       (snap) => {
+        markUpdated();
         if (!snap.exists()) {
           renderMessage('GAME NOT FOUND', "This game doesn't exist or has ended.");
           return;
