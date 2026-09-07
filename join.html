@@ -69,6 +69,35 @@
     margin-top: 12px;
   }
   .status-line b { color: #e8edf2; }
+  /* Full roster, not just whose turn it is - a real report: "eliminated,
+     winner, big updates about the player list should appear there." Was
+     entirely missing from the schema (games/{gameId} only ever tracked
+     the current turn) - see updateGameLiveState()'s new `players` field. */
+  .roster {
+    width: 100%; max-width: 320px;
+    margin-top: 24px;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .roster-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 14px;
+    background: #131c27; border: 1px solid #1e2d40; border-radius: 10px;
+    font-size: 15px;
+  }
+  .roster-row.eliminated { opacity: 0.45; }
+  .roster-row.current { border-color: #D99E38; background: #271B07; }
+  .roster-name { display: flex; align-items: center; gap: 8px; }
+  .roster-name .tag { font-size: 11px; letter-spacing: 1px; color: #D99E38; font-weight: 700; }
+  .roster-lives { display: flex; gap: 4px; }
+  .roster-lives .pip { width: 10px; height: 10px; }
+  .winner-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(40px, 12vw, 72px);
+    letter-spacing: 3px;
+    color: #D99E38;
+    margin-bottom: 6px;
+  }
+  .winner-sub { font-size: 15px; color: #78909c; margin-bottom: 8px; }
   .idle-title {
     font-family: 'Bebas Neue', sans-serif;
     font-size: clamp(36px, 10vw, 56px);
@@ -191,11 +220,37 @@
     `;
   }
 
+  // Shared by the live-turn view and the winner view - a full roster,
+  // not just whose turn it currently is. `current` marks the player
+  // whose turn it is right now (irrelevant once the game's over, so
+  // renderWinner doesn't pass a currentName).
+  function renderRoster(players, currentName) {
+    if (!Array.isArray(players) || players.length === 0) return '';
+    const rows = players.map(p => {
+      const isCurrent = p.name === currentName;
+      const maxLives = Math.max(p.lives || 0, 1);
+      const pips = Array.from({ length: maxLives }, (_, i) =>
+        `<div class="pip ${i < p.lives ? 'on' : ''}"></div>`
+      ).join('');
+      return `
+        <div class="roster-row ${p.eliminated ? 'eliminated' : ''} ${isCurrent ? 'current' : ''}">
+          <div class="roster-name">
+            ${escapeHtml(p.name)}
+            ${isCurrent ? '<span class="tag">UP NOW</span>' : ''}
+            ${p.eliminated ? '<span class="tag" style="color:#ef5350">OUT</span>' : ''}
+          </div>
+          <div class="roster-lives">${pips}</div>
+        </div>
+      `;
+    }).join('');
+    return `<div class="roster">${rows}</div>`;
+  }
+
   function renderGame(state) {
     // Same shape the app sends to the Chromecast receiver (see
     // Cast.sendGame in KillerPool.jsx / updateGameLiveState in
     // src/firebase.js): { round, currentPlayerName, lives, defaultLives,
-    // aliveCount, totalPlayers }
+    // aliveCount, totalPlayers, players }
     const total = Math.max(state.defaultLives || 3, state.lives || 0);
     const pips = Array.from({ length: total }, (_, i) =>
       `<div class="pip ${i < state.lives ? 'on' : ''}"></div>`
@@ -206,6 +261,16 @@
       <div class="player-name">${escapeHtml(state.currentPlayerName || '')}</div>
       <div class="pips">${pips}</div>
       <div class="status-line"><b>${state.aliveCount ?? '–'}</b> of <b>${state.totalPlayers ?? '–'}</b> players remaining</div>
+      ${renderRoster(state.players, state.currentPlayerName)}
+    `;
+  }
+
+  function renderWinner(state) {
+    stage.innerHTML = `
+      <div class="pool-ball">8</div>
+      <div class="winner-title">${escapeHtml(state.winnerName || 'SOMEONE')} WINS</div>
+      <div class="winner-sub">Game over — round ${state.round ?? 1}</div>
+      ${renderRoster(state.players, null)}
     `;
   }
 
@@ -256,6 +321,10 @@
           return;
         }
         const state = snap.data();
+        if (state.gameOver) {
+          renderWinner(state);
+          return;
+        }
         if (!state.currentPlayerName) {
           renderMessage('WAITING FOR THE FIRST SHOT…', '');
           return;
