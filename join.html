@@ -5,13 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Killer Pool — Follow Along</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700;900&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body {
     width: 100%; min-height: 100%;
     background: #0c1117;
     color: #e8edf2;
-    font-family: 'Barlow', sans-serif;
+    /* Matches the app's own switch away from Barlow - Helvetica Neue is a
+       system font on iOS/macOS (no download), standard fallback elsewhere. */
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   }
   .stage {
     min-height: 100vh;
@@ -20,21 +22,28 @@
     text-align: center;
     padding: 8vh 8vw;
   }
+  /* Purple/gold rebrand (was the neon-lime #D0F30D family) - colors
+     matched to the app's actual current CSS, not just a hex swap: the
+     round-badge pill is the app's real neutral navy pill (round-badge
+     class in KillerPool.jsx), "UP NOW"/idle-title use the gold hand-fixed
+     for the hero card specifically (not the generic darker gold-shade
+     used elsewhere), and .pip.on mirrors LifePips' non-dark fill/border. */
   .round-badge {
     font-size: 14px;
     letter-spacing: 3px;
-    color: #677515;
+    color: #546e7a;
     font-weight: 700;
-    background: #161d0e;
-    border: 1px solid #3e470b;
+    background: #1a2535;
+    border: 1px solid #1e2d40;
     border-radius: 100px;
     padding: 6px 16px;
     margin-bottom: 24px;
   }
+  .round-badge b { color: #D99E38; }
   .up-now-label {
     font-size: 13px;
     letter-spacing: 3px;
-    color: #677515;
+    color: #D99E38;
     font-weight: 700;
     margin-bottom: 8px;
   }
@@ -43,8 +52,8 @@
     font-size: clamp(48px, 16vw, 96px);
     letter-spacing: 3px;
     line-height: 1;
-    color: #D0F30D;
-    text-shadow: 0 0 60px rgba(208,243,13,0.25);
+    color: #fff;
+    text-shadow: 0 0 60px rgba(217,158,56,0.25);
     margin-bottom: 20px;
     word-break: break-word;
   }
@@ -53,7 +62,7 @@
     width: 20px; height: 20px; border-radius: 50%;
     background: #1e2530; border: 2px solid #3a4250;
   }
-  .pip.on { background: #D0F30D; border-color: #9EB231; }
+  .pip.on { background: #D99E38; border-color: #CB8F27; }
   .status-line {
     font-size: 15px;
     color: #78909c;
@@ -64,12 +73,12 @@
     font-family: 'Bebas Neue', sans-serif;
     font-size: clamp(36px, 10vw, 56px);
     letter-spacing: 4px;
-    color: #D0F30D;
+    color: #D99E38;
   }
   .idle-sub {
     font-size: 14px;
     letter-spacing: 2px;
-    color: #4a5568;
+    color: #909AAC;
     margin-top: 16px;
     max-width: 320px;
   }
@@ -77,6 +86,7 @@
     width: 56px; height: 56px;
     border-radius: 50%;
     background: radial-gradient(circle at 35% 30%, #3a3a3a, #0a0a0a 70%);
+    border: 1.5px solid #D99E38;
     display: flex; align-items: center; justify-content: center;
     font-family: 'Bebas Neue', sans-serif;
     font-size: 22px;
@@ -143,7 +153,7 @@
       `<div class="pip ${i < state.lives ? 'on' : ''}"></div>`
     ).join('');
     stage.innerHTML = `
-      <div class="round-badge">ROUND ${state.round ?? 1}</div>
+      <div class="round-badge">ROUND <b>${state.round ?? 1}</b></div>
       <div class="up-now-label">UP NOW</div>
       <div class="player-name">${escapeHtml(state.currentPlayerName || '')}</div>
       <div class="pips">${pips}</div>
