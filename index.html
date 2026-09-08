@@ -39,31 +39,67 @@
     align-items: center; justify-content: center;
     text-align: center;
   }
-  /* Grid instead of flex+justify-content:center for the game state -
-     flex-grow ratios on left-aligned content left a large, unpredictable
-     dead gap between the two columns (justify-content centers the ROW as
-     a unit rather than reliably stretching each item to fill its share).
-     Grid's fr columns are a hard, deterministic split of the actual
-     available width, so both columns start exactly where intended. */
+  /* v2: the grid-of-text alone (previous fix) technically spanned the
+     width correctly, but read as a handful of small labels floating in a
+     huge dark void - no persistent identity once a game starts (only the
+     idle screen had the "KILLER POOL" wordmark), and capping the grid's
+     width to avoid a dead gap between columns just moved that same dead
+     space to the screen's edges instead. Framing everything inside one
+     large bordered card - the same gold-rimmed treatment the app's own
+     hero card uses - fixes both at once: the CARD is sized to be a real
+     presence on the screen (not just its text), and a permanent brand
+     row up top means the screen never looks unbranded once play starts. */
   .stage.game {
-    display: grid;
-    grid-template-columns: 1.4fr 1fr;
-    column-gap: 4vw;
+    display: flex;
     align-items: center;
+    justify-content: center;
     height: 100%;
-    /* Both columns' actual content (a name, a row of pips) is much
-       narrower than an even split of a 1920px+ screen, so stretching the
-       grid full-bleed just moved the old dead gap from "between" the
-       columns to "inside" them - capped and centered instead, like a
-       poster laid out on the felt rather than smeared edge to edge. */
-    max-width: 1160px;
-    margin: 0 auto;
+  }
+  .game-card {
+    width: min(1500px, 90vw);
+    background: linear-gradient(160deg, #171f2c 0%, #0d1219 100%);
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    border-radius: 28px;
+    box-shadow:
+      0 0 0 1px rgba(255, 215, 0, 0.07) inset,
+      0 40px 100px rgba(0, 0, 0, 0.55);
+    padding: 5vh 5vw;
+  }
+  .brand-row {
+    display: flex;
+    align-items: center;
+    gap: 1vw;
+    margin-bottom: 4vh;
+    padding-bottom: 3vh;
+    border-bottom: 1px solid #23303f;
+  }
+  .brand-row .pool-ball { width: 5vh; height: 5vh; font-size: 1.9vh; margin-bottom: 0; }
+  .brand-word {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.4vh;
+    letter-spacing: 0.35vw;
+    color: #FFD700;
+  }
+  .brand-word span { color: #55606e; letter-spacing: 0.2vw; }
+  /* auto columns + justify-content:center, not fr columns - fr stretches
+     each column to a fixed fraction of the card's full width regardless
+     of what's actually inside it, which just relocated the old dead-gap
+     problem from "around the card" to "inside the right half of it".
+     auto columns size to their own content and justify-content centers
+     the pair as a unit, so the card's extra width becomes even breathing
+     room on both sides instead of a lopsided empty quadrant. */
+  .game-grid {
+    display: grid;
+    grid-template-columns: auto auto;
+    column-gap: 6vw;
+    justify-content: center;
+    align-items: center;
   }
   .left-col { min-width: 0; text-align: left; }
   .right-col { min-width: 0; text-align: left; padding-left: 4vw; border-left: 2px solid #1e2d40; height: fit-content; }
   .round-badge {
     display: inline-block;
-    font-size: 1.6vw;
+    font-size: 1.7vw;
     letter-spacing: 0.3vw;
     color: #7a6010;
     font-weight: 700;
@@ -74,7 +110,7 @@
     margin-bottom: 3vh;
   }
   .up-now-label {
-    font-size: 1.4vw;
+    font-size: 1.5vw;
     letter-spacing: 0.4vw;
     color: #7a6010;
     font-weight: 700;
@@ -85,37 +121,37 @@
     /* vh, not vw, for the dimension actually in short supply on a
        landscape screen - vw made this scale with the WIDE axis, which
        is exactly backwards for a screen that's short and wide. */
-    font-size: 14vh;
+    font-size: 13vh;
     letter-spacing: 0.3vw;
     line-height: 1;
     color: #FFD700;
     text-shadow: 0 0 60px rgba(255,215,0,0.25);
-    /* A name long enough to not fit in one line at 14vh used to hard-wrap
+    /* A name long enough to not fit in one line at 13vh used to hard-wrap
        mid-word ("CHRISTOP / HER") - renderGame now grades the font size
        down by name length instead, so a long name shrinks to fit on one
        line rather than getting torn in half. */
     white-space: nowrap;
   }
-  .player-name.len-long { font-size: 9vh; }
-  .player-name.len-verylong { font-size: 6.5vh; }
+  .player-name.len-long { font-size: 8.5vh; }
+  .player-name.len-verylong { font-size: 6.2vh; }
   .stat-label {
-    font-size: 1.3vw;
+    font-size: 1.4vw;
     letter-spacing: 0.3vw;
     color: #78909c;
     font-weight: 700;
-    margin-bottom: 1.5vh;
+    margin-bottom: 2vh;
   }
-  .pips { display: flex; gap: 1vw; flex-wrap: wrap; margin-bottom: 3vh; }
+  .pips { display: flex; gap: 1.1vw; flex-wrap: wrap; margin-bottom: 3.5vh; }
   .pip {
-    width: 2.4vw; height: 2.4vw; border-radius: 50%;
+    width: 3.2vw; height: 3.2vw; border-radius: 50%;
     background: #1e2530; border: 3px solid #3a4250;
   }
   .pip.on { background: #FFD700; border-color: #b8942a; }
   .status-line {
-    font-size: 1.5vw;
+    font-size: 1.6vw;
     color: #78909c;
   }
-  .status-line b { color: #e8edf2; font-size: 1.8vw; }
+  .status-line b { color: #e8edf2; font-size: 2vw; }
   .idle-title {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 7vw;
@@ -175,15 +211,23 @@
     const name = state.currentPlayerName ?? '';
     const nameClass = name.length > 14 ? 'len-verylong' : name.length > 9 ? 'len-long' : '';
     stage.innerHTML = `
-      <div class="left-col">
-        <div class="round-badge">ROUND ${state.round ?? 1}</div>
-        <div class="up-now-label">UP NOW</div>
-        <div class="player-name ${nameClass}">${escapeHtml(name)}</div>
-      </div>
-      <div class="right-col">
-        <div class="stat-label">LIVES</div>
-        <div class="pips">${pips}</div>
-        <div class="status-line"><b>${state.aliveCount ?? '–'}</b> of <b>${state.totalPlayers ?? '–'}</b><br/>players remaining</div>
+      <div class="game-card">
+        <div class="brand-row">
+          <div class="pool-ball">8</div>
+          <div class="brand-word">KILLER POOL <span>— LIVE</span></div>
+        </div>
+        <div class="game-grid">
+          <div class="left-col">
+            <div class="round-badge">ROUND ${state.round ?? 1}</div>
+            <div class="up-now-label">UP NOW</div>
+            <div class="player-name ${nameClass}">${escapeHtml(name)}</div>
+          </div>
+          <div class="right-col">
+            <div class="stat-label">LIVES</div>
+            <div class="pips">${pips}</div>
+            <div class="status-line"><b>${state.aliveCount ?? '–'}</b> of <b>${state.totalPlayers ?? '–'}</b><br/>players remaining</div>
+          </div>
+        </div>
       </div>
     `;
   }
