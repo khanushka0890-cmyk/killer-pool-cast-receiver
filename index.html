@@ -65,14 +65,21 @@
       0 40px 100px rgba(0, 0, 0, 0.55);
     padding: 5vh 5vw;
   }
+  /* space-between, not the plain left-aligned row this was - the round
+     badge used to sit above "UP NOW" in the left column, floating in
+     the middle of the card on its own. Moving it up here, right-aligned
+     and vertically centered with the brand mark, gives it a fixed home
+     (top-right, like a broadcast graphic's corner bug) instead of
+     competing with the player name for the same block of space. */
   .brand-row {
     display: flex;
     align-items: center;
-    gap: 1vw;
+    justify-content: space-between;
     margin-bottom: 4vh;
     padding-bottom: 3vh;
     border-bottom: 1px solid #23303f;
   }
+  .brand-left { display: flex; align-items: center; gap: 1vw; }
   .brand-row .pool-ball { width: 5vh; height: 5vh; font-size: 1.9vh; margin-bottom: 0; }
   .brand-word {
     font-family: 'Bebas Neue', sans-serif;
@@ -97,6 +104,21 @@
   }
   .left-col { min-width: 0; text-align: left; }
   .right-col { min-width: 0; text-align: left; padding-left: 4vw; border-left: 2px solid #1e2d40; height: fit-content; }
+  /* Avatar sits beside the "UP NOW" / name stack, not above or below it -
+     same identity-row shape the app's own hero card uses. */
+  .identity-row { display: flex; align-items: center; gap: 2vw; }
+  .avatar {
+    flex-shrink: 0;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    color: #fff;
+    background: #546e7a;
+    border: 3px solid rgba(255, 215, 0, 0.5);
+  }
+  .avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .avatar.game-avatar { width: 11vh; height: 11vh; font-size: 4vh; }
   .round-badge {
     display: inline-block;
     font-size: 1.7vw;
@@ -107,7 +129,6 @@
     border: 1px solid #3a2e0f;
     border-radius: 100px;
     padding: 0.8vh 1.6vw;
-    margin-bottom: 3vh;
   }
   .up-now-label {
     font-size: 1.5vw;
@@ -152,6 +173,44 @@
     color: #78909c;
   }
   .status-line b { color: #e8edf2; font-size: 2vw; }
+  /* Winner screen - reuses the same card/brand-row shell as the game
+     state (so it doesn't feel like a different app), single centered
+     column instead of the two-column layout since there's only one
+     thing left to announce. */
+  .stage.winner {
+    display: flex; align-items: center; justify-content: center;
+    height: 100%;
+  }
+  .winner-card { width: min(900px, 72vw); }
+  .winner-content { text-align: center; padding-top: 1vh; }
+  .winner-label {
+    font-size: 1.8vh;
+    letter-spacing: 0.5vw;
+    color: #7a6010;
+    font-weight: 700;
+    margin-bottom: 3vh;
+  }
+  .avatar.winner-avatar {
+    width: 20vh; height: 20vh; font-size: 7vh;
+    margin: 0 auto 3.5vh;
+    border-width: 4px;
+    box-shadow: 0 0 60px rgba(255, 215, 0, 0.3);
+  }
+  .winner-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 11vh;
+    line-height: 1;
+    color: #FFD700;
+    text-shadow: 0 0 80px rgba(255, 215, 0, 0.35);
+    word-break: break-word;
+  }
+  .winner-sub {
+    margin-top: 2.5vh;
+    font-size: 1.6vh;
+    letter-spacing: 0.3vw;
+    color: #78909c;
+    font-weight: 700;
+  }
   .idle-title {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 7vw;
@@ -202,7 +261,11 @@
 
   function renderGame(state) {
     // Expected shape (kept intentionally small — see capacitorSetup.js):
-    // { round, currentPlayerName, lives, defaultLives, aliveCount, totalPlayers }
+    // { round, currentPlayerName, lives, defaultLives, aliveCount,
+    //   totalPlayers, currentPlayerAvatar, currentPlayerAvatarColor }
+    // currentPlayerAvatar is a data: URL (or absent) - see
+    // resizeImageToDataUrl in KillerPool.jsx, already resized small
+    // before it ever leaves the phone.
     stage.className = 'stage game';
     const total = Math.max(state.defaultLives || 3, state.lives || 0);
     const pips = Array.from({ length: total }, (_, i) =>
@@ -213,14 +276,21 @@
     stage.innerHTML = `
       <div class="game-card">
         <div class="brand-row">
-          <div class="pool-ball">8</div>
-          <div class="brand-word">KILLER POOL <span>— LIVE</span></div>
+          <div class="brand-left">
+            <div class="pool-ball">8</div>
+            <div class="brand-word">KILLER POOL <span>— LIVE</span></div>
+          </div>
+          <div class="round-badge">ROUND ${state.round ?? 1}</div>
         </div>
         <div class="game-grid">
           <div class="left-col">
-            <div class="round-badge">ROUND ${state.round ?? 1}</div>
-            <div class="up-now-label">UP NOW</div>
-            <div class="player-name ${nameClass}">${escapeHtml(name)}</div>
+            <div class="identity-row">
+              ${avatarHtml(state.currentPlayerAvatar, state.currentPlayerAvatarColor, name, 'game-avatar')}
+              <div>
+                <div class="up-now-label">UP NOW</div>
+                <div class="player-name ${nameClass}">${escapeHtml(name)}</div>
+              </div>
+            </div>
           </div>
           <div class="right-col">
             <div class="stat-label">LIVES</div>
@@ -230,6 +300,40 @@
         </div>
       </div>
     `;
+  }
+
+  function renderWinner(state) {
+    // { winnerName, winnerAvatar, winnerAvatarColor }
+    stage.className = 'stage winner';
+    const name = state.winnerName ?? '';
+    stage.innerHTML = `
+      <div class="game-card winner-card">
+        <div class="brand-row">
+          <div class="brand-left">
+            <div class="pool-ball">8</div>
+            <div class="brand-word">KILLER POOL <span>— LIVE</span></div>
+          </div>
+        </div>
+        <div class="winner-content">
+          <div class="winner-label">WINNER</div>
+          ${avatarHtml(state.winnerAvatar, state.winnerAvatarColor, name, 'winner-avatar')}
+          <div class="winner-name">${escapeHtml(name)}</div>
+          <div class="winner-sub">LAST ONE STANDING</div>
+        </div>
+      </div>
+    `;
+  }
+
+  // Shared between the game and winner screens - a real photo if the
+  // player set one (already a small resized data: URL by the time it
+  // gets here), otherwise the same colored-circle-plus-initial fallback
+  // the app itself uses when there's no photo.
+  function avatarHtml(photoUrl, color, name, sizeClass) {
+    const initial = escapeHtml((name || '').trim().charAt(0).toUpperCase() || '?');
+    if (photoUrl) {
+      return `<div class="avatar ${sizeClass}"><img src="${photoUrl}" alt="" /></div>`;
+    }
+    return `<div class="avatar ${sizeClass}" style="background:${color || '#546e7a'}">${initial}</div>`;
   }
 
   function escapeHtml(s) {
@@ -246,6 +350,7 @@
       const data = event.data;
       if (!data || data.type === 'idle') { renderIdle(); return; }
       if (data.type === 'game') { renderGame(data); return; }
+      if (data.type === 'winner') { renderWinner(data); return; }
     });
 
     const options = new cast.framework.CastReceiverOptions();
