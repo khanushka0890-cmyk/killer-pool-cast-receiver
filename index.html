@@ -56,6 +56,7 @@
     height: 100%;
   }
   .game-card {
+    position: relative; /* anchors .qr-badge to the card, not the viewport */
     width: min(1500px, 90vw);
     background: linear-gradient(160deg, #171f2c 0%, #0d1219 100%);
     border: 2px solid rgba(255, 215, 0, 0.3);
@@ -64,6 +65,40 @@
       0 0 0 1px rgba(255, 215, 0, 0.07) inset,
       0 40px 100px rgba(0, 0, 0, 0.55);
     padding: 5vh 5vw;
+  }
+  /* Real request: whatever the TV is showing (live game or the winner),
+     someone standing in front of it has no way to get the join link
+     themselves - same join.html link the organizer's own phone Share
+     screen already offers, just drawn here too. Corner badge rather than
+     a dedicated section so it doesn't compete with the game state for
+     attention - a light-background square QR needs to sit on white
+     regardless of the dark card behind it, so it reads as a deliberate
+     "scan me" object rather than part of the felt/card design. */
+  .qr-badge {
+    position: absolute;
+    bottom: 3vh;
+    right: 3vh;
+    background: #fff;
+    border-radius: 1.2vh;
+    padding: 1vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  }
+  .qr-badge svg {
+    width: 12vh;
+    height: 12vh;
+    display: block;
+  }
+  .qr-badge-label {
+    margin-top: 0.7vh;
+    font-size: 1.15vh;
+    letter-spacing: 0.15vw;
+    font-weight: 700;
+    color: #0c1117;
+    text-align: center;
+    white-space: nowrap;
   }
   /* space-between, not the plain left-aligned row this was - the round
      badge used to sit above "UP NOW" in the left column, floating in
@@ -244,11 +279,37 @@
   </div>
 
 <script src="//www.gstatic.com/cast/sdk/libs/caf_receiver/v3/cast_receiver_framework.js"></script>
+<!-- Same QR library (same pinned version) the app's own Share screen
+     already uses (src/KillerPool.jsx) - a plain UMD build, exposes a
+     global `qrcode` function, no build step needed for this static page. -->
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@2.0.4/dist/qrcode.js"></script>
 <script>
   // Custom message namespace the phone app (sender) publishes state on.
   // Must match CAST_NAMESPACE in the app's Chromecast integration.
   const NAMESPACE = 'urn:x-cast:com.killerpool.state';
   const stage = document.getElementById('stage');
+
+  // Same join.html link + QR the organizer's own phone Share screen
+  // offers (src/KillerPool.jsx's JOIN_PAGE_BASE_URL) - drawn here too so
+  // anyone standing in front of the TV can scan it directly, not just the
+  // organizer. Returns '' (nothing rendered) when there's no gameId yet -
+  // a fresh game's Firestore doc takes a couple seconds to be created
+  // (see KillerPool.jsx's gameId-creation effect), so the very first
+  // state message or two won't have one.
+  const JOIN_PAGE_BASE_URL = 'https://khanushka0890-cmyk.github.io/killer-pool-cast-receiver/join.html';
+  function qrBadgeHtml(gameId) {
+    if (!gameId || typeof qrcode !== 'function') return '';
+    const joinUrl = `${JOIN_PAGE_BASE_URL}?game=${gameId}`;
+    const qr = qrcode(0, 'M');
+    qr.addData(joinUrl);
+    qr.make();
+    return `
+      <div class="qr-badge">
+        ${qr.createSvgTag({ cellSize: 5, margin: 1 })}
+        <div class="qr-badge-label">SCAN TO<br/>FOLLOW ALONG</div>
+      </div>
+    `;
+  }
 
   function renderIdle() {
     stage.className = 'stage idle';
@@ -298,6 +359,7 @@
             <div class="status-line"><b>${state.aliveCount ?? '–'}</b> of <b>${state.totalPlayers ?? '–'}</b><br/>players remaining</div>
           </div>
         </div>
+        ${qrBadgeHtml(state.gameId)}
       </div>
     `;
   }
@@ -320,6 +382,7 @@
           <div class="winner-name">${escapeHtml(name)}</div>
           <div class="winner-sub">LAST ONE STANDING</div>
         </div>
+        ${qrBadgeHtml(state.gameId)}
       </div>
     `;
   }
