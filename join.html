@@ -224,10 +224,20 @@
   // not just whose turn it currently is. `current` marks the player
   // whose turn it is right now (irrelevant once the game's over, so
   // renderWinner doesn't pass a currentName).
-  function renderRoster(players, currentName) {
+  //
+  // showTurnOrder (default true - only renderGame ever passes false):
+  // real request from the app side, "it can be a strategic game... we do
+  // not need to show who is going to play next" to a remote viewer by
+  // default. `players` array order IS turn order (the app cycles turns
+  // through it by index), so just listing it in that order alone would
+  // leak the same info the app's own "UP NOW" gate is withholding -
+  // sorted alphabetically instead whenever showTurnOrder is false, and
+  // the current-turn tag is dropped too.
+  function renderRoster(players, currentName, showTurnOrder = true) {
     if (!Array.isArray(players) || players.length === 0) return '';
-    const rows = players.map(p => {
-      const isCurrent = p.name === currentName;
+    const ordered = showTurnOrder ? players : [...players].sort((a, b) => a.name.localeCompare(b.name));
+    const rows = ordered.map(p => {
+      const isCurrent = showTurnOrder && p.name === currentName;
       const maxLives = Math.max(p.lives || 0, 1);
       const pips = Array.from({ length: maxLives }, (_, i) =>
         `<div class="pip ${i < p.lives ? 'on' : ''}"></div>`
@@ -250,18 +260,27 @@
     // Same shape the app sends to the Chromecast receiver (see
     // Cast.sendGame in KillerPool.jsx / updateGameLiveState in
     // src/firebase.js): { round, currentPlayerName, lives, defaultLives,
-    // aliveCount, totalPlayers, players }
+    // aliveCount, totalPlayers, players, showTurnOrder }
     const total = Math.max(state.defaultLives || 3, state.lives || 0);
     const pips = Array.from({ length: total }, (_, i) =>
       `<div class="pip ${i < state.lives ? 'on' : ''}"></div>`
     ).join('');
+    // Real request: turn order withheld from this page by default -
+    // same reasoning as renderRoster above. Round + remaining count still
+    // show (not order-revealing on their own); who's actually up doesn't,
+    // unless the organizer turned "Public turn info" on in Settings.
+    const turnInfo = state.showTurnOrder
+      ? `
+        <div class="up-now-label">UP NOW</div>
+        <div class="player-name">${escapeHtml(state.currentPlayerName || '')}</div>
+        <div class="pips">${pips}</div>
+      `
+      : `<div class="status-line" style="margin-top:16px;margin-bottom:4px;">Turn order is private for this game</div>`;
     stage.innerHTML = `
       <div class="round-badge">ROUND <b>${state.round ?? 1}</b></div>
-      <div class="up-now-label">UP NOW</div>
-      <div class="player-name">${escapeHtml(state.currentPlayerName || '')}</div>
-      <div class="pips">${pips}</div>
+      ${turnInfo}
       <div class="status-line"><b>${state.aliveCount ?? '–'}</b> of <b>${state.totalPlayers ?? '–'}</b> players remaining</div>
-      ${renderRoster(state.players, state.currentPlayerName)}
+      ${renderRoster(state.players, state.currentPlayerName, state.showTurnOrder)}
     `;
   }
 
