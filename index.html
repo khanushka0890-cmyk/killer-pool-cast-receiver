@@ -198,6 +198,32 @@
     margin-bottom: 2vh;
   }
   .pips { display: flex; gap: 1.1vw; flex-wrap: wrap; margin-bottom: 3.5vh; }
+  /* Real request: "a round progress line as a progress bar" on every
+     public-facing page, including this one. Spans the full card width,
+     below the identity/stats grid - same #FFD700 accent this file
+     already uses (not the app's own #D99E38, which only join.html and
+     the app itself use). */
+  /* padding-right reserves room for .qr-badge, an absolutely-positioned
+     corner overlay (bottom/right: 3vh, ~14vh wide including its own
+     padding) that this full-width block would otherwise run straight
+     under - confirmed via screenshot: the "X / Y · Z%" label, pushed to
+     the far right by justify-content: space-between, was rendering
+     partially hidden behind the QR code. Reserved unconditionally
+     (harmless when there's no QR badge to avoid - state.gameId absent) -
+     simpler than threading a "is a QR badge present" flag through here
+     just to make the padding conditional. */
+  .round-progress { margin-top: 3vh; padding-right: 18vh; }
+  .round-progress-label {
+    display: flex; justify-content: space-between;
+    font-size: 1.3vh; letter-spacing: 0.2vw; color: #78909c; font-weight: 700;
+    margin-bottom: 1vh;
+  }
+  .round-progress-label b { color: #e8edf2; }
+  .round-progress-track {
+    height: 1.3vh; border-radius: 1vh;
+    background: rgba(255,255,255,0.1); overflow: hidden;
+  }
+  .round-progress-fill { height: 100%; background: #FFD700; border-radius: 1vh; }
   .pip {
     width: 3.2vw; height: 3.2vw; border-radius: 50%;
     background: #1e2530; border: 3px solid #3a4250;
@@ -320,10 +346,30 @@
     `;
   }
 
+  // Real request: "a round progress line as a progress bar" on every
+  // public-facing page, including this one. played/alive, not played/
+  // totalPlayers - identical in round 1 (no one's eliminated yet), but
+  // alive is the actually-correct denominator once a later round has
+  // fewer players left to take a shot.
+  function roundProgressHtml(played, alive) {
+    if (!alive) return '';
+    const pct = Math.min(100, Math.round((played / alive) * 100));
+    return `
+      <div class="round-progress">
+        <div class="round-progress-label">
+          <span>ROUND PROGRESS</span>
+          <span><b>${played} / ${alive}</b> · ${pct}%</span>
+        </div>
+        <div class="round-progress-track"><div class="round-progress-fill" style="width:${pct}%"></div></div>
+      </div>
+    `;
+  }
+
   function renderGame(state) {
     // Expected shape (kept intentionally small — see capacitorSetup.js):
     // { round, currentPlayerName, lives, defaultLives, aliveCount,
-    //   totalPlayers, currentPlayerAvatar, currentPlayerAvatarColor }
+    //   totalPlayers, playedThisRoundCount, currentPlayerAvatar,
+    //   currentPlayerAvatarColor }
     // currentPlayerAvatar is a data: URL (or absent) - see
     // resizeImageToDataUrl in KillerPool.jsx, already resized small
     // before it ever leaves the phone.
@@ -359,6 +405,7 @@
             <div class="status-line"><b>${state.aliveCount ?? '–'}</b> of <b>${state.totalPlayers ?? '–'}</b><br/>players remaining</div>
           </div>
         </div>
+        ${roundProgressHtml(state.playedThisRoundCount ?? 0, state.aliveCount ?? 0)}
         ${qrBadgeHtml(state.gameId)}
       </div>
     `;

@@ -69,6 +69,22 @@
     margin-top: 12px;
   }
   .status-line b { color: #e8edf2; }
+  /* Real request: "a round progress line as a progress bar" on every
+     public-facing page. Never gated behind showTurnOrder - an aggregate
+     count doesn't reveal any one player's position (see renderGame's own
+     comment on the app side for the same reasoning). */
+  .round-progress { width: 100%; max-width: 280px; margin: 16px auto 0; }
+  .round-progress-label {
+    display: flex; justify-content: space-between;
+    font-size: 11px; letter-spacing: 1px; color: #78909c; font-weight: 700;
+    margin-bottom: 5px;
+  }
+  .round-progress-label b { color: #e8edf2; }
+  .round-progress-track {
+    height: 8px; border-radius: 4px;
+    background: rgba(255,255,255,0.1); overflow: hidden;
+  }
+  .round-progress-fill { height: 100%; background: #D99E38; border-radius: 4px; }
   /* Full roster, not just whose turn it is - a real report: "eliminated,
      winner, big updates about the player list should appear there." Was
      entirely missing from the schema (games/{gameId} only ever tracked
@@ -256,11 +272,29 @@
     return `<div class="roster">${rows}</div>`;
   }
 
+  // played/alive, not played/totalPlayers - identical in round 1 (no one
+  // eliminated yet), but alive is the actually-correct denominator once
+  // a later round has fewer players left to take a shot.
+  function roundProgressHtml(played, alive) {
+    if (!alive) return '';
+    const pct = Math.min(100, Math.round((played / alive) * 100));
+    return `
+      <div class="round-progress">
+        <div class="round-progress-label">
+          <span>ROUND PROGRESS</span>
+          <span><b>${played} / ${alive}</b> · ${pct}%</span>
+        </div>
+        <div class="round-progress-track"><div class="round-progress-fill" style="width:${pct}%"></div></div>
+      </div>
+    `;
+  }
+
   function renderGame(state) {
     // Same shape the app sends to the Chromecast receiver (see
     // Cast.sendGame in KillerPool.jsx / updateGameLiveState in
     // src/firebase.js): { round, currentPlayerName, lives, defaultLives,
-    // aliveCount, totalPlayers, players, showTurnOrder }
+    // aliveCount, totalPlayers, playedThisRoundCount, players,
+    // showTurnOrder }
     const total = Math.max(state.defaultLives || 3, state.lives || 0);
     const pips = Array.from({ length: total }, (_, i) =>
       `<div class="pip ${i < state.lives ? 'on' : ''}"></div>`
@@ -278,6 +312,7 @@
       : `<div class="status-line" style="margin-top:16px;margin-bottom:4px;">Turn order is private for this game</div>`;
     stage.innerHTML = `
       <div class="round-badge">ROUND <b>${state.round ?? 1}</b></div>
+      ${roundProgressHtml(state.playedThisRoundCount ?? 0, state.aliveCount ?? 0)}
       ${turnInfo}
       <div class="status-line"><b>${state.aliveCount ?? '–'}</b> of <b>${state.totalPlayers ?? '–'}</b> players remaining</div>
       ${renderRoster(state.players, state.currentPlayerName, state.showTurnOrder)}
