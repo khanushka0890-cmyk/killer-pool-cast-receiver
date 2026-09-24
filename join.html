@@ -122,6 +122,22 @@
   .out-row .roster-name { color: var(--text-muted); font-weight: 500; }
   .out-row .out-note { font-size: 13px; color: var(--text-muted); flex-shrink: 0; }
 
+  /* Sponsor promo banner - deliberately an ivory ad strip (light
+     background, AD tag), not another dark ticket card - per the
+     sponsor-promo design doc: "it must read as an ad, not a game
+     element." Same component in spirit as the in-app Spectate screen's
+     SponsorBanner, just plain HTML/CSS here since this page isn't part
+     of that bundle. */
+  .sponsor { background: #F7EEDC; border-radius: 10px; padding: 10px; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 0 0 1px rgba(242,184,75,.5); }
+  .sponsor__top { display: flex; align-items: center; gap: 8px; padding: 0 2px; }
+  .sponsor__ad { height: 20px; padding: 0 7px 0 8px; border-radius: 4px; background: #1A1030; color: #F7EEDC; display: inline-flex; align-items: center; font: 700 11px/1 'Barlow Condensed', sans-serif; letter-spacing: 1.2px; }
+  .sponsor__label { font: 700 12px/1.2 'Barlow Condensed', sans-serif; letter-spacing: 1.5px; color: #6B5E80; }
+  .sponsor__img { display: block; width: 100%; aspect-ratio: 3/1; object-fit: cover; border-radius: 6px; }
+  .sponsor__headline { margin: 0; padding: 0 2px 2px; font: 700 16px/21px 'Barlow', sans-serif; color: #1A1030; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sponsor__headline-only { display: flex; align-items: center; gap: 12px; padding: 0 2px 2px; }
+  .sponsor__tag { width: 44px; height: 44px; flex-shrink: 0; border-radius: 8px; background: #1A1030; color: #F5C76A; display: flex; align-items: center; justify-content: center; }
+  .sponsor__headline-only .sponsor__headline { font: 700 16px/21px 'Barlow', sans-serif; color: #1A1030; white-space: normal; overflow: visible; text-overflow: clip; padding: 0; }
+
   /* Winner state - kept as its own simpler layout, not the ticket pattern */
   .pool-ball {
     width: 56px; height: 56px; border-radius: 50%;
@@ -302,6 +318,29 @@
     `;
   }
 
+  function sponsorBannerHtml(state) {
+    if (!state.sponsorPromoActive || (!state.sponsorPromoImage && !state.sponsorPromoHeadline)) return '';
+    const label = 'SPONSORED' + (state.venueName ? ' · ' + escapeHtml(state.venueName.toUpperCase()) : '');
+    const img = state.sponsorPromoImage ? `<img class="sponsor__img" src="${state.sponsorPromoImage}" alt="">` : '';
+    let headline = '';
+    if (state.sponsorPromoHeadline && state.sponsorPromoImage) {
+      headline = `<p class="sponsor__headline">${escapeHtml(state.sponsorPromoHeadline)}</p>`;
+    } else if (state.sponsorPromoHeadline) {
+      headline = `
+        <div class="sponsor__headline-only">
+          <span class="sponsor__tag"><svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor"><path d="M2 1a1 1 0 0 0-1 1v4.586a1 1 0 0 0 .293.707l7 7a1 1 0 0 0 1.414 0l4.586-4.586a1 1 0 0 0 0-1.414l-7-7A1 1 0 0 0 6.586 1zm4 3.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/></svg></span>
+          <span class="sponsor__headline">${escapeHtml(state.sponsorPromoHeadline)}</span>
+        </div>`;
+    }
+    return `
+      <aside class="sponsor" aria-label="Sponsored by ${escapeHtml(state.venueName || 'this venue')}">
+        <div class="sponsor__top"><span class="sponsor__ad">AD</span><span class="sponsor__label">${label}</span></div>
+        ${img}
+        ${headline}
+      </aside>
+    `;
+  }
+
   function renderGame(state) {
     // Same shape the app sends to the Chromecast receiver (see
     // Cast.sendGame in KillerPool.jsx / updateGameLiveState in
@@ -344,6 +383,7 @@
           </div>
         </div>
       </div>
+      ${sponsorBannerHtml(state)}
       ${renderPlayers(state.players, state.currentPlayerName, state.showTurnOrder)}
     `;
   }
@@ -357,6 +397,7 @@
         <div class="winner-title">${escapeHtml(state.winnerName || 'SOMEONE')} WINS</div>
         <div class="winner-sub">Game over — round ${state.round ?? 1}</div>
       </div>
+      ${sponsorBannerHtml(state)}
       ${renderPlayers(state.players, null, false)}
     `;
   }
