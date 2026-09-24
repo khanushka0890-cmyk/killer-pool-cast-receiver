@@ -5,201 +5,186 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Killer Pool — Follow Along</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap');
+  :root {
+    --bg:#0B0A12; --surface:#15131F; --border:#2A2640; --border-2:#4A4463;
+    --felt:#2D1A55; --stub:#1E1238; --deep:#1A1030;
+    --gold:#F2B84B; --gold-text:#F5C76A; --gold-line:rgba(242,184,75,.55);
+    --text:#F4F1FA; --text-2:#CBC2E0; --text-muted:#8C86A3;
+    --live:#F0625A; --danger-text:#FF8A83; --success:#5BD08A;
+  }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body {
     width: 100%; min-height: 100%;
-    background: #0c1117;
-    color: #e8edf2;
-    /* Matches the app's own switch away from Barlow - Helvetica Neue is a
-       system font on iOS/macOS (no download), standard fallback elsewhere. */
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Barlow', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   }
-  .stage {
-    min-height: 100vh;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    text-align: center;
-    padding: 8vh 8vw 130px;
+  a { color: var(--gold); }
+  a:hover { color: #FFD27A; }
+  button { font-family: inherit; }
+  .felt {
+    background-color: var(--felt);
+    background-image:
+      repeating-linear-gradient(45deg, rgba(255,255,255,.024) 0 1px, transparent 1px 4px),
+      repeating-linear-gradient(-45deg, rgba(0,0,0,.09) 0 1px, transparent 1px 4px);
   }
-  /* Purple/gold rebrand (was the neon-lime #D0F30D family) - colors
-     matched to the app's actual current CSS, not just a hex swap: the
-     round-badge pill is the app's real neutral navy pill (round-badge
-     class in KillerPool.jsx), "UP NOW"/idle-title use the gold hand-fixed
-     for the hero card specifically (not the generic darker gold-shade
-     used elsewhere), and .pip.on mirrors LifePips' non-dark fill/border. */
+  .page { max-width: 480px; margin: 0 auto; padding: 0 16px 150px; }
+
+  /* Header: brand mark (left) + live pill (right) */
+  .topbar { display: flex; align-items: center; justify-content: space-between; padding: 20px 0 12px; gap: 12px; }
+  .brand { display: flex; align-items: center; gap: 8px; }
+  .brand-ball { width: 28px; height: 28px; border-radius: 50%; background: var(--bg); box-shadow: 0 0 0 1.5px var(--gold); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .brand-text { display: flex; flex-direction: column; gap: 1px; line-height: 1; }
+  .brand-title { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 1.5px; color: var(--gold); }
+  .brand-sub { font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 10px; letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase; }
+  .live-pill {
+    height: 36px; display: flex; align-items: center; gap: 8px;
+    padding: 0 12px 0 10px; border-radius: 18px;
+    background: var(--surface); border: 1px solid var(--border);
+    color: var(--text-2); font-size: 13px; cursor: pointer; flex-shrink: 0;
+  }
+  .live-pill[hidden] { display: none; }
+  .live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--success); flex-shrink: 0; }
+  .live-dot.stale { background: var(--text-muted); }
+
+  /* Content column */
+  .stage { display: flex; flex-direction: column; gap: 20px; padding-top: 8px; }
+  .centered-msg { min-height: 60vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 16px; }
+
+  /* Hero ticket */
+  .ticket { position: relative; filter: drop-shadow(0 18px 30px rgba(91,42,158,.45)); }
+  .ticket-top {
+    border: 1px solid var(--gold-line); border-bottom: none; border-radius: 22px 22px 0 0;
+    padding: 22px 20px 24px; display: flex; flex-direction: column; align-items: center; gap: 10px;
+  }
   .round-badge {
-    font-size: 14px;
-    letter-spacing: 3px;
-    color: #546e7a;
-    font-weight: 700;
-    background: #1a2535;
-    border: 1px solid #1e2d40;
-    border-radius: 100px;
-    padding: 6px 16px;
-    margin-bottom: 24px;
+    height: 36px; box-sizing: border-box; padding: 0 14px; border-radius: 10px;
+    background: rgba(11,10,18,.45); border: 1px solid rgba(242,184,75,.35);
+    display: flex; align-items: center; gap: 8px;
   }
-  .round-badge b { color: #D99E38; }
-  .up-now-label {
-    font-size: 13px;
-    letter-spacing: 3px;
-    color: #D99E38;
-    font-weight: 700;
-    margin-bottom: 8px;
-  }
-  .player-name {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(48px, 16vw, 96px);
-    letter-spacing: 3px;
-    line-height: 1;
-    color: #fff;
-    text-shadow: 0 0 60px rgba(217,158,56,0.25);
-    margin-bottom: 20px;
-    word-break: break-word;
-  }
-  .pips { display: flex; gap: 10px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap; }
-  .pip {
-    width: 20px; height: 20px; border-radius: 50%;
-    background: #1e2530; border: 2px solid #3a4250;
-  }
-  .pip.on { background: #D99E38; border-color: #CB8F27; }
-  .status-line {
-    font-size: 15px;
-    color: #78909c;
-    margin-top: 12px;
-  }
-  .status-line b { color: #e8edf2; }
-  /* Real request: "a round progress line as a progress bar" on every
-     public-facing page. Never gated behind showTurnOrder - an aggregate
-     count doesn't reveal any one player's position (see renderGame's own
-     comment on the app side for the same reasoning). */
-  .round-progress { width: 100%; max-width: 280px; margin: 16px auto 0; }
-  .round-progress-label {
-    display: flex; justify-content: space-between;
-    font-size: 11px; letter-spacing: 1px; color: #78909c; font-weight: 700;
-    margin-bottom: 5px;
-  }
-  .round-progress-label b { color: #e8edf2; }
-  .round-progress-track {
-    height: 8px; border-radius: 4px;
-    background: rgba(255,255,255,0.1); overflow: hidden;
-  }
-  .round-progress-fill { height: 100%; background: #D99E38; border-radius: 4px; }
-  /* Full roster, not just whose turn it is - a real report: "eliminated,
-     winner, big updates about the player list should appear there." Was
-     entirely missing from the schema (games/{gameId} only ever tracked
-     the current turn) - see updateGameLiveState()'s new `players` field. */
-  .roster {
-    width: 100%; max-width: 320px;
-    margin-top: 24px;
-    display: flex; flex-direction: column; gap: 6px;
-  }
+  .round-badge .lbl { font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 12px; letter-spacing: 2px; color: var(--text-2); }
+  .round-badge .num { font-family: 'Bebas Neue', sans-serif; font-size: 26px; line-height: 26px; color: var(--gold); padding-top: 3px; }
+  .up-now-label { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 3px; padding-left: 3px; color: var(--gold-text); margin-top: 8px; }
+  .player-name { font-family: 'Bebas Neue', sans-serif; font-size: clamp(52px, 16vw, 88px); line-height: 1; letter-spacing: 2px; padding-left: 2px; color: var(--gold); word-break: break-word; text-align: center; }
+  .pips { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .pip { width: 22px; height: 22px; border-radius: 50%; background: var(--gold); box-shadow: inset -2px -2px 0 rgba(0,0,0,.22), inset 1px 1px 0 rgba(255,255,255,.35); flex-shrink: 0; }
+  .pip.off { background: transparent; box-shadow: none; border: 1.5px solid var(--border-2); }
+
+  .perf { position: relative; height: 24px; display: flex; align-items: center; padding: 0 22px; background: var(--stub); border-left: 1px solid var(--gold-line); border-right: 1px solid var(--gold-line); }
+  .perf-line { flex-grow: 1; border-top: 2px dashed rgba(242,184,75,.4); }
+  .perf-hole { position: absolute; top: 0; width: 24px; height: 24px; border-radius: 50%; box-sizing: border-box; background: var(--bg); }
+  .perf-hole.l { left: -13px; border-right: 1px solid var(--gold-line); }
+  .perf-hole.r { right: -13px; border-left: 1px solid var(--gold-line); }
+
+  .ticket-stub { background: var(--stub); border: 1px solid var(--gold-line); border-top: none; border-radius: 0 0 22px 22px; padding: 14px 20px 20px; display: flex; flex-direction: column; gap: 14px; }
+  .progress-row { display: flex; flex-direction: column; gap: 8px; }
+  .progress-label { display: flex; justify-content: space-between; align-items: baseline; }
+  .progress-label .lbl { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 2.5px; color: var(--text-2); }
+  .progress-label .val { font-size: 14px; color: var(--text-2); font-variant-numeric: tabular-nums; }
+  .progress-label .val b { color: var(--text); }
+  .progress-track { height: 6px; border-radius: 3px; background: rgba(255,255,255,.12); }
+  .progress-fill { height: 100%; border-radius: 3px; background: var(--gold); }
+  .hairline { height: 1px; background: rgba(255,255,255,.08); }
+  .remaining-row { display: flex; flex-direction: column; gap: 8px; }
+  .remaining-row .txt { font-size: 15px; color: var(--text-2); }
+  .remaining-row .txt b { color: var(--text); }
+  .seg-track { display: flex; gap: 4px; }
+  .seg { flex: 1; height: 6px; border-radius: 3px; background: var(--gold); }
+  .seg.off { background: rgba(255,255,255,.14); }
+
+  /* Players section */
+  .players-head { display: flex; align-items: baseline; justify-content: space-between; padding: 0 4px; }
+  .players-head h2 { font-family: 'Bebas Neue', sans-serif; font-weight: 400; font-size: 22px; letter-spacing: 2.5px; color: var(--text-2); }
+  .players-head .count { font-size: 14px; color: var(--text-muted); }
+  .roster { display: flex; flex-direction: column; gap: 8px; }
   .roster-row {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 10px 14px;
-    background: #131c27; border: 1px solid #1e2d40; border-radius: 10px;
-    font-size: 15px;
+    display: flex; align-items: center; gap: 12px; padding: 0 16px 0 12px;
+    height: 68px; border-radius: 16px; background: var(--surface); border: 1px solid var(--border);
   }
-  .roster-row.eliminated { opacity: 0.45; }
-  .roster-row.current { border-color: #D99E38; background: #271B07; }
-  .roster-name { display: flex; align-items: center; gap: 8px; }
-  .roster-name .tag { font-size: 11px; letter-spacing: 1px; color: #D99E38; font-weight: 700; }
-  .roster-lives { display: flex; gap: 4px; }
-  .roster-lives .pip { width: 10px; height: 10px; }
-  .winner-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(40px, 12vw, 72px);
-    letter-spacing: 3px;
-    color: #D99E38;
-    margin-bottom: 6px;
-  }
-  .winner-sub { font-size: 15px; color: #78909c; margin-bottom: 8px; }
-  .idle-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(36px, 10vw, 56px);
-    letter-spacing: 4px;
-    color: #D99E38;
-  }
-  .idle-sub {
-    font-size: 14px;
-    letter-spacing: 2px;
-    color: #909AAC;
-    margin-top: 16px;
-    max-width: 320px;
-  }
+  .roster-row.current { background: rgba(242,184,75,.1); border: 1.5px solid var(--gold); }
+  .av { width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 18px; color: #fff; overflow: hidden; }
+  .roster-row.current .av { box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--gold); }
+  .av img { width: 100%; height: 100%; object-fit: cover; }
+  .roster-info { flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+  .roster-name { font-size: 17px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .roster-tag { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 1.5px; }
+  .roster-tag.up { color: var(--gold); }
+  .roster-tag.last { color: var(--danger-text); }
+  .roster-pips { display: flex; gap: 5px; flex-shrink: 0; }
+  .roster-pips .pip { width: 12px; height: 12px; }
+
+  .out-divider { display: flex; align-items: center; gap: 10px; padding: 8px 4px 0; }
+  .out-divider .lbl { font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 13px; letter-spacing: 2px; color: var(--text-muted); }
+  .out-divider .line { flex-grow: 1; height: 1px; background: var(--border); }
+  .out-row { height: 56px; box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 0 16px 0 12px; border-radius: 16px; border: 1px dashed var(--border); }
+  .out-row .av { width: 36px; height: 36px; font-size: 16px; background: var(--border); color: var(--text-muted); }
+  .out-row .roster-name { color: var(--text-muted); font-weight: 500; }
+  .out-row .out-note { font-size: 13px; color: var(--text-muted); flex-shrink: 0; }
+
+  /* Winner state - kept as its own simpler layout, not the ticket pattern */
   .pool-ball {
-    width: 56px; height: 56px;
-    border-radius: 50%;
+    width: 56px; height: 56px; border-radius: 50%;
     background: radial-gradient(circle at 35% 30%, #3a3a3a, #0a0a0a 70%);
-    border: 1.5px solid #D99E38;
+    border: 1.5px solid var(--gold);
     display: flex; align-items: center; justify-content: center;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 22px;
-    color: #fff;
-    margin-bottom: 20px;
+    font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: #fff;
   }
-  .footer {
-    position: fixed; bottom: 0; left: 0; right: 0;
-    display: flex; flex-direction: column; align-items: center; gap: 10px;
-    padding: 16px 8vw calc(16px + env(safe-area-inset-bottom));
-    background: linear-gradient(0deg, #0c1117 40%, transparent);
+  .winner-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(40px, 12vw, 72px); letter-spacing: 3px; color: var(--gold); }
+  .winner-sub { font-size: 15px; color: var(--text-muted); }
+  .idle-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(36px, 10vw, 56px); letter-spacing: 4px; color: var(--gold); }
+  .idle-sub { font-size: 14px; letter-spacing: 2px; color: var(--text-muted); max-width: 320px; }
+
+  /* Sticky App Store bar */
+  .appstore-bar {
+    position: fixed; left: 0; right: 0; bottom: 0;
+    padding: 14px 20px calc(14px + env(safe-area-inset-bottom));
+    background: rgba(11,10,18,.92); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+    display: flex; justify-content: center; z-index: 10;
   }
-  .footer-note {
-    text-align: center;
-    font-size: 11px;
-    letter-spacing: 1px;
-    color: #2a3545;
-  }
-  /* Live-status row: this page updates itself automatically (a Firestore
-     realtime listener, not polling) - but mobile browsers commonly
-     suspend a backgrounded/locked-screen tab's network activity, and
-     the listener can take a moment to reconnect once it's foregrounded
-     again. Rather than leave that invisible (a viewer just sees a frozen
-     screen with no way to tell "is this stuck or just quiet"), show when
-     the last update landed, plus a manual refresh as a safety net. */
-  .live-status {
-    position: fixed; top: 14px; left: 0; right: 0;
+  .appstore-btn {
+    width: 100%; max-width: 440px; height: 56px; box-sizing: border-box; border-radius: 28px;
+    border: 2px solid var(--gold); background: var(--bg); color: var(--gold);
     display: flex; align-items: center; justify-content: center; gap: 10px;
-    font-size: 12px; color: #546e7a; letter-spacing: 0.5px;
+    text-decoration: none; font-weight: 700; font-size: 18px; letter-spacing: .3px; white-space: nowrap;
   }
-  .live-dot { width: 7px; height: 7px; border-radius: 50%; background: #43a047; flex-shrink: 0; }
-  .live-dot.stale { background: #909AAC; }
-  .refresh-btn {
-    background: transparent; border: 1px solid #253040; color: #909AAC;
-    border-radius: 100px; padding: 3px 10px; font-size: 12px;
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    cursor: pointer;
-  }
-  .app-store-link {
-    display: inline-flex; align-items: center; gap: 6px;
-    margin-top: 28px;
-    color: #D99E38; text-decoration: none;
-    font-size: 14px; font-weight: 700; letter-spacing: 0.5px;
-    border: 1px solid #7C5718; border-radius: 100px;
-    padding: 8px 18px;
-  }
+  .footer-note { text-align: center; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 12px; letter-spacing: 2.5px; color: #5E5874; margin: 8px 0 0; }
 </style>
 </head>
 <body>
-  <div class="live-status" id="liveStatus" hidden>
-    <span class="live-dot" id="liveDot"></span>
-    <span id="liveText">updated just now</span>
-    <button class="refresh-btn" id="refreshBtn" onclick="location.reload()">↻ Refresh</button>
+  <div class="page">
+    <div class="topbar">
+      <div class="brand">
+        <span class="brand-ball">
+          <svg width="22" height="22" viewBox="0 0 26 26" aria-hidden="true"><circle cx="13" cy="13" r="12" fill="#0B0A12" stroke="#0B0A12" stroke-width="1"></circle><circle cx="13" cy="13" r="6" fill="#F4F1FA"></circle><text x="13" y="16.5" text-anchor="middle" font-family="Barlow, sans-serif" font-weight="700" font-size="9" fill="#0B0A12">8</text></svg>
+        </span>
+        <span class="brand-text">
+          <span class="brand-title">Killer Pool</span>
+          <span class="brand-sub">elimination</span>
+        </span>
+      </div>
+      <button class="live-pill" id="livePill" hidden aria-label="Refresh" onclick="location.reload()">
+        <span class="live-dot" id="liveDot"></span>
+        <span id="liveText">Updated just now</span>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7"></path><path d="M20 4v7h-7"></path></svg>
+      </button>
+    </div>
+    <div class="stage" id="stage">
+      <div class="centered-msg">
+        <div class="pool-ball">8</div>
+        <div class="idle-title">CONNECTING…</div>
+      </div>
+    </div>
   </div>
-  <div class="stage" id="stage">
-    <div class="pool-ball">8</div>
-    <div class="idle-title">CONNECTING…</div>
-  </div>
-  <div class="footer">
+  <div class="appstore-bar">
     <!-- Standard App Store URL format (id-only, no name slug needed) -
          App Apple ID confirmed via App Store Connect (6802345932). A
          spectator following a game with no app installed is exactly the
          audience most worth putting this in front of. -->
-    <a class="app-store-link" href="https://apps.apple.com/app/id6802345932" target="_blank" rel="noopener">
+    <a class="appstore-btn" href="https://apps.apple.com/app/id6802345932" target="_blank" rel="noopener">
       <svg width="16" height="16" viewBox="0 0 384 512" fill="currentColor"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg>
       Get Killer Pool on the App Store
     </a>
-    <div class="footer-note">KILLER POOL — LIVE SPECTATOR VIEW</div>
   </div>
 
 <script type="module">
@@ -228,63 +213,91 @@
     return String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
   }
 
+  function avatarHtml(p, size) {
+    const initial = escapeHtml((p.name?.[0] || '?').toUpperCase());
+    const fontSize = Math.round(size * 0.44);
+    if (p.avatarPhoto) return `<div class="av" style="width:${size}px;height:${size}px;"><img src="${p.avatarPhoto}" alt="" /></div>`;
+    return `<div class="av" style="width:${size}px;height:${size}px;font-size:${fontSize}px;background:${p.avatarColor || '#546e7a'};">${initial}</div>`;
+  }
+
   function renderMessage(title, sub) {
     stage.innerHTML = `
-      <div class="pool-ball">8</div>
-      <div class="idle-title">${escapeHtml(title)}</div>
-      <div class="idle-sub">${escapeHtml(sub || '')}</div>
+      <div class="centered-msg">
+        <div class="pool-ball">8</div>
+        <div class="idle-title">${escapeHtml(title)}</div>
+        <div class="idle-sub">${escapeHtml(sub || '')}</div>
+      </div>
     `;
   }
 
-  // Shared by the live-turn view and the winner view - a full roster,
-  // not just whose turn it currently is. `current` marks the player
-  // whose turn it is right now (irrelevant once the game's over, so
-  // renderWinner doesn't pass a currentName).
-  //
-  // showTurnOrder (default true - only renderGame ever passes false):
-  // real request from the app side, "it can be a strategic game... we do
-  // not need to show who is going to play next" to a remote viewer by
-  // default. `players` array order IS turn order (the app cycles turns
-  // through it by index), so just listing it in that order alone would
-  // leak the same info the app's own "UP NOW" gate is withholding -
-  // sorted alphabetically instead whenever showTurnOrder is false, and
-  // the current-turn tag is dropped too.
-  function renderRoster(players, currentName, showTurnOrder = true) {
+  // Still-in players first (turn order when the organizer opted in via
+  // Public turn info, alphabetical otherwise - same reasoning as the
+  // in-app Spectate screen), knocked-out players under a dashed OUT
+  // divider, most recently eliminated first. Mirrors KillerPool.jsx's
+  // own Spectate roster exactly (see its own comment for the same
+  // showTurnOrder gating).
+  function renderPlayers(players, currentName, showTurnOrder = true) {
     if (!Array.isArray(players) || players.length === 0) return '';
-    const ordered = showTurnOrder ? players : [...players].sort((a, b) => a.name.localeCompare(b.name));
+    const stillIn = players.filter(p => !p.eliminated);
+    const out = players.filter(p => p.eliminated).sort((a, b) => (b.eliminatedInRound ?? 0) - (a.eliminatedInRound ?? 0));
+    const ordered = showTurnOrder ? stillIn : [...stillIn].sort((a, b) => a.name.localeCompare(b.name));
+
     const rows = ordered.map(p => {
-      const isCurrent = showTurnOrder && p.name === currentName;
+      // Who's shooting right now is live, observable info - not a leak
+      // the way the FUTURE turn sequence would be. showTurnOrder only
+      // gates the list's ORDER (turn order vs alphabetical) above; the
+      // current-player highlight itself is never hidden.
+      const isCurrent = p.name === currentName;
+      const lastLife = p.lives === 1;
       const maxLives = Math.max(p.lives || 0, 1);
       const pips = Array.from({ length: maxLives }, (_, i) =>
-        `<div class="pip ${i < p.lives ? 'on' : ''}"></div>`
+        `<span class="pip ${i < p.lives ? '' : 'off'}"></span>`
       ).join('');
       return `
-        <div class="roster-row ${p.eliminated ? 'eliminated' : ''} ${isCurrent ? 'current' : ''}">
-          <div class="roster-name">
-            ${escapeHtml(p.name)}
-            ${isCurrent ? '<span class="tag">UP NOW</span>' : ''}
-            ${p.eliminated ? '<span class="tag" style="color:#ef5350">OUT</span>' : ''}
+        <div class="roster-row ${isCurrent ? 'current' : ''}">
+          ${avatarHtml(p, 40)}
+          <div class="roster-info">
+            <span class="roster-name">${escapeHtml(p.name)}</span>
+            ${isCurrent ? '<span class="roster-tag up">UP NOW</span>' : lastLife ? '<span class="roster-tag last">LAST LIFE</span>' : ''}
           </div>
-          <div class="roster-lives">${pips}</div>
+          <div class="roster-pips">${pips}</div>
         </div>
       `;
     }).join('');
-    return `<div class="roster">${rows}</div>`;
+
+    const outRows = out.map(p => `
+      <div class="out-row" aria-label="${escapeHtml(p.name)}, out${p.eliminatedInRound ? ` in round ${p.eliminatedInRound}` : ''}">
+        ${avatarHtml(p, 36)}
+        <span class="roster-name" style="flex-grow:1;min-width:0;">${escapeHtml(p.name)}</span>
+        ${p.eliminatedInRound ? `<span class="out-note">Out in round ${p.eliminatedInRound}</span>` : '<span class="out-note">Out</span>'}
+      </div>
+    `).join('');
+
+    return `
+      <div>
+        <div class="players-head">
+          <h2>Players</h2>
+          <span class="count">${stillIn.length} in · ${out.length} out</span>
+        </div>
+        <div class="roster" style="margin-top:12px;">${rows}</div>
+        ${out.length > 0 ? `<div class="out-divider"><span class="lbl">OUT</span><div class="line"></div></div><div class="roster" style="margin-top:8px;">${outRows}</div>` : ''}
+      </div>
+    `;
   }
 
   // played/alive, not played/totalPlayers - identical in round 1 (no one
   // eliminated yet), but alive is the actually-correct denominator once
   // a later round has fewer players left to take a shot.
-  function roundProgressHtml(played, alive) {
+  function progressHtml(played, alive) {
     if (!alive) return '';
     const pct = Math.min(100, Math.round((played / alive) * 100));
     return `
-      <div class="round-progress">
-        <div class="round-progress-label">
-          <span>ROUND PROGRESS</span>
-          <span><b>${played} / ${alive}</b> · ${pct}%</span>
+      <div class="progress-row">
+        <div class="progress-label">
+          <span class="lbl">ROUND PROGRESS</span>
+          <span class="val"><b>${played}</b> / ${alive} shots</span>
         </div>
-        <div class="round-progress-track"><div class="round-progress-fill" style="width:${pct}%"></div></div>
+        <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
       </div>
     `;
   }
@@ -297,34 +310,54 @@
     // showTurnOrder }
     const total = Math.max(state.defaultLives || 3, state.lives || 0);
     const pips = Array.from({ length: total }, (_, i) =>
-      `<div class="pip ${i < state.lives ? 'on' : ''}"></div>`
+      `<span class="pip ${i < state.lives ? '' : 'off'}"></span>`
     ).join('');
-    // Real request: turn order withheld from this page by default -
-    // same reasoning as renderRoster above. Round + remaining count still
-    // show (not order-revealing on their own); who's actually up doesn't,
-    // unless the organizer turned "Public turn info" on in Settings.
-    const turnInfo = state.showTurnOrder
-      ? `
-        <div class="up-now-label">UP NOW</div>
-        <div class="player-name">${escapeHtml(state.currentPlayerName || '')}</div>
-        <div class="pips">${pips}</div>
-      `
-      : `<div class="status-line" style="margin-top:16px;margin-bottom:4px;">Turn order is private for this game</div>`;
+    // UP NOW always shows - who's shooting right now is happening live,
+    // not a strategic leak. "Public turn info" (showTurnOrder) only
+    // controls whether the roster BELOW reveals the upcoming turn
+    // sequence (turn order) or hides it (alphabetical) - see
+    // renderPlayers.
+    const turnInfo = `
+      <span class="up-now-label">UP NOW</span>
+      ${avatarHtml({ name: state.currentPlayerName, avatarPhoto: state.currentPlayerAvatar, avatarColor: state.currentPlayerAvatarColor }, 72)}
+      <div class="player-name">${escapeHtml(state.currentPlayerName || '')}</div>
+      <div class="pips">${pips}</div>
+    `;
+    const segTotal = Math.max(state.totalPlayers ?? 0, 1);
+    const segs = Array.from({ length: segTotal }, (_, i) =>
+      `<span class="seg ${i < (state.aliveCount ?? 0) ? '' : 'off'}"></span>`
+    ).join('');
+
     stage.innerHTML = `
-      <div class="round-badge">ROUND <b>${state.round ?? 1}</b></div>
-      ${roundProgressHtml(state.playedThisRoundCount ?? 0, state.aliveCount ?? 0)}
-      ${turnInfo}
-      <div class="status-line"><b>${state.aliveCount ?? '–'}</b> of <b>${state.totalPlayers ?? '–'}</b> players remaining</div>
-      ${renderRoster(state.players, state.currentPlayerName, state.showTurnOrder)}
+      <div class="ticket">
+        <div class="ticket-top felt">
+          <div class="round-badge"><span class="lbl">ROUND</span><span class="num">${state.round ?? 1}</span></div>
+          ${turnInfo}
+        </div>
+        <div class="perf"><div class="perf-line"></div><span class="perf-hole l"></span><span class="perf-hole r"></span></div>
+        <div class="ticket-stub">
+          ${progressHtml(state.playedThisRoundCount ?? 0, state.aliveCount ?? 0)}
+          <div class="hairline"></div>
+          <div class="remaining-row">
+            <div class="txt"><b>${state.aliveCount ?? '–'}</b> of <b>${state.totalPlayers ?? '–'}</b> players remaining</div>
+            <div class="seg-track">${segs}</div>
+          </div>
+        </div>
+      </div>
+      ${renderPlayers(state.players, state.currentPlayerName, state.showTurnOrder)}
     `;
   }
 
+  // Winner state kept as its own simpler layout (not the ticket pattern) -
+  // explicit decision, not restyled to match renderGame's hero.
   function renderWinner(state) {
     stage.innerHTML = `
-      <div class="pool-ball">8</div>
-      <div class="winner-title">${escapeHtml(state.winnerName || 'SOMEONE')} WINS</div>
-      <div class="winner-sub">Game over — round ${state.round ?? 1}</div>
-      ${renderRoster(state.players, null)}
+      <div class="centered-msg" style="min-height:auto;padding:20px 0;">
+        <div class="pool-ball">8</div>
+        <div class="winner-title">${escapeHtml(state.winnerName || 'SOMEONE')} WINS</div>
+        <div class="winner-sub">Game over — round ${state.round ?? 1}</div>
+      </div>
+      ${renderPlayers(state.players, null, false)}
     `;
   }
 
@@ -334,24 +367,25 @@
   // network activity, and the listener can take a moment to reconnect
   // once it's foregrounded again. Rather than leave a viewer guessing
   // "is this frozen or just quiet," track when the last update actually
-  // landed and show it - plus a manual refresh (a full page reload,
-  // guaranteed to force a fresh connection) as a safety net.
-  const liveStatus = document.getElementById('liveStatus');
+  // landed and show it - the pill itself is a manual refresh (a full
+  // page reload, guaranteed to force a fresh connection) as a safety net.
+  const livePill = document.getElementById('livePill');
   const liveDot = document.getElementById('liveDot');
   const liveText = document.getElementById('liveText');
   let lastUpdate = null;
   function markUpdated() {
     lastUpdate = Date.now();
-    liveStatus.hidden = false;
+    livePill.hidden = false;
   }
   function tickLiveStatus() {
     if (!lastUpdate) return;
     const secs = Math.round((Date.now() - lastUpdate) / 1000);
     const stale = secs > 25;
     liveDot.classList.toggle('stale', stale);
-    if (secs < 5) liveText.textContent = 'updated just now';
-    else if (secs < 60) liveText.textContent = `updated ${secs}s ago`;
-    else liveText.textContent = `updated ${Math.round(secs / 60)}m ago${stale ? ' — try refresh' : ''}`;
+    if (secs < 5) liveText.textContent = 'Updated just now';
+    else if (secs < 60) liveText.textContent = `Updated ${secs}s ago`;
+    else liveText.textContent = `Updated ${Math.round(secs / 60)}m ago${stale ? ' — try refresh' : ''}`;
+    livePill.setAttribute('aria-label', `Refresh, ${liveText.textContent.toLowerCase()}`);
   }
   setInterval(tickLiveStatus, 1000);
   // Re-check promptly when the tab comes back to the foreground, rather
