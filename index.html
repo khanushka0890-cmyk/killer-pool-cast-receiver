@@ -4,304 +4,162 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Killer Pool — Cast Receiver</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700;900&display=swap');
+  :root {
+    /* 1 design px. Stage is designed at 1280x720 and scales to fit any
+       screen while keeping 16:9 - letterboxes (never stretches/crops) on
+       a non-16:9 receiver viewport. See killer-pool-tv-cast-screen-handoff.md */
+    --u: min(calc(100vw / 1280), calc(100vh / 720));
+    --bg:#0B0A12; --felt:#2D1A55; --stub:#1E1238; --deep:#1A1030;
+    --gold:#F2B84B; --gold-text:#F5C76A; --ivory:#F7EEDC;
+    --text:#FFFFFF; --text-2:#CBC2E0; --line:#4A4463;
+    --live:#F0625A; --live-text:#FF8A83;
+    --next:#B79CF0; --next-edge:rgba(183,156,240,.45);
+    --edge:rgba(242,184,75,.55);
+  }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body {
-    width: 100%; height: 100%;
-    color: #e8edf2;
-    font-family: 'Barlow', sans-serif;
-    overflow: hidden;
-    /* Same felt weave used on the app's own hero card - a flat #0c1117
-       fill left the wide dead space between the two game-state columns
-       reading as empty/broken rather than as deliberate breathing room. */
-    background-color: #0c1117;
-    background-image:
-      repeating-linear-gradient(45deg, rgba(255,255,255,.025) 0 1px, transparent 1px 6px),
-      repeating-linear-gradient(-45deg, rgba(0,0,0,.16) 0 1px, transparent 1px 6px);
-  }
-  /* Real landscape layout, not a portrait column centered on a wide
-     screen. Was a single flex-column stack (badge, label, name, pips,
-     status all centered) sized in vw - technically fills a landscape
-     viewport, but a lone centered column of text doesn't span the WIDTH
-     of a 16:9 screen on its own, so the actual content read as a narrow
-     vertical strip with huge empty gutters left/right - exactly what
-     "vertical on a horizontal screen" looks like, even though nothing
-     was literally rotated. Fixed by actually using the width: identity
-     (round + up now + name) on the left, stats (pips + remaining) on
-     the right, both vertically centered, one row. */
-  .stage {
-    width: 100vw; height: 100vh;
-    padding: 4vh 6vw;
-  }
-  .stage.idle {
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    text-align: center;
-  }
-  /* v2: the grid-of-text alone (previous fix) technically spanned the
-     width correctly, but read as a handful of small labels floating in a
-     huge dark void - no persistent identity once a game starts (only the
-     idle screen had the "KILLER POOL" wordmark), and capping the grid's
-     width to avoid a dead gap between columns just moved that same dead
-     space to the screen's edges instead. Framing everything inside one
-     large bordered card - the same gold-rimmed treatment the app's own
-     hero card uses - fixes both at once: the CARD is sized to be a real
-     presence on the screen (not just its text), and a permanent brand
-     row up top means the screen never looks unbranded once play starts. */
-  .stage.game {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-  }
-  .game-card {
-    position: relative; /* anchors .qr-badge to the card, not the viewport */
-    width: min(1500px, 90vw);
-    background: linear-gradient(160deg, #171f2c 0%, #0d1219 100%);
-    border: 2px solid rgba(255, 215, 0, 0.3);
-    border-radius: 28px;
-    box-shadow:
-      0 0 0 1px rgba(255, 215, 0, 0.07) inset,
-      0 40px 100px rgba(0, 0, 0, 0.55);
-    padding: 5vh 5vw;
-  }
-  /* Real request: whatever the TV is showing (live game or the winner),
-     someone standing in front of it has no way to get the join link
-     themselves - same join.html link the organizer's own phone Share
-     screen already offers, just drawn here too. Corner badge rather than
-     a dedicated section so it doesn't compete with the game state for
-     attention - a light-background square QR needs to sit on white
-     regardless of the dark card behind it, so it reads as a deliberate
-     "scan me" object rather than part of the felt/card design. */
-  .qr-badge {
-    position: absolute;
-    bottom: 3vh;
-    right: 3vh;
-    background: #fff;
-    border-radius: 1.2vh;
-    padding: 1vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
-  }
-  .qr-badge svg {
-    width: 12vh;
-    height: 12vh;
-    display: block;
-  }
-  .qr-badge-label {
-    margin-top: 0.7vh;
-    font-size: 1.15vh;
-    letter-spacing: 0.15vw;
-    font-weight: 700;
-    color: #0c1117;
-    text-align: center;
-    white-space: nowrap;
-  }
-  /* space-between, not the plain left-aligned row this was - the round
-     badge used to sit above "UP NOW" in the left column, floating in
-     the middle of the card on its own. Moving it up here, right-aligned
-     and vertically centered with the brand mark, gives it a fixed home
-     (top-right, like a broadcast graphic's corner bug) instead of
-     competing with the player name for the same block of space. */
-  .brand-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 4vh;
-    padding-bottom: 3vh;
-    border-bottom: 1px solid #23303f;
-  }
-  .brand-left { display: flex; align-items: center; gap: 1vw; }
-  .brand-row .pool-ball { width: 5vh; height: 5vh; font-size: 1.9vh; margin-bottom: 0; }
-  .brand-word {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 2.4vh;
-    letter-spacing: 0.35vw;
-    color: #FFD700;
-  }
-  .brand-word span { color: #55606e; letter-spacing: 0.2vw; }
-  /* auto columns + justify-content:center, not fr columns - fr stretches
-     each column to a fixed fraction of the card's full width regardless
-     of what's actually inside it, which just relocated the old dead-gap
-     problem from "around the card" to "inside the right half of it".
-     auto columns size to their own content and justify-content centers
-     the pair as a unit, so the card's extra width becomes even breathing
-     room on both sides instead of a lopsided empty quadrant. */
-  .game-grid {
-    display: grid;
-    grid-template-columns: auto auto;
-    column-gap: 6vw;
-    justify-content: center;
-    align-items: center;
-  }
-  .left-col { min-width: 0; text-align: left; }
-  .right-col { min-width: 0; text-align: left; padding-left: 4vw; border-left: 2px solid #1e2d40; height: fit-content; }
-  /* Avatar sits beside the "UP NOW" / name stack, not above or below it -
-     same identity-row shape the app's own hero card uses. */
-  .identity-row { display: flex; align-items: center; gap: 2vw; }
-  .avatar {
-    flex-shrink: 0;
-    border-radius: 50%;
-    overflow: hidden;
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Bebas Neue', sans-serif;
-    color: #fff;
-    background: #546e7a;
-    border: 3px solid rgba(255, 215, 0, 0.5);
-  }
-  .avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .avatar.game-avatar { width: 11vh; height: 11vh; font-size: 4vh; }
-  .round-badge {
-    display: inline-block;
-    font-size: 1.7vw;
-    letter-spacing: 0.3vw;
-    color: #7a6010;
-    font-weight: 700;
-    background: #1a1508;
-    border: 1px solid #3a2e0f;
-    border-radius: 100px;
-    padding: 0.8vh 1.6vw;
-  }
-  .up-now-label {
-    font-size: 1.5vw;
-    letter-spacing: 0.4vw;
-    color: #7a6010;
-    font-weight: 700;
-    margin-bottom: 1vh;
-  }
-  .player-name {
-    font-family: 'Bebas Neue', sans-serif;
-    /* vh, not vw, for the dimension actually in short supply on a
-       landscape screen - vw made this scale with the WIDE axis, which
-       is exactly backwards for a screen that's short and wide. */
-    font-size: 13vh;
-    letter-spacing: 0.3vw;
-    line-height: 1;
-    color: #FFD700;
-    text-shadow: 0 0 60px rgba(255,215,0,0.25);
-    /* A name long enough to not fit in one line at 13vh used to hard-wrap
-       mid-word ("CHRISTOP / HER") - renderGame now grades the font size
-       down by name length instead, so a long name shrinks to fit on one
-       line rather than getting torn in half. */
-    white-space: nowrap;
-  }
-  .player-name.len-long { font-size: 8.5vh; }
-  .player-name.len-verylong { font-size: 6.2vh; }
-  .stat-label {
-    font-size: 1.4vw;
-    letter-spacing: 0.3vw;
-    color: #78909c;
-    font-weight: 700;
-    margin-bottom: 2vh;
-  }
-  .pips { display: flex; gap: 1.1vw; flex-wrap: wrap; margin-bottom: 3.5vh; }
-  /* Real request: "a round progress line as a progress bar" on every
-     public-facing page, including this one. Spans the full card width,
-     below the identity/stats grid - same #FFD700 accent this file
-     already uses (not the app's own #D99E38, which only join.html and
-     the app itself use). */
-  /* padding-right reserves room for .qr-badge, an absolutely-positioned
-     corner overlay (bottom/right: 3vh, ~14vh wide including its own
-     padding) that this full-width block would otherwise run straight
-     under - confirmed via screenshot: the "X / Y · Z%" label, pushed to
-     the far right by justify-content: space-between, was rendering
-     partially hidden behind the QR code. Reserved unconditionally
-     (harmless when there's no QR badge to avoid - state.gameId absent) -
-     simpler than threading a "is a QR badge present" flag through here
-     just to make the padding conditional. */
-  .round-progress { margin-top: 3vh; padding-right: 18vh; }
-  .round-progress-label {
-    display: flex; justify-content: space-between;
-    font-size: 1.3vh; letter-spacing: 0.2vw; color: #78909c; font-weight: 700;
-    margin-bottom: 1vh;
-  }
-  .round-progress-label b { color: #e8edf2; }
-  .round-progress-track {
-    height: 1.3vh; border-radius: 1vh;
-    background: rgba(255,255,255,0.1); overflow: hidden;
-  }
-  .round-progress-fill { height: 100%; background: #FFD700; border-radius: 1vh; }
-  .pip {
-    width: 3.2vw; height: 3.2vw; border-radius: 50%;
-    background: #1e2530; border: 3px solid #3a4250;
-  }
-  .pip.on { background: #FFD700; border-color: #b8942a; }
-  .status-line {
-    font-size: 1.6vw;
-    color: #78909c;
-  }
-  .status-line b { color: #e8edf2; font-size: 2vw; }
-  /* Winner screen - reuses the same card/brand-row shell as the game
-     state (so it doesn't feel like a different app), single centered
-     column instead of the two-column layout since there's only one
-     thing left to announce. */
-  .stage.winner {
-    display: flex; align-items: center; justify-content: center;
-    height: 100%;
-  }
-  .winner-card { width: min(900px, 72vw); }
-  .winner-content { text-align: center; padding-top: 1vh; }
-  .winner-label {
-    font-size: 1.8vh;
-    letter-spacing: 0.5vw;
-    color: #7a6010;
-    font-weight: 700;
-    margin-bottom: 3vh;
-  }
-  .avatar.winner-avatar {
-    width: 20vh; height: 20vh; font-size: 7vh;
-    margin: 0 auto 3.5vh;
-    border-width: 4px;
-    box-shadow: 0 0 60px rgba(255, 215, 0, 0.3);
-  }
-  .winner-name {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 11vh;
-    line-height: 1;
-    color: #FFD700;
-    text-shadow: 0 0 80px rgba(255, 215, 0, 0.35);
-    word-break: break-word;
-  }
-  .winner-sub {
-    margin-top: 2.5vh;
-    font-size: 1.6vh;
-    letter-spacing: 0.3vw;
-    color: #78909c;
-    font-weight: 700;
-  }
-  .idle-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 7vw;
-    letter-spacing: 0.5vw;
-    color: #FFD700;
-  }
-  .idle-sub {
-    font-size: 1.4vw;
-    letter-spacing: 0.3vw;
-    color: #4a5568;
-    margin-top: 2vh;
-  }
-  .pool-ball {
-    width: 7vh; height: 7vh;
-    border-radius: 50%;
-    background: radial-gradient(circle at 35% 30%, #3a3a3a, #0a0a0a 70%);
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 2.6vh;
-    color: #fff;
-    margin-bottom: 3vh;
-  }
-  .idle .pool-ball { margin-left: auto; margin-right: auto; }
+  html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: var(--bg); }
+  body { font-family: 'Barlow', system-ui, sans-serif; color: var(--text); -webkit-font-smoothing: antialiased; }
+
+  .tv-stage { position: fixed; inset: 0; margin: auto;
+    width: calc(1280 * var(--u)); height: calc(720 * var(--u));
+    background: radial-gradient(ellipse at 50% 40%, var(--deep) 0%, var(--bg) 70%); }
+
+  /* Felt texture - fixed-px weave, deliberately NOT scaled with --u so it
+     stays a fine weave instead of a blown-up pattern on big/4K screens. */
+  .felt { background-color: var(--felt);
+    background-image: repeating-linear-gradient(45deg, rgba(255,255,255,.024) 0 1px, transparent 1px 4px),
+                       repeating-linear-gradient(-45deg, rgba(0,0,0,.09) 0 1px, transparent 1px 4px); }
+
+  /* Idle */
+  .tv-idle { position: absolute; inset: 0; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: calc(20 * var(--u)); text-align: center; }
+  .tv-idle__ball { width: calc(84 * var(--u)); height: calc(84 * var(--u)); }
+  .tv-idle__title { font: 400 calc(52 * var(--u))/1 'Bebas Neue', sans-serif; letter-spacing: calc(4 * var(--u)); color: var(--gold); }
+  .tv-idle__sub { font: 600 calc(17 * var(--u))/1 'Barlow Condensed', sans-serif; letter-spacing: calc(3 * var(--u)); color: var(--text-2); }
+
+  /* Ticket: felt | perforation | stub, inside the 5% title-safe area. */
+  .tv-ticket { position: absolute; left: calc(80 * var(--u)); top: calc(88 * var(--u));
+    width: calc(1120 * var(--u)); height: calc(544 * var(--u)); display: flex;
+    filter: drop-shadow(0 calc(30 * var(--u)) calc(60 * var(--u)) rgba(0,0,0,.5)); }
+  /* Next-up pill grows the ticket by 48 design px (top 88->64, height 544->592) -
+     still inside the 36px title-safe margin. See tv-cast-screen-update-2.md */
+  .tv-ticket.has-next { top: calc(64 * var(--u)); height: calc(592 * var(--u)); }
+
+  .tv-main { flex: 1 1 auto; min-width: 0; box-sizing: border-box; display: flex; flex-direction: column;
+    border: 1px solid var(--edge); border-right: none; border-radius: calc(28 * var(--u)) 0 0 calc(28 * var(--u));
+    padding: calc(44 * var(--u)) calc(56 * var(--u)) calc(48 * var(--u)); }
+
+  .tv-head { display: flex; align-items: center; justify-content: space-between; height: calc(52 * var(--u)); }
+  .tv-brand { display: flex; align-items: center; gap: calc(14 * var(--u)); }
+  .tv-brand__ball { width: calc(44 * var(--u)); height: calc(44 * var(--u)); flex-shrink: 0; }
+  .tv-brand__lockup { display: flex; flex-direction: column; gap: calc(2 * var(--u)); }
+  .tv-brand__name { font: 400 calc(30 * var(--u))/1 'Bebas Neue', sans-serif; letter-spacing: calc(3 * var(--u)); color: var(--gold); }
+  .tv-brand__sub { font: 600 calc(15 * var(--u))/1.1 'Barlow Condensed', sans-serif; letter-spacing: calc(6.6 * var(--u)); color: var(--text-2); }
+  .tv-live { display: inline-flex; align-items: center; gap: calc(8 * var(--u)); height: calc(32 * var(--u));
+    padding: 0 calc(14 * var(--u)) 0 calc(12 * var(--u)); border-radius: calc(16 * var(--u)); background: rgba(240,98,90,.14);
+    font: 700 calc(16 * var(--u))/1 'Barlow Condensed', sans-serif; letter-spacing: calc(2 * var(--u)); color: var(--live-text);
+    margin-left: calc(14 * var(--u)); }
+  .tv-live::before { content: ""; width: calc(9 * var(--u)); height: calc(9 * var(--u)); border-radius: 50%; background: var(--live); }
+  .tv-round { display: flex; align-items: center; gap: calc(12 * var(--u)); height: calc(52 * var(--u)); box-sizing: border-box;
+    padding: 0 calc(22 * var(--u)); border-radius: calc(14 * var(--u)); background: rgba(11,10,18,.45); border: 1px solid rgba(242,184,75,.35); }
+  .tv-round__lbl { font: 600 calc(18 * var(--u))/1 'Barlow Condensed', sans-serif; letter-spacing: calc(3 * var(--u)); padding-left: calc(3 * var(--u)); color: var(--text-2); }
+  .tv-round__num { font: 400 calc(40 * var(--u))/1 'Bebas Neue', sans-serif; color: var(--gold); padding-top: calc(4 * var(--u)); }
+
+  .tv-hero { flex: 1 1 auto; display: flex; align-items: center; gap: calc(40 * var(--u)); min-height: 0; }
+  .tv-avatar { width: calc(168 * var(--u)); height: calc(168 * var(--u)); flex-shrink: 0; box-sizing: border-box; border-radius: 50%;
+    padding: calc(5 * var(--u)); background: var(--gold); }
+  .tv-avatar__inner { width: 100%; height: 100%; box-sizing: border-box; border-radius: 50%; border: calc(5 * var(--u)) solid var(--felt);
+    display: flex; align-items: center; justify-content: center; font: 400 calc(80 * var(--u))/1 'Bebas Neue', sans-serif;
+    color: #fff; padding-top: calc(6 * var(--u)); overflow: hidden; }
+  .tv-avatar__inner img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 50%; }
+  .tv-hero__text { display: flex; flex-direction: column; gap: calc(6 * var(--u)); min-width: 0; }
+  .tv-upnow { font: 700 calc(22 * var(--u))/1 'Barlow Condensed', sans-serif; letter-spacing: calc(6 * var(--u)); color: var(--gold-text); }
+  .tv-name { font: 400 calc(150 * var(--u))/calc(128 * var(--u)) 'Bebas Neue', sans-serif; letter-spacing: calc(3 * var(--u));
+    color: var(--text); padding-top: calc(10 * var(--u)); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tv-lives { display: flex; align-items: center; gap: calc(12 * var(--u)); margin-top: calc(6 * var(--u)); flex-wrap: wrap; }
+  .tv-pip { width: calc(30 * var(--u)); height: calc(30 * var(--u)); box-sizing: border-box; border-radius: 50%; border: calc(2 * var(--u)) solid var(--line); flex-shrink: 0; }
+  .tv-pip.is-on { border: none; background: var(--gold);
+    box-shadow: inset calc(-3 * var(--u)) calc(-3 * var(--u)) 0 rgba(0,0,0,.22), inset calc(2 * var(--u)) calc(2 * var(--u)) 0 rgba(255,255,255,.35); }
+  .tv-pip.is-last { background: var(--live); box-shadow: inset calc(-3 * var(--u)) calc(-3 * var(--u)) 0 rgba(0,0,0,.22), inset calc(2 * var(--u)) calc(2 * var(--u)) 0 rgba(255,255,255,.35); }
+  .tv-lives__txt { font: 500 calc(22 * var(--u))/1 'Barlow', sans-serif; color: var(--text-2); margin-left: calc(6 * var(--u)); }
+  .tv-lives__txt.is-last { color: var(--live-text); }
+
+  /* Next-up pill - lilac, not gold (gold is reserved for the current
+     shooter); only rendered when showTurnOrder is on and there's a next
+     player to show (see tv-cast-screen-update-2.md). */
+  .tv-next { align-self: flex-start; display: flex; align-items: center; gap: calc(12 * var(--u)); margin-top: calc(18 * var(--u));
+    height: calc(52 * var(--u)); box-sizing: border-box; padding: 0 calc(22 * var(--u)) 0 calc(8 * var(--u)); border-radius: calc(26 * var(--u));
+    background: rgba(11,10,18,.45); border: 1px solid var(--next-edge); }
+  .tv-next__av { width: calc(38 * var(--u)); height: calc(38 * var(--u)); flex-shrink: 0; box-sizing: border-box; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; overflow: hidden;
+    font: 400 calc(20 * var(--u))/1 'Bebas Neue', sans-serif; color: #fff; padding-top: calc(2 * var(--u)); }
+  .tv-next__av img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 50%; }
+  .tv-next__lbl { font: 700 calc(17 * var(--u))/1 'Barlow Condensed', sans-serif; letter-spacing: calc(3 * var(--u)); color: var(--next); }
+  .tv-next__name { font: 700 calc(24 * var(--u))/1 'Barlow', sans-serif; color: #fff;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: calc(320 * var(--u)); }
+
+  .tv-stats { display: grid; grid-template-columns: 1fr 1fr; gap: calc(48 * var(--u)); padding-top: calc(28 * var(--u)); border-top: 1px solid rgba(255,255,255,.1); }
+  .tv-stat { display: flex; flex-direction: column; gap: calc(12 * var(--u)); min-width: 0; }
+  .tv-stat__row { display: flex; justify-content: space-between; align-items: baseline; }
+  .tv-stat__lbl { font: 700 calc(17 * var(--u))/1 'Barlow Condensed', sans-serif; letter-spacing: calc(3 * var(--u)); color: var(--text-2); }
+  .tv-stat__val { font: 400 calc(22 * var(--u))/1 'Barlow', sans-serif; color: var(--text-2); font-variant-numeric: tabular-nums; }
+  .tv-stat__val b { color: #fff; font-weight: 700; }
+  .tv-bar { height: calc(8 * var(--u)); border-radius: calc(4 * var(--u)); background: rgba(255,255,255,.12); overflow: hidden; }
+  .tv-bar__fill { height: 100%; border-radius: inherit; background: var(--gold); }
+  .tv-segs { display: flex; gap: calc(6 * var(--u)); }
+  .tv-seg { flex: 1; height: calc(8 * var(--u)); border-radius: calc(4 * var(--u)); background: rgba(255,255,255,.12); }
+  .tv-seg.is-on { background: var(--gold); }
+
+  /* Vertical perforation */
+  .tv-perf { position: relative; width: calc(28 * var(--u)); flex-shrink: 0; box-sizing: border-box;
+    border-top: 1px solid var(--edge); border-bottom: 1px solid var(--edge);
+    background: linear-gradient(90deg, transparent 50%, var(--stub) 50%); }
+  .tv-perf__felt { position: absolute; left: 0; top: 0; bottom: 0; width: 50%; }
+  .tv-perf__line { position: absolute; left: 50%; top: calc(36 * var(--u)); bottom: calc(36 * var(--u)); border-left: 2px dashed rgba(242,184,75,.4); transform: translateX(-1px); }
+  .tv-perf__hole { position: absolute; left: 0; width: calc(28 * var(--u)); height: calc(28 * var(--u)); box-sizing: border-box; border-radius: 50%; background: var(--bg); }
+  .tv-perf__hole--top { top: calc(-15 * var(--u)); border-bottom: 1px solid var(--edge); }
+  .tv-perf__hole--bot { bottom: calc(-15 * var(--u)); border-top: 1px solid var(--edge); }
+
+  /* Stub: QR. Flat, no texture (per the handoff's "only two tones" rule). */
+  .tv-stub { width: calc(300 * var(--u)); flex-shrink: 0; box-sizing: border-box; background: var(--stub);
+    border: 1px solid var(--edge); border-left: none; border-radius: 0 calc(28 * var(--u)) calc(28 * var(--u)) 0;
+    padding: calc(44 * var(--u)) calc(36 * var(--u)) calc(48 * var(--u));
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: calc(22 * var(--u)); }
+  .tv-qr { padding: calc(16 * var(--u)); border-radius: calc(18 * var(--u)); background: var(--ivory); box-shadow: 0 0 0 1px rgba(242,184,75,.5); }
+  .tv-qr svg { display: block; width: calc(184 * var(--u)); height: calc(184 * var(--u)); }
+  .tv-qr__cap { font: 700 calc(17 * var(--u))/1 'Barlow Condensed', sans-serif; letter-spacing: calc(3 * var(--u)); padding-left: calc(3 * var(--u)); color: var(--gold-text); text-align: center; }
+
+  /* Winner screen - not covered by the ticket spec, so it isn't a 3-part
+     ticket; same token palette/fonts/felt so it doesn't look like a
+     different app once the game ends. Single felt card, QR badge kept in
+     the corner (same idea the old design used). */
+  .tv-winner-wrap { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+  .tv-winner-card { position: relative; width: calc(760 * var(--u)); box-sizing: border-box;
+    border: 1px solid var(--edge); border-radius: calc(28 * var(--u));
+    padding: calc(48 * var(--u)) calc(64 * var(--u)) calc(56 * var(--u)); text-align: center;
+    filter: drop-shadow(0 calc(30 * var(--u)) calc(60 * var(--u)) rgba(0,0,0,.5)); }
+  .tv-winner-brand { display: flex; align-items: center; justify-content: center; gap: calc(14 * var(--u)); margin-bottom: calc(36 * var(--u)); }
+  .tv-winner-label { font: 700 calc(20 * var(--u))/1 'Barlow Condensed', sans-serif; letter-spacing: calc(6 * var(--u)); color: var(--gold-text); margin-bottom: calc(28 * var(--u)); }
+  .tv-winner-avatar { width: calc(180 * var(--u)); height: calc(180 * var(--u)); margin: 0 auto calc(28 * var(--u)); box-sizing: border-box;
+    border-radius: 50%; padding: calc(5 * var(--u)); background: var(--gold); box-shadow: 0 0 calc(60 * var(--u)) rgba(242,184,75,.3); }
+  .tv-winner-avatar__inner { width: 100%; height: 100%; box-sizing: border-box; border-radius: 50%; border: calc(5 * var(--u)) solid var(--felt);
+    display: flex; align-items: center; justify-content: center; font: 400 calc(70 * var(--u))/1 'Bebas Neue', sans-serif; color: #fff; overflow: hidden; }
+  .tv-winner-avatar__inner img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 50%; }
+  .tv-winner-name { font: 400 calc(96 * var(--u))/1 'Bebas Neue', sans-serif; letter-spacing: calc(3 * var(--u)); color: var(--text); word-break: break-word; }
+  .tv-winner-sub { margin-top: calc(20 * var(--u)); font: 700 calc(17 * var(--u))/1 'Barlow Condensed', sans-serif; letter-spacing: calc(3 * var(--u)); color: var(--text-2); }
+  .tv-winner-qr-badge { position: absolute; bottom: calc(28 * var(--u)); right: calc(28 * var(--u)); display: flex; flex-direction: column; align-items: center; gap: calc(10 * var(--u)); }
 </style>
 </head>
 <body>
-  <div class="stage idle" id="stage">
-    <div class="pool-ball">8</div>
-    <div class="idle-title">KILLER POOL</div>
-    <div class="idle-sub">WAITING FOR ORGANISER TO START A GAME…</div>
+  <div class="tv-stage" id="stage">
+    <div class="tv-idle">
+      <svg class="tv-idle__ball" viewBox="0 0 26 26" aria-hidden="true"><circle cx="13" cy="13" r="12" fill="#0B0A12" stroke="#4A4463" stroke-width="1"/><circle cx="13" cy="13" r="6" fill="#F4F1FA"/><text x="13" y="16.5" text-anchor="middle" font-family="Barlow, sans-serif" font-weight="700" font-size="9" fill="#0B0A12">8</text></svg>
+      <div class="tv-idle__title">KILLER POOL</div>
+      <div class="tv-idle__sub">WAITING FOR ORGANISER TO START A GAME…</div>
+    </div>
   </div>
 
 <script src="//www.gstatic.com/cast/sdk/libs/caf_receiver/v3/cast_receiver_framework.js"></script>
@@ -314,136 +172,212 @@
   // Must match CAST_NAMESPACE in the app's Chromecast integration.
   const NAMESPACE = 'urn:x-cast:com.killerpool.state';
   const stage = document.getElementById('stage');
+  const BRAND_BALL_SVG = '<svg class="tv-brand__ball" viewBox="0 0 26 26" aria-hidden="true"><circle cx="13" cy="13" r="12" fill="#0B0A12" stroke="#4A4463" stroke-width="1"/><circle cx="13" cy="13" r="6" fill="#F4F1FA"/><text x="13" y="16.5" text-anchor="middle" font-family="Barlow, sans-serif" font-weight="700" font-size="9" fill="#0B0A12">8</text></svg>';
 
   // Same join.html link + QR the organizer's own phone Share screen
   // offers (src/KillerPool.jsx's JOIN_PAGE_BASE_URL) - drawn here too so
   // anyone standing in front of the TV can scan it directly, not just the
-  // organizer. Returns '' (nothing rendered) when there's no gameId yet -
-  // a fresh game's Firestore doc takes a couple seconds to be created
-  // (see KillerPool.jsx's gameId-creation effect), so the very first
-  // state message or two won't have one.
+  // organizer. Returns null when there's no gameId yet - a fresh game's
+  // Firestore doc takes a couple seconds to be created (see
+  // KillerPool.jsx's gameId-creation effect), so the very first state
+  // message or two won't have one; the stub still renders, just without
+  // the QR tile until one arrives.
   const JOIN_PAGE_BASE_URL = 'https://khanushka0890-cmyk.github.io/killer-pool-cast-receiver/join.html';
-  function qrBadgeHtml(gameId) {
-    if (!gameId || typeof qrcode !== 'function') return '';
+  function qrSvg(gameId) {
+    if (!gameId || typeof qrcode !== 'function') return null;
     const joinUrl = `${JOIN_PAGE_BASE_URL}?game=${gameId}`;
     const qr = qrcode(0, 'M');
     qr.addData(joinUrl);
     qr.make();
-    return `
-      <div class="qr-badge">
-        ${qr.createSvgTag({ cellSize: 5, margin: 1 })}
-        <div class="qr-badge-label">SCAN TO<br/>FOLLOW ALONG</div>
-      </div>
-    `;
+    return qr.createSvgTag({ cellSize: 5, margin: 1 });
+  }
+  function qrStubHtml(gameId) {
+    const svg = qrSvg(gameId);
+    if (!svg) return '';
+    return `<div class="tv-qr">${svg}</div><span class="tv-qr__cap">SCAN TO FOLLOW ALONG</span>`;
   }
 
   function renderIdle() {
-    stage.className = 'stage idle';
+    stage.className = 'tv-stage';
     stage.innerHTML = `
-      <div class="pool-ball">8</div>
-      <div class="idle-title">KILLER POOL</div>
-      <div class="idle-sub">WAITING FOR ORGANISER TO START A GAME…</div>
-    `;
-  }
-
-  // Real request: "a round progress line as a progress bar" on every
-  // public-facing page, including this one. played/alive, not played/
-  // totalPlayers - identical in round 1 (no one's eliminated yet), but
-  // alive is the actually-correct denominator once a later round has
-  // fewer players left to take a shot.
-  function roundProgressHtml(played, alive) {
-    if (!alive) return '';
-    const pct = Math.min(100, Math.round((played / alive) * 100));
-    return `
-      <div class="round-progress">
-        <div class="round-progress-label">
-          <span>ROUND PROGRESS</span>
-          <span><b>${played} / ${alive}</b> · ${pct}%</span>
-        </div>
-        <div class="round-progress-track"><div class="round-progress-fill" style="width:${pct}%"></div></div>
+      <div class="tv-idle">
+        ${BRAND_BALL_SVG.replace('tv-brand__ball', 'tv-idle__ball')}
+        <div class="tv-idle__title">KILLER POOL</div>
+        <div class="tv-idle__sub">WAITING FOR ORGANISER TO START A GAME…</div>
       </div>
     `;
   }
 
+  // Real request: "a round progress line as a progress bar" - played/
+  // alive, not played/totalPlayers, since alive is the correct
+  // denominator once a later round has fewer players left to shoot.
+  function roundProgressStat(played, alive) {
+    const denom = alive || 0;
+    const pct = denom ? Math.min(100, Math.round((played / denom) * 100)) : 0;
+    return `
+      <div class="tv-stat">
+        <div class="tv-stat__row"><span class="tv-stat__lbl">ROUND PROGRESS</span><span class="tv-stat__val"><b>${played}</b> / ${denom} shots</span></div>
+        <div class="tv-bar"><div class="tv-bar__fill" style="width:${pct}%"></div></div>
+      </div>
+    `;
+  }
+
+  // Segmented bar up to 12 players (one segment per player, readable at TV
+  // distance); above that, a continuous fill bar like round progress,
+  // since 20+ segments get too thin to read. See the TV handoff, 5.3.
+  function playersRemainingStat(alive, total) {
+    let visual;
+    if (total > 12) {
+      const pct = total ? Math.min(100, Math.round((alive / total) * 100)) : 0;
+      visual = `<div class="tv-bar"><div class="tv-bar__fill" style="width:${pct}%"></div></div>`;
+    } else {
+      const segs = Array.from({ length: total || 0 }, (_, i) => `<span class="tv-seg ${i < alive ? 'is-on' : ''}"></span>`).join('');
+      visual = `<div class="tv-segs">${segs}</div>`;
+    }
+    return `
+      <div class="tv-stat">
+        <div class="tv-stat__row"><span class="tv-stat__lbl">PLAYERS REMAINING</span><span class="tv-stat__val"><b>${alive}</b> of ${total}</span></div>
+        ${visual}
+      </div>
+    `;
+  }
+
+  // Same rule as the app's own RdPips (KillerPool.jsx): the single
+  // remaining pip on the last life turns red, and the caption swaps to
+  // "Last life".
+  function livesHtml(lives, defaultLives) {
+    const show = Math.max(lives, 0);
+    const total = Math.max(defaultLives || 3, show);
+    const isLast = show === 1;
+    const pips = Array.from({ length: total }, (_, i) => {
+      const filled = i < show;
+      const lastPip = filled && isLast && i === show - 1;
+      return `<span class="tv-pip ${filled ? 'is-on' : ''} ${lastPip ? 'is-last' : ''}"></span>`;
+    }).join('');
+    const label = isLast ? 'Last life' : `${show} lives left`;
+    return `
+      <div class="tv-lives" aria-label="${show} of ${total} lives left">
+        ${pips}
+        <span class="tv-lives__txt ${isLast ? 'is-last' : ''}">${label}</span>
+      </div>
+    `;
+  }
+
+  // Main "UP NOW" avatar: gold ring + felt inner border, matching the
+  // app's own hero card. Real photo when the player set one, otherwise a
+  // colored-circle-plus-initial fallback.
+  function heroAvatarHtml(photoUrl, color, name) {
+    const initial = escapeHtml((name || '').trim().charAt(0).toUpperCase() || '?');
+    const inner = photoUrl
+      ? `<div class="tv-avatar__inner"><img src="${photoUrl}" alt="" /></div>`
+      : `<div class="tv-avatar__inner" style="background:${color || '#546e7a'}">${initial}</div>`;
+    return `<div class="tv-avatar">${inner}</div>`;
+  }
+
+  // Next-up pill avatar - same photo-or-fallback pattern, no ring (see
+  // tv-cast-screen-update-2.md's .tv-next__av).
+  function nextAvatarHtml(photoUrl, color, name) {
+    const initial = escapeHtml((name || '').trim().charAt(0).toUpperCase() || '?');
+    if (photoUrl) return `<span class="tv-next__av"><img src="${photoUrl}" alt="" /></span>`;
+    return `<span class="tv-next__av" style="background:${color || '#546e7a'}">${initial}</span>`;
+  }
+
+  function winnerAvatarHtml(photoUrl, color, name) {
+    const initial = escapeHtml((name || '').trim().charAt(0).toUpperCase() || '?');
+    const inner = photoUrl
+      ? `<div class="tv-winner-avatar__inner"><img src="${photoUrl}" alt="" /></div>`
+      : `<div class="tv-winner-avatar__inner" style="background:${color || '#546e7a'}">${initial}</div>`;
+    return `<div class="tv-winner-avatar">${inner}</div>`;
+  }
+
   function renderGame(state) {
-    // Expected shape (kept intentionally small — see capacitorSetup.js):
+    // Expected shape (kept intentionally small - see capacitorSetup.js):
     // { round, currentPlayerName, lives, defaultLives, aliveCount,
     //   totalPlayers, playedThisRoundCount, currentPlayerAvatar,
-    //   currentPlayerAvatarColor }
-    // currentPlayerAvatar is a data: URL (or absent) - see
-    // resizeImageToDataUrl in KillerPool.jsx, already resized small
-    // before it ever leaves the phone.
-    stage.className = 'stage game';
-    const total = Math.max(state.defaultLives || 3, state.lives || 0);
-    const pips = Array.from({ length: total }, (_, i) =>
-      `<div class="pip ${i < state.lives ? 'on' : ''}"></div>`
-    ).join('');
+    //   currentPlayerAvatarColor, showTurnOrder, nextPlayerName,
+    //   nextPlayerAvatar, nextPlayerAvatarColor, gameId }
+    // Avatar fields are data: URLs (or absent) - already resized small on
+    // the phone before they're ever sent (resizeImageToDataUrl).
+    stage.className = 'tv-stage';
+    const alive = state.aliveCount ?? 0;
+    const total = state.totalPlayers ?? 0;
     const name = state.currentPlayerName ?? '';
-    const nameClass = name.length > 14 ? 'len-verylong' : name.length > 9 ? 'len-long' : '';
+    // "Next up" only shows when the organizer has turned on Public turn
+    // info AND there's actually a next player to name (nothing to show
+    // once only one player is left) - see tv-cast-screen-update-2.md.
+    const hasNext = !!(state.showTurnOrder && state.nextPlayerName);
     stage.innerHTML = `
-      <div class="game-card">
-        <div class="brand-row">
-          <div class="brand-left">
-            <div class="pool-ball">8</div>
-            <div class="brand-word">KILLER POOL <span>— LIVE</span></div>
-          </div>
-          <div class="round-badge">ROUND ${state.round ?? 1}</div>
-        </div>
-        <div class="game-grid">
-          <div class="left-col">
-            <div class="identity-row">
-              ${avatarHtml(state.currentPlayerAvatar, state.currentPlayerAvatarColor, name, 'game-avatar')}
-              <div>
-                <div class="up-now-label">UP NOW</div>
-                <div class="player-name ${nameClass}">${escapeHtml(name)}</div>
+      <div class="tv-ticket${hasNext ? ' has-next' : ''}">
+        <section class="tv-main felt">
+          <header class="tv-head">
+            <div class="tv-brand">
+              ${BRAND_BALL_SVG}
+              <div class="tv-brand__lockup">
+                <span class="tv-brand__name">KILLER POOL</span>
+                <span class="tv-brand__sub">ELIMINATION</span>
               </div>
+              <span class="tv-live">LIVE</span>
+            </div>
+            <div class="tv-round"><span class="tv-round__lbl">ROUND</span><span class="tv-round__num">${state.round ?? 1}</span></div>
+          </header>
+
+          <div class="tv-hero">
+            ${heroAvatarHtml(state.currentPlayerAvatar, state.currentPlayerAvatarColor, name)}
+            <div class="tv-hero__text">
+              <span class="tv-upnow">UP NOW</span>
+              <span class="tv-name">${escapeHtml(name)}</span>
+              ${livesHtml(state.lives ?? 0, state.defaultLives)}
+              ${hasNext ? `
+                <div class="tv-next" aria-label="Next up: ${escapeHtml(state.nextPlayerName)}">
+                  ${nextAvatarHtml(state.nextPlayerAvatar, state.nextPlayerAvatarColor, state.nextPlayerName)}
+                  <span class="tv-next__lbl">NEXT UP</span>
+                  <span class="tv-next__name">${escapeHtml(state.nextPlayerName)}</span>
+                </div>
+              ` : ''}
             </div>
           </div>
-          <div class="right-col">
-            <div class="stat-label">LIVES</div>
-            <div class="pips">${pips}</div>
-            <div class="status-line"><b>${state.aliveCount ?? '–'}</b> of <b>${state.totalPlayers ?? '–'}</b><br/>players remaining</div>
+
+          <div class="tv-stats">
+            ${roundProgressStat(state.playedThisRoundCount ?? 0, alive)}
+            ${playersRemainingStat(alive, total)}
           </div>
+        </section>
+
+        <div class="tv-perf" aria-hidden="true">
+          <span class="tv-perf__felt felt"></span><span class="tv-perf__line"></span>
+          <span class="tv-perf__hole tv-perf__hole--top"></span><span class="tv-perf__hole tv-perf__hole--bot"></span>
         </div>
-        ${roundProgressHtml(state.playedThisRoundCount ?? 0, state.aliveCount ?? 0)}
-        ${qrBadgeHtml(state.gameId)}
+
+        <aside class="tv-stub">
+          ${qrStubHtml(state.gameId)}
+        </aside>
       </div>
     `;
   }
 
   function renderWinner(state) {
-    // { winnerName, winnerAvatar, winnerAvatarColor }
-    stage.className = 'stage winner';
+    // { winnerName, winnerAvatar, winnerAvatarColor, gameId }
+    stage.className = 'tv-stage';
     const name = state.winnerName ?? '';
+    const qr = qrSvg(state.gameId);
     stage.innerHTML = `
-      <div class="game-card winner-card">
-        <div class="brand-row">
-          <div class="brand-left">
-            <div class="pool-ball">8</div>
-            <div class="brand-word">KILLER POOL <span>— LIVE</span></div>
+      <div class="tv-winner-wrap">
+        <div class="tv-winner-card felt">
+          <div class="tv-winner-brand">
+            ${BRAND_BALL_SVG}
+            <div class="tv-brand__lockup">
+              <span class="tv-brand__name">KILLER POOL</span>
+              <span class="tv-brand__sub">ELIMINATION</span>
+            </div>
           </div>
+          <div class="tv-winner-label">WINNER</div>
+          ${winnerAvatarHtml(state.winnerAvatar, state.winnerAvatarColor, name)}
+          <div class="tv-winner-name">${escapeHtml(name)}</div>
+          <div class="tv-winner-sub">LAST ONE STANDING</div>
+          ${qr ? `<div class="tv-winner-qr-badge"><div class="tv-qr">${qr}</div><span class="tv-qr__cap">SCAN TO FOLLOW ALONG</span></div>` : ''}
         </div>
-        <div class="winner-content">
-          <div class="winner-label">WINNER</div>
-          ${avatarHtml(state.winnerAvatar, state.winnerAvatarColor, name, 'winner-avatar')}
-          <div class="winner-name">${escapeHtml(name)}</div>
-          <div class="winner-sub">LAST ONE STANDING</div>
-        </div>
-        ${qrBadgeHtml(state.gameId)}
       </div>
     `;
-  }
-
-  // Shared between the game and winner screens - a real photo if the
-  // player set one (already a small resized data: URL by the time it
-  // gets here), otherwise the same colored-circle-plus-initial fallback
-  // the app itself uses when there's no photo.
-  function avatarHtml(photoUrl, color, name, sizeClass) {
-    const initial = escapeHtml((name || '').trim().charAt(0).toUpperCase() || '?');
-    if (photoUrl) {
-      return `<div class="avatar ${sizeClass}"><img src="${photoUrl}" alt="" /></div>`;
-    }
-    return `<div class="avatar ${sizeClass}" style="background:${color || '#546e7a'}">${initial}</div>`;
   }
 
   function escapeHtml(s) {
