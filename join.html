@@ -92,6 +92,12 @@
   .seg-track { display: flex; gap: 4px; }
   .seg { flex: 1; height: 6px; border-radius: 3px; background: var(--gold); }
   .seg.off { background: rgba(255,255,255,.14); }
+  /* Prize pot - same "no currency" decision as the app's own Spectate
+     screen (the app runs in different countries, so only the plain
+     number matters for the math), rollover included. */
+  .prize-row { display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .prize-row .lbl { font-size: 14px; color: var(--text-muted); }
+  .prize-row b { color: var(--gold); font-size: 16px; }
 
   /* Players section */
   .players-head { display: flex; align-items: baseline; justify-content: space-between; padding: 0 4px; }
@@ -236,12 +242,13 @@
     return `<div class="av" style="width:${size}px;height:${size}px;font-size:${fontSize}px;background:${p.avatarColor || '#546e7a'};">${initial}</div>`;
   }
 
-  function renderMessage(title, sub) {
+  function renderMessage(title, sub, extraHtml) {
     stage.innerHTML = `
       <div class="centered-msg">
         <div class="pool-ball">8</div>
         <div class="idle-title">${escapeHtml(title)}</div>
         <div class="idle-sub">${escapeHtml(sub || '')}</div>
+        ${extraHtml || ''}
       </div>
     `;
   }
@@ -297,6 +304,22 @@
         </div>
         <div class="roster" style="margin-top:12px;">${rows}</div>
         ${out.length > 0 ? `<div class="out-divider"><span class="lbl">OUT</span><div class="line"></div></div><div class="roster" style="margin-top:8px;">${outRows}</div>` : ''}
+      </div>
+    `;
+  }
+
+  // Prize pot - rollover (whatever carried over from an earlier
+  // unconfirmed round) + this round's own entry fee × the full roster.
+  // No currency unit - same real product decision already shipped on
+  // the app's own Spectate screen (it runs in different countries, so
+  // only the plain number, as the organizer typed it, matters).
+  function prizeRowHtml(state) {
+    const total = (state.potRollover || 0) + (state.entryFeeAmount || 0) * (state.totalPlayers ?? 0);
+    if (total <= 0) return '';
+    return `
+      <div class="prize-row">
+        <span class="lbl">PRIZE POT</span>
+        <b>${Math.round(total).toLocaleString()}</b>
       </div>
     `;
   }
@@ -381,6 +404,7 @@
             <div class="txt"><b>${state.aliveCount ?? '–'}</b> of <b>${state.totalPlayers ?? '–'}</b> players remaining</div>
             <div class="seg-track">${segs}</div>
           </div>
+          ${prizeRowHtml(state)}
         </div>
       </div>
       ${sponsorBannerHtml(state)}
@@ -396,6 +420,7 @@
         <div class="pool-ball">8</div>
         <div class="winner-title">${escapeHtml(state.winnerName || 'SOMEONE')} WINS</div>
         <div class="winner-sub">Game over — round ${state.round ?? 1}</div>
+        ${prizeRowHtml(state)}
       </div>
       ${sponsorBannerHtml(state)}
       ${renderPlayers(state.players, null, false)}
@@ -461,7 +486,13 @@
         // SHOT" message for what's actually a round that already ended
         // unconfirmed, not a game that hasn't started yet.
         if (state.roundUnconfirmed) {
-          renderMessage('NO ONE CONFIRMED THE WIN', 'The host is setting up the next round');
+          // potRollover, not the full prize-row formula - there's no
+          // "this round's fee" yet (the host hasn't set one for the
+          // restart), just whatever already carried over.
+          const rollover = state.potRollover > 0
+            ? `<div class="prize-row" style="margin-top:8px;"><span class="lbl">POT ROLLS OVER</span><b>${Math.round(state.potRollover).toLocaleString()}</b></div>`
+            : '';
+          renderMessage('NO ONE CONFIRMED THE WIN', 'The host is setting up the next round', rollover);
           return;
         }
         if (!state.currentPlayerName) {
