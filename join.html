@@ -34,10 +34,10 @@
   /* Header: brand mark (left) + live pill (right) */
   .topbar { display: flex; align-items: center; justify-content: space-between; padding: 20px 0 12px; gap: 12px; }
   .brand { display: flex; align-items: center; gap: 8px; }
-  .brand-ball { width: 28px; height: 28px; border-radius: 50%; background: var(--bg); box-shadow: 0 0 0 1.5px var(--gold); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .brand-text { display: flex; flex-direction: column; gap: 1px; line-height: 1; }
-  .brand-title { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 1.5px; color: var(--gold); }
-  .brand-sub { font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 10px; letter-spacing: 2px; color: var(--text-muted); text-transform: uppercase; }
+  .brand-ball { width: 32px; height: 32px; border-radius: 50%; background: var(--bg); box-shadow: 0 0 0 1.5px var(--gold); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .brand-text { display: flex; flex-direction: column; gap: 0; line-height: 1; }
+  .brand-title { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 2px; color: var(--gold); padding-top: 2px; line-height: 1; }
+  .brand-sub { font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 9px; letter-spacing: 4.6px; color: #CBC2E0; text-transform: uppercase; line-height: 1; }
   .live-pill {
     height: 36px; display: flex; align-items: center; gap: 8px;
     padding: 0 12px 0 10px; border-radius: 18px;
@@ -144,7 +144,33 @@
   .sponsor__tag { width: 44px; height: 44px; flex-shrink: 0; border-radius: 8px; background: #1A1030; color: #F5C76A; display: flex; align-items: center; justify-content: center; }
   .sponsor__headline-only .sponsor__headline { font: 700 16px/21px 'Barlow', sans-serif; color: #1A1030; white-space: normal; overflow: visible; text-overflow: clip; padding: 0; }
 
-  /* Winner state - kept as its own simpler layout, not the ticket pattern */
+  /* Winner state - the same winner ticket as the app's winner screen,
+     in-app Spectate and the TV (design file "join.html — winner"). */
+  .crown-av { position: relative; margin-top: 30px; width: 104px; height: 104px; border-radius: 50%; padding: 4px; background: var(--gold); box-sizing: border-box; box-shadow: 0 0 28px rgba(242,184,75,.35); }
+  .crown-av > svg { position: absolute; left: 34px; top: -27px; }
+  .crown-av__in { width: 100%; height: 100%; border-radius: 50%; border: 4px solid var(--felt); box-sizing: border-box; overflow: hidden; }
+  .crown-av__in .av { width: 100% !important; height: 100% !important; font-size: 44px !important; }
+  .win-label { margin-top: 8px; font: 700 14px/1 'Barlow Condensed', sans-serif; letter-spacing: 3px; padding-left: 3px; color: var(--gold-text); }
+  .win-name { font-family: 'Bebas Neue', sans-serif; font-size: clamp(52px, 16vw, 88px); line-height: .95; letter-spacing: 2px; padding-left: 2px; color: var(--gold); word-break: break-word; text-align: center; }
+  .win-sub { font-size: 15px; color: var(--text-2); }
+  .facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+  .fact { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+  .fact.r { align-items: flex-end; }
+  .fact .k { font: 700 12px/1 'Barlow Condensed', sans-serif; letter-spacing: 2.5px; color: var(--text-2); }
+  .fact .v { display: flex; align-items: center; gap: 8px; font-size: 16px; font-weight: 700; color: #fff; line-height: 24px; min-width: 0; }
+  .fact .v span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pot-line { grid-column: 1 / -1; display: flex; align-items: baseline; justify-content: space-between; padding-top: 14px; border-top: 1px solid rgba(255,255,255,.08); }
+  .pot-line .k { font: 700 12px/1 'Barlow Condensed', sans-serif; letter-spacing: 2.5px; color: var(--gold-text); }
+  .pot-line .v { font-family: 'Bebas Neue', sans-serif; font-size: 30px; line-height: 1; color: var(--gold); }
+  .place { height: 56px; box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 0 16px 0 12px; border-radius: 16px; background: var(--surface); border: 1px solid var(--border); }
+  .place.first { height: 60px; background: rgba(242,184,75,.1); border: 1.5px solid var(--gold); }
+  .place .n { font-family: 'Bebas Neue', sans-serif; font-size: 24px; width: 20px; text-align: center; }
+  .place .roster-name { flex-grow: 1; min-width: 0; }
+  .place .tag { font: 700 12px/1 'Barlow Condensed', sans-serif; letter-spacing: 1.5px; color: var(--gold); }
+  .place .note { font-size: 13px; color: var(--text-muted); flex-shrink: 0; }
+  body.final .live-pill { background: rgba(242,184,75,.16); border: none; color: var(--gold-text); font: 700 13px/1 'Barlow Condensed', sans-serif; letter-spacing: 1.5px; cursor: default; height: 32px; }
+  body.final .live-pill .live-dot, body.final .live-pill svg { display: none; }
+  body.final .appstore-btn { font-size: 16px; }
   .pool-ball {
     width: 56px; height: 56px; border-radius: 50%;
     background: radial-gradient(circle at 35% 30%, #3a3a3a, #0a0a0a 70%);
@@ -205,7 +231,7 @@
          audience most worth putting this in front of. -->
     <a class="appstore-btn" href="https://apps.apple.com/app/id6802345932" target="_blank" rel="noopener">
       <svg width="16" height="16" viewBox="0 0 384 512" fill="currentColor"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/></svg>
-      Get Killer Pool on the App Store
+      <span id="appstoreText">Get Killer Pool on the App Store</span>
     </a>
   </div>
 
@@ -412,18 +438,62 @@
     `;
   }
 
-  // Winner state kept as its own simpler layout (not the ticket pattern) -
-  // explicit decision, not restyled to match renderGame's hero.
+  // Winner: the same ticket as the app's winner screen, in-app Spectate
+  // and the TV (design file "join.html — winner"). rounds/playersBeaten/
+  // runnerUp*/potTotal are synced by the app at game end; older games
+  // without them fall back to what the roster can tell us.
+  const CROWN_SVG = '<svg width="36" height="36" viewBox="0 0 24 24" fill="#F2B84B" aria-hidden="true"><path d="M3 8.5l4.2 3.1L12 4l4.8 7.6L21 8.5l-1.6 9.2a1 1 0 0 1-1 .8H5.6a1 1 0 0 1-1-.8L3 8.5z"/></svg>';
   function renderWinner(state) {
+    document.body.classList.add('final');
+    liveText.textContent = 'FINAL RESULT';
+    livePill.hidden = false;
+    livePill.onclick = null;
+    document.getElementById('appstoreText').textContent = 'Host your own game — get Killer Pool';
+
+    const players = Array.isArray(state.players) ? state.players : [];
+    const out = players.filter(p => p.eliminated).sort((a, b) => (b.eliminatedInRound ?? 0) - (a.eliminatedInRound ?? 0));
+    const winner = { name: state.winnerName || 'Winner', avatarPhoto: state.winnerAvatar, avatarColor: state.winnerAvatarColor };
+    const runnerUp = state.runnerUpName
+      ? { name: state.runnerUpName, avatarPhoto: state.runnerUpAvatar, avatarColor: state.runnerUpAvatarColor }
+      : out[0] || null;
+    const total = state.totalPlayers ?? players.length;
+    const beaten = state.playersBeaten ?? Math.max(total - 1, 0);
+    const rounds = state.rounds ?? state.round ?? 1;
+    const pot = state.potTotal ?? ((state.potRollover || 0) + (state.entryFeeAmount || 0) * total);
+    const chip = [state.venueName ? escapeHtml(state.venueName.toUpperCase()) : null, `${rounds} ROUND${rounds === 1 ? '' : 'S'}`].filter(Boolean).join(' · ');
+    const colors = ['var(--gold)', 'var(--text-2)', '#C6905E'];
+    const places = [winner, ...out].slice(0, 3).map((p, i) => `
+      <div class="place ${i === 0 ? 'first' : ''}">
+        <span class="n" style="color:${colors[i]}">${i + 1}</span>
+        ${avatarHtml(p, 40)}
+        <span class="roster-name" ${i === 0 ? 'style="color:#fff"' : ''}>${escapeHtml(p.name)}</span>
+        ${i === 0 ? '<span class="tag">WINNER</span>' : p.eliminatedInRound ? `<span class="note">Out in round ${p.eliminatedInRound}</span>` : ''}
+      </div>`).join('');
+
     stage.innerHTML = `
-      <div class="centered-msg" style="min-height:auto;padding:20px 0;">
-        <div class="pool-ball">8</div>
-        <div class="winner-title">${escapeHtml(state.winnerName || 'SOMEONE')} WINS</div>
-        <div class="winner-sub">Game over — round ${state.round ?? 1}</div>
-        ${prizeRowHtml(state)}
+      <div class="ticket">
+        <div class="ticket-top felt" style="gap:8px;">
+          <div class="round-badge"><span class="lbl">${chip}</span></div>
+          <div class="crown-av">${CROWN_SVG}<div class="crown-av__in">${avatarHtml(winner, 96)}</div></div>
+          <span class="win-label">WINNER</span>
+          <span class="win-name">${escapeHtml(winner.name)}</span>
+          <span class="win-sub">Last player standing</span>
+        </div>
+        <div class="perf"><div class="perf-line"></div><span class="perf-hole l"></span><span class="perf-hole r"></span></div>
+        <div class="ticket-stub">
+          <div class="facts">
+            <div class="fact"><span class="k">RUNNER-UP</span><span class="v">${runnerUp ? `${avatarHtml(runnerUp, 24)}<span>${escapeHtml(runnerUp.name)}</span>` : '—'}</span></div>
+            <div class="fact r"><span class="k">PLAYERS BEATEN</span><span class="v">${beaten} of ${total}</span></div>
+            ${pot > 0 ? `<div class="pot-line"><span class="k">WINS THE POT</span><span class="v">${Math.round(pot).toLocaleString()}</span></div>` : ''}
+          </div>
+        </div>
       </div>
       ${sponsorBannerHtml(state)}
-      ${renderPlayers(state.players, null, false)}
+      <div>
+        <div class="players-head"><h2>Final standings</h2><span class="count">${players.length} players</span></div>
+        <div class="roster" style="margin-top:12px;">${places}</div>
+      </div>
+      <p class="footer-note">KILLER POOL · FINAL RESULT</p>
     `;
   }
 
@@ -444,7 +514,7 @@
     livePill.hidden = false;
   }
   function tickLiveStatus() {
-    if (!lastUpdate) return;
+    if (!lastUpdate || document.body.classList.contains('final')) return;
     const secs = Math.round((Date.now() - lastUpdate) / 1000);
     const stale = secs > 25;
     liveDot.classList.toggle('stale', stale);
