@@ -39,6 +39,7 @@
     align-items: center; justify-content: center; gap: calc(20 * var(--u)); text-align: center; }
   .tv-idle__ball { width: calc(84 * var(--u)); height: calc(84 * var(--u)); }
   .tv-idle__title { font: 400 calc(52 * var(--u))/1 'Bebas Neue', sans-serif; letter-spacing: calc(4 * var(--u)); color: var(--gold); }
+  .tv-idle__elim { font: 600 calc(20 * var(--u))/1 'Barlow Condensed', sans-serif; letter-spacing: calc(10 * var(--u)); padding-left: calc(10 * var(--u)); color: #CBC2E0; margin-top: calc(-6 * var(--u)); }
   .tv-idle__sub { font: 600 calc(17 * var(--u))/1 'Barlow Condensed', sans-serif; letter-spacing: calc(3 * var(--u)); color: var(--text-2); }
 
   /* Ticket: felt | perforation | stub, inside the 5% title-safe area. Used
@@ -62,9 +63,9 @@
   .tv-head { display: flex; align-items: center; justify-content: space-between; height: calc(52 * var(--u)); }
   .tv-brand { display: flex; align-items: center; gap: calc(14 * var(--u)); }
   .tv-brand__ball { width: calc(49 * var(--u)); height: calc(49 * var(--u)); flex-shrink: 0; }
-  .tv-brand__lockup { display: flex; flex-direction: column; gap: calc(2 * var(--u)); }
+  .tv-brand__lockup { display: flex; flex-direction: column; gap: 0; }
   .tv-brand__name { font: 400 calc(30 * var(--u))/1 'Bebas Neue', sans-serif; letter-spacing: calc(3 * var(--u)); color: var(--gold); }
-  .tv-brand__sub { font: 600 calc(15 * var(--u))/1.1 'Barlow Condensed', sans-serif; letter-spacing: calc(6.6 * var(--u)); color: var(--text-2); }
+  .tv-brand__sub { font: 600 calc(12 * var(--u))/1 'Barlow Condensed', sans-serif; letter-spacing: calc(6 * var(--u)); color: #CBC2E0; }
   .tv-live { display: inline-flex; align-items: center; gap: calc(8 * var(--u)); height: calc(32 * var(--u));
     padding: 0 calc(14 * var(--u)) 0 calc(12 * var(--u)); border-radius: calc(16 * var(--u)); background: rgba(240,98,90,.14);
     font: 700 calc(16 * var(--u))/1 'Barlow Condensed', sans-serif; letter-spacing: calc(2 * var(--u)); color: var(--live-text);
@@ -207,8 +208,9 @@
 <body>
   <div class="tv-stage" id="stage">
     <div class="tv-idle">
-      <svg class="tv-idle__ball" viewBox="0 0 26 26" aria-hidden="true"><circle cx="13" cy="13" r="12" fill="#0B0A12" stroke="#4A4463" stroke-width="1"/><circle cx="13" cy="13" r="6" fill="#F4F1FA"/><text x="13" y="16.5" text-anchor="middle" font-family="Barlow, sans-serif" font-weight="700" font-size="9" fill="#0B0A12">8</text></svg>
+      <svg class="tv-idle__ball" viewBox="0 0 26 26" aria-hidden="true"><circle cx="13" cy="13" r="12" fill="#0B0A12" stroke="#F2B84B" stroke-width="1"/><circle cx="13" cy="13" r="6" fill="#F4F1FA"/><text x="13" y="16.5" text-anchor="middle" font-family="Barlow, sans-serif" font-weight="700" font-size="9" fill="#0B0A12">8</text></svg>
       <div class="tv-idle__title">KILLER POOL</div>
+      <div class="tv-idle__elim">ELIMINATION</div>
       <div class="tv-idle__sub">WAITING FOR ORGANISER TO START A GAME…</div>
     </div>
   </div>
@@ -223,7 +225,7 @@
   // Must match CAST_NAMESPACE in the app's Chromecast integration.
   const NAMESPACE = 'urn:x-cast:com.killerpool.state';
   const stage = document.getElementById('stage');
-  const BRAND_BALL_SVG = '<svg class="tv-brand__ball" viewBox="0 0 26 26" aria-hidden="true"><circle cx="13" cy="13" r="12" fill="#0B0A12" stroke="#4A4463" stroke-width="1"/><circle cx="13" cy="13" r="6" fill="#F4F1FA"/><text x="13" y="16.5" text-anchor="middle" font-family="Barlow, sans-serif" font-weight="700" font-size="9" fill="#0B0A12">8</text></svg>';
+  const BRAND_BALL_SVG = '<svg class="tv-brand__ball" viewBox="0 0 26 26" aria-hidden="true"><circle cx="13" cy="13" r="12" fill="#0B0A12" stroke="#F2B84B" stroke-width="1"/><circle cx="13" cy="13" r="6" fill="#F4F1FA"/><text x="13" y="16.5" text-anchor="middle" font-family="Barlow, sans-serif" font-weight="700" font-size="9" fill="#0B0A12">8</text></svg>';
   // Same 8-ball mark, drawn grey - used for the no-winner screen's empty
   // avatar slot so it reads as "no one", not as a live player circle.
   const VOID_BALL_SVG = '<svg viewBox="0 0 26 26" aria-hidden="true"><circle cx="13" cy="13" r="12" fill="#0B0A12" stroke="#4A4463" stroke-width="1"/><circle cx="13" cy="13" r="6" fill="#8C86A3"/><text x="13" y="16.5" text-anchor="middle" font-family="Barlow, sans-serif" font-weight="700" font-size="9" fill="#0B0A12">8</text></svg>';
@@ -264,6 +266,7 @@
       <div class="tv-idle">
         ${BRAND_BALL_SVG.replace('tv-brand__ball', 'tv-idle__ball')}
         <div class="tv-idle__title">KILLER POOL</div>
+      <div class="tv-idle__elim">ELIMINATION</div>
         <div class="tv-idle__sub">WAITING FOR ORGANISER TO START A GAME…</div>
       </div>
     `;
