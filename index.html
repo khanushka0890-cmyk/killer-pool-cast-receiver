@@ -203,6 +203,53 @@
   .tv-fact__av { width: calc(30 * var(--u)); height: calc(30 * var(--u)); flex-shrink: 0; border-radius: 50%; display: flex; align-items: center; justify-content: center;
     overflow: hidden; font: 400 calc(16 * var(--u))/1 'Bebas Neue', sans-serif; color: #fff; padding-top: calc(2 * var(--u)); }
   .tv-fact__av img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 50%; }
+
+  /* ── New layout (build 41): pot in the left card, players on the right.
+     Matches the design file's "TV cast — players & lives", "…no winner
+     (new layout)" and "…winner (new layout)" artboards. Used only when
+     the app sends a players/standings list; older app builds keep the
+     layout above. */
+  .tv-pot { display: flex; align-items: baseline; justify-content: space-between; padding-top: calc(28 * var(--u)); border-top: 1px solid rgba(255,255,255,.1); }
+  .tv-pot__lbl { font: 700 calc(17 * var(--u))/1 'Barlow Condensed', sans-serif; letter-spacing: calc(3 * var(--u)); color: var(--gold-text); }
+  .tv-pot__val { font: 400 calc(54 * var(--u))/1 'Bebas Neue', sans-serif; letter-spacing: calc(1 * var(--u)); color: var(--gold); }
+  .tv-pot.is-void .tv-pot__lbl, .tv-pot.is-void .tv-pot__val { color: var(--text-2); }
+
+  .tv-stub.roster { width: calc(360 * var(--u)); justify-content: flex-start; align-items: stretch; gap: calc(16 * var(--u));
+    padding: calc(24 * var(--u)) calc(32 * var(--u)) calc(24 * var(--u)) calc(18 * var(--u)); }
+  .tv-ro__head { display: flex; justify-content: space-between; align-items: center; }
+  .tv-ro__lbl { font: 700 calc(17 * var(--u))/1 'Barlow Condensed', sans-serif; letter-spacing: calc(3 * var(--u)); color: var(--text-2); }
+  .tv-ro__cnt { font: 500 calc(22 * var(--u))/1 'Barlow', sans-serif; color: var(--text-2); }
+  .tv-ro__cnt b { font: 400 calc(34 * var(--u))/1 'Bebas Neue', sans-serif; color: var(--gold); vertical-align: calc(-3 * var(--u)); margin-right: calc(2 * var(--u)); }
+  .tv-ro__view { position: relative; flex: 1 1 auto; min-height: 0; overflow: hidden; }
+  .tv-ro__view.is-scrolling { -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 82%, transparent 100%); mask-image: linear-gradient(to bottom, #000 0, #000 82%, transparent 100%); }
+  .tv-ro__list { display: flex; flex-direction: column; gap: calc(6 * var(--u)); }
+  .tv-ro__view.is-scrolling .tv-ro__list { animation: tvRoScroll var(--ro-dur, 16s) ease-in-out infinite; animation-delay: var(--ro-delay, 0s); }
+  @keyframes tvRoScroll { 0%, 18% { transform: translateY(0); } 50%, 68% { transform: translateY(calc(-1px * var(--ro-dist, 0))); } 100% { transform: translateY(0); } }
+  .tv-ro__row { display: flex; align-items: center; gap: calc(10 * var(--u)); height: calc(40 * var(--u)); flex-shrink: 0; padding: 0 calc(10 * var(--u)); border-radius: calc(10 * var(--u)); background: rgba(255,255,255,.04); }
+  .tv-ro__row.is-now { background: rgba(242,184,75,.14); box-shadow: inset 0 0 0 1px rgba(242,184,75,.6); }
+  .tv-ro__row.is-next { box-shadow: inset 0 0 0 1px rgba(183,156,240,.55); }
+  .tv-ro__av { width: calc(28 * var(--u)); height: calc(28 * var(--u)); border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+    font: 400 calc(16 * var(--u))/1 'Bebas Neue', sans-serif; color: #fff; padding-top: calc(2 * var(--u)); }
+  .tv-ro__name { flex: 1 1 auto; min-width: 0; font: 600 calc(20 * var(--u))/1 'Barlow', sans-serif; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tv-ro__hearts { display: flex; gap: calc(3 * var(--u)); flex-shrink: 0; }
+  .tv-ro__hearts svg { width: calc(16 * var(--u)); height: calc(15 * var(--u)); display: block; }
+  .tv-ro__nextchip { flex-shrink: 0; font: 700 calc(13 * var(--u))/1 'Barlow Condensed', sans-serif; letter-spacing: calc(1.5 * var(--u)); color: var(--next);
+    padding: calc(4 * var(--u)) calc(7 * var(--u)); border-radius: calc(8 * var(--u)); background: rgba(183,156,240,.14); }
+  .tv-ro__rank { width: calc(18 * var(--u)); flex-shrink: 0; text-align: center; font: 400 calc(24 * var(--u))/1 'Bebas Neue', sans-serif; color: var(--text-2); padding-top: calc(2 * var(--u)); }
+  .tv-ro__row.is-now .tv-ro__rank { color: var(--gold); }
+  .tv-ro__rank.is-bronze { color: #C6905E; }
+  .tv-ro__tag { flex-shrink: 0; font: 700 calc(13 * var(--u))/1 'Barlow Condensed', sans-serif; letter-spacing: calc(1.5 * var(--u)); color: var(--gold); }
+  .tv-ro__out { flex-shrink: 0; font: 600 calc(14 * var(--u))/1 'Barlow Condensed', sans-serif; letter-spacing: calc(1.5 * var(--u)); color: #8C86A3; }
+  .tv-ro__prog { display: flex; flex-direction: column; gap: calc(10 * var(--u)); }
+  .tv-ro__prog.is-row { flex-direction: row; justify-content: space-between; align-items: baseline; }
+  .tv-ro__prog .tv-stat__lbl { font-size: calc(16 * var(--u)); letter-spacing: calc(2.5 * var(--u)); }
+  .tv-ro__prog .tv-stat__val { font-size: calc(20 * var(--u)); }
+  .tv-ro__foot { display: flex; align-items: center; gap: calc(12 * var(--u)); padding-top: calc(16 * var(--u)); border-top: 1px solid rgba(255,255,255,.08); }
+  .tv-ro__foot .tv-qr { padding: calc(6 * var(--u)); border-radius: calc(8 * var(--u)); flex-shrink: 0; }
+  .tv-ro__foot .tv-qr svg { width: calc(80 * var(--u)); height: calc(80 * var(--u)); }
+  .tv-ro__foot .tv-qr__cap { white-space: nowrap; font: 700 calc(26 * var(--u))/1.3 'Barlow Condensed', sans-serif; letter-spacing: calc(2 * var(--u)); padding-left: 0; color: var(--gold-text); text-align: left; }
+  /* Hearts for lives (new layout) */
+  .tv-lives svg { width: calc(34 * var(--u)); height: calc(31 * var(--u)); display: block; flex-shrink: 0; }
 </style>
 </head>
 <body>
@@ -354,6 +401,60 @@
     return `<span class="${className}" style="background:${color || '#546e7a'}">${initial}</span>`;
   }
 
+
+  // ── New layout helpers (build 41) ─────────────────────────────────────
+  const HEART_PATH = 'M12 21.2C12 21.2 1.6 14.6 1.6 7.7C1.6 4.3 4.2 1.6 7.4 1.6C9.4 1.6 11.1 2.7 12 4.3C12.9 2.7 14.6 1.6 16.6 1.6C19.8 1.6 22.4 4.3 22.4 7.7C22.4 14.6 12 21.2 12 21.2Z';
+  function heartSvg(state) {
+    // 'on' gold, 'last' red (one life left), 'off' outline
+    if (state === 'off') return `<svg viewBox="0 0 24 22" aria-hidden="true"><path d="${HEART_PATH}" fill="none" stroke="#5E5778" stroke-width="2" stroke-linejoin="round"/></svg>`;
+    return `<svg viewBox="0 0 24 22" aria-hidden="true"><path d="${HEART_PATH}" fill="${state === 'last' ? '#F0625A' : '#F2B84B'}"/></svg>`;
+  }
+  function heartsRow(lives, total) {
+    const show = Math.max(lives || 0, 0);
+    const n = Math.max(total || 3, show);
+    return Array.from({ length: n }, (_, i) => heartSvg(i < show ? (show === 1 ? 'last' : 'on') : 'off')).join('');
+  }
+  function livesHeartsHtml(lives, defaultLives) {
+    const show = Math.max(lives || 0, 0);
+    const isLast = show === 1;
+    return `
+      <div class="tv-lives" aria-label="${show} lives left">
+        ${heartsRow(show, defaultLives)}
+        <span class="tv-lives__txt ${isLast ? 'is-last' : ''}">${isLast ? 'Last life' : `${show} lives left`}</span>
+      </div>`;
+  }
+  function initialOf(name) { return escapeHtml((name || '').trim().charAt(0).toUpperCase() || '?'); }
+  function rosterFootHtml(gameId, caption) {
+    const svg = qrSvg(gameId);
+    if (!svg) return '';
+    return `<div class="tv-ro__foot"><div class="tv-qr">${svg}</div><span class="tv-qr__cap">${caption.replace(' TO ', ' TO<br>').replace(' FOR ', ' FOR<br>')}</span></div>`;
+  }
+  function potHtml(label, value, isVoid) {
+    if (!(value > 0)) return '';
+    return `<div class="tv-pot${isVoid ? ' is-void' : ''}"><span class="tv-pot__lbl">${label}</span><span class="tv-pot__val">${fmtPot(value)}</span></div>`;
+  }
+  // Auto-scroll: only when the list is taller than its window. The cycle
+  // keeps running across re-renders (every shot re-renders the stage), so
+  // it never jumps back to the top mid-glide.
+  const scrollEpoch = Date.now();
+  function startAutoScroll() {
+    const view = stage.querySelector('.tv-ro__view');
+    const list = view && view.querySelector('.tv-ro__list');
+    if (!view || !list) return;
+    const dist = list.scrollHeight - view.clientHeight;
+    if (dist <= 4) { view.classList.remove('is-scrolling'); return; }
+    const rowPx = (list.firstElementChild ? list.firstElementChild.getBoundingClientRect().height : 40) || 40;
+    const dur = Math.max(10, Math.round(6 + (dist / rowPx) * 3)); // ~1.5 s per row each way + rests
+    view.style.setProperty('--ro-dist', String(Math.round(dist)));
+    view.style.setProperty('--ro-dur', dur + 's');
+    view.style.setProperty('--ro-delay', `-${((Date.now() - scrollEpoch) / 1000) % dur}s`);
+    view.classList.add('is-scrolling');
+  }
+  function playerRowHtml(p, defaultLives, showNext) {
+    const cls = p.now ? ' is-now' : (showNext && p.next ? ' is-next' : '');
+    return `<div class="tv-ro__row${cls}"><span class="tv-ro__av" style="background:${p.color || '#546e7a'}">${initialOf(p.name)}</span><span class="tv-ro__name">${escapeHtml(p.name || '')}</span>${showNext && p.next ? '<span class="tv-ro__nextchip">NEXT</span>' : ''}<span class="tv-ro__hearts">${heartsRow(p.lives, defaultLives)}</span></div>`;
+  }
+
   function renderGame(state) {
     // Expected shape (kept intentionally small - see capacitorSetup.js):
     // { round, currentPlayerName, lives, defaultLives, aliveCount,
@@ -370,6 +471,7 @@
     // info AND there's actually a next player to name (nothing to show
     // once only one player is left) - see tv-cast-screen-update-2.md.
     const hasNext = !!(state.showTurnOrder && state.nextPlayerName);
+    const roster = Array.isArray(state.players) ? state.players : null;
     stage.innerHTML = `
       <div class="tv-ticket${hasNext ? ' has-next' : ''}">
         <section class="tv-main felt">
@@ -392,7 +494,7 @@
                 <span class="tv-upnow">UP NOW</span>
                 <span class="tv-name">${escapeHtml(name)}</span>
               </div>
-              ${livesHtml(state.lives ?? 0, state.defaultLives)}
+              ${roster ? livesHeartsHtml(state.lives ?? 0, state.defaultLives) : livesHtml(state.lives ?? 0, state.defaultLives)}
             </div>
           </div>
           ${hasNext ? `
@@ -403,10 +505,11 @@
             </div>
           ` : ''}
 
+          ${roster ? potHtml('PRIZE POT', state.potTotal) : `
           <div class="tv-stats">
             ${roundProgressStat(state.playedThisRoundCount ?? 0, alive)}
             ${playersRemainingStat(alive, total)}
-          </div>
+          </div>`}
         </section>
 
         <div class="tv-perf" aria-hidden="true">
@@ -414,6 +517,13 @@
           <span class="tv-perf__hole tv-perf__hole--top"></span><span class="tv-perf__hole tv-perf__hole--bot"></span>
         </div>
 
+        ${roster ? `
+        <aside class="tv-stub roster" aria-label="Players still in">
+          <div class="tv-ro__head"><span class="tv-ro__lbl">${state.showTurnOrder ? 'TURN ORDER' : 'PLAYERS'}</span><span class="tv-ro__cnt"><b>${alive}</b> out of ${total}</span></div>
+          <div class="tv-ro__view"><div class="tv-ro__list">${roster.map(p => playerRowHtml(p, state.defaultLives, !!state.showTurnOrder)).join('')}</div></div>
+          <div class="tv-ro__prog">${roundProgressStat(state.playedThisRoundCount ?? 0, alive).replace('<div class="tv-stat">', '<div class="tv-stat" style="gap:inherit">')}</div>
+          ${rosterFootHtml(state.gameId, 'SCAN TO FOLLOW ALONG')}
+        </aside>` : `
         <aside class="tv-stub">
           ${state.potTotal > 0 ? `
             <div class="tv-prize">
@@ -423,9 +533,10 @@
             <span class="tv-stub__rule"></span>
           ` : ''}
           ${qrBlockHtml(state.gameId, 'SCAN TO FOLLOW ALONG')}
-        </aside>
+        </aside>`}
       </div>
     `;
+    if (roster) startAutoScroll();
   }
 
   function renderWinner(state) {
@@ -434,6 +545,7 @@
     //   runnerUpAvatarColor, potTotal, gameId }
     stage.className = 'tv-stage';
     const name = state.winnerName ?? '';
+    const top = Array.isArray(state.standings) ? state.standings : null;
     stage.innerHTML = `
       <div class="tv-ticket">
         <section class="tv-main felt">
@@ -460,6 +572,7 @@
             </div>
           </div>
 
+          ${top ? potHtml('WINS THE POT', state.potTotal) : `
           <div class="tv-facts">
             <div class="tv-fact">
               <span class="tv-fact__lbl">RUNNER-UP</span>
@@ -469,7 +582,7 @@
               <span class="tv-fact__lbl">PLAYERS BEATEN</span>
               <span class="tv-fact__val">${state.playersBeaten ?? 0} of ${state.totalPlayers ?? 0}</span>
             </div>
-          </div>
+          </div>`}
         </section>
 
         <div class="tv-perf" aria-hidden="true">
@@ -477,6 +590,13 @@
           <span class="tv-perf__hole tv-perf__hole--top"></span><span class="tv-perf__hole tv-perf__hole--bot"></span>
         </div>
 
+        ${top ? `
+        <aside class="tv-stub roster" aria-label="Top 3">
+          <div class="tv-ro__head"><span class="tv-ro__lbl">TOP 3</span><span class="tv-ro__cnt"><b>${state.totalPlayers ?? 0}</b> players</span></div>
+          <div class="tv-ro__view"><div class="tv-ro__list">${top.slice(0, 3).map((p, i) => `<div class="tv-ro__row${i === 0 ? ' is-now' : ''}"><span class="tv-ro__rank${i === 2 ? ' is-bronze' : ''}">${i + 1}</span><span class="tv-ro__av" style="background:${p.color || '#546e7a'}">${initialOf(p.name)}</span><span class="tv-ro__name">${escapeHtml(p.name || '')}</span>${i === 0 ? '<span class="tv-ro__tag">WINNER</span>' : (p.outRound ? `<span class="tv-ro__out">OUT · R${p.outRound}</span>` : '')}</div>`).join('')}</div></div>
+          <div class="tv-ro__prog is-row"><span class="tv-stat__lbl">PLAYERS BEATEN</span><span class="tv-stat__val"><b>${state.playersBeaten ?? 0}</b> of ${state.totalPlayers ?? 0}</span></div>
+          ${rosterFootHtml(state.gameId, 'SCAN FOR THE RESULT')}
+        </aside>` : `
         <aside class="tv-stub">
           ${state.potTotal > 0 ? `
             <div class="tv-prize">
@@ -487,7 +607,7 @@
             <span class="tv-stub__rule"></span>
           ` : ''}
           ${qrBlockHtml(state.gameId, 'SCAN FOR THE RESULT')}
-        </aside>
+        </aside>`}
       </div>
     `;
   }
@@ -500,6 +620,7 @@
     // lives back - it's a fresh restart with this roster, not a
     // continuation, so there's no smaller "still alive" count to show).
     stage.className = 'tv-stage';
+    const roster = Array.isArray(state.players) ? state.players : null;
     stage.innerHTML = `
       <div class="tv-ticket">
         <section class="tv-main felt">
@@ -526,6 +647,7 @@
             </div>
           </div>
 
+          ${roster ? potHtml('POT ROLLS OVER', state.potRollover, true) : `
           <div class="tv-facts">
             <div class="tv-fact">
               <span class="tv-fact__lbl">PLAYERS</span>
@@ -535,7 +657,7 @@
               <span class="tv-fact__lbl">NEXT</span>
               <span class="tv-fact__val">New round, full lives</span>
             </div>
-          </div>
+          </div>`}
         </section>
 
         <div class="tv-perf" aria-hidden="true">
@@ -543,6 +665,12 @@
           <span class="tv-perf__hole tv-perf__hole--top"></span><span class="tv-perf__hole tv-perf__hole--bot"></span>
         </div>
 
+        ${roster ? `
+        <aside class="tv-stub roster" aria-label="Players going into the restart">
+          <div class="tv-ro__head"><span class="tv-ro__lbl">RESTART</span><span class="tv-ro__cnt"><b>${roster.length}</b> players</span></div>
+          <div class="tv-ro__view"><div class="tv-ro__list">${roster.map(p => playerRowHtml(p, p.lives, false)).join('')}</div></div>
+          ${rosterFootHtml(state.gameId, 'SCAN TO FOLLOW ALONG')}
+        </aside>` : `
         <aside class="tv-stub">
           ${state.potRollover > 0 ? `
             <div class="tv-prize">
@@ -553,9 +681,10 @@
             <span class="tv-stub__rule"></span>
           ` : ''}
           ${qrBlockHtml(state.gameId, 'SCAN TO FOLLOW ALONG')}
-        </aside>
+        </aside>`}
       </div>
     `;
+    if (roster) startAutoScroll();
   }
 
   function escapeHtml(s) {
@@ -580,6 +709,7 @@
     options.disableIdleTimeout = true; // keep the receiver alive between rounds
     context.start(options);
   } else {
+    window.__tv = { renderIdle, renderGame, renderWinner, renderRoundEnded };
     console.warn('Cast SDK not available — showing idle state (expected in a plain browser preview).');
   }
 </script>
