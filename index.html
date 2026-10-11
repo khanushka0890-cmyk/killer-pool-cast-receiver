@@ -580,7 +580,7 @@
             </div>
             <div class="tv-fact">
               <span class="tv-fact__lbl">PLAYERS BEATEN</span>
-              <span class="tv-fact__val">${state.playersBeaten ?? 0} of ${state.totalPlayers ?? 0}</span>
+              <span class="tv-fact__val">${state.playersBeaten ?? 0}</span>
             </div>
           </div>`}
         </section>
@@ -594,7 +594,7 @@
         <aside class="tv-stub roster" aria-label="Top 3">
           <div class="tv-ro__head"><span class="tv-ro__lbl">TOP 3</span><span class="tv-ro__cnt"><b>${state.totalPlayers ?? 0}</b> players</span></div>
           <div class="tv-ro__view"><div class="tv-ro__list">${top.slice(0, 3).map((p, i) => `<div class="tv-ro__row${i === 0 ? ' is-now' : ''}"><span class="tv-ro__rank${i === 2 ? ' is-bronze' : ''}">${i + 1}</span><span class="tv-ro__av" style="background:${p.color || '#546e7a'}">${initialOf(p.name)}</span><span class="tv-ro__name">${escapeHtml(p.name || '')}</span>${i === 0 ? '<span class="tv-ro__tag">WINNER</span>' : (p.outRound ? `<span class="tv-ro__out">OUT · R${p.outRound}</span>` : '')}</div>`).join('')}</div></div>
-          <div class="tv-ro__prog is-row"><span class="tv-stat__lbl">PLAYERS BEATEN</span><span class="tv-stat__val"><b>${state.playersBeaten ?? 0}</b> of ${state.totalPlayers ?? 0}</span></div>
+          <div class="tv-ro__prog is-row"><span class="tv-stat__lbl">PLAYERS BEATEN</span><span class="tv-stat__val"><b>${state.playersBeaten ?? 0}</b></span></div>
           ${rosterFootHtml(state.gameId, 'SCAN FOR THE RESULT')}
         </aside>` : `
         <aside class="tv-stub">

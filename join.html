@@ -483,7 +483,7 @@
         <div class="ticket-stub">
           <div class="facts">
             <div class="fact"><span class="k">RUNNER-UP</span><span class="v">${runnerUp ? `${avatarHtml(runnerUp, 24)}<span>${escapeHtml(runnerUp.name)}</span>` : '—'}</span></div>
-            <div class="fact r"><span class="k">PLAYERS BEATEN</span><span class="v">${beaten} of ${total}</span></div>
+            <div class="fact r"><span class="k">PLAYERS BEATEN</span><span class="v">${beaten}</span></div>
             ${pot > 0 ? `<div class="pot-line"><span class="k">WINS THE POT</span><span class="v">${Math.round(pot).toLocaleString()}</span></div>` : ''}
           </div>
         </div>
