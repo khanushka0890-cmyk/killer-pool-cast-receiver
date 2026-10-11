@@ -286,7 +286,7 @@
   // KillerPool.jsx's gameId-creation effect), so the very first state
   // message or two won't have one; the stub still renders, just without
   // the QR tile until one arrives.
-  const JOIN_PAGE_BASE_URL = 'https://khanushka0890-cmyk.github.io/killer-pool-cast-receiver/join.html';
+  const JOIN_PAGE_BASE_URL = 'https://killer.pocketpoolapp.com/join.html';
   function qrSvg(gameId) {
     if (!gameId || typeof qrcode !== 'function') return null;
     const joinUrl = `${JOIN_PAGE_BASE_URL}?game=${gameId}`;
