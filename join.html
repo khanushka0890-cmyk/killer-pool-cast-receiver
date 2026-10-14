@@ -196,6 +196,18 @@
     display: flex; align-items: center; justify-content: center; gap: 10px;
     text-decoration: none; font-weight: 700; font-size: 18px; letter-spacing: .3px; white-space: nowrap;
   }
+  /* Invite sign-up (before the game starts) */
+  .su-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(34px, 10vw, 44px); line-height: 1; letter-spacing: 1px; color: #fff; text-align: center; }
+  .su-meta { font-size: 15px; color: #E4DEF2; text-align: center; }
+  .su-card { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 18px; display: flex; flex-direction: column; gap: 12px; }
+  .su-lbl { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: 2.5px; color: var(--text-2); }
+  .su-input { width: 100%; height: 56px; padding: 0 16px; border-radius: 14px; background: #0F0D18; border: 1px solid var(--border); color: var(--text); font-family: inherit; font-size: 18px; outline: none; }
+  .su-input:focus { border-color: var(--gold); }
+  .su-btn { width: 100%; height: 64px; border: none; border-radius: 16px; background: var(--gold); color: #1A1030; font-family: 'Bebas Neue', sans-serif; font-size: 30px; letter-spacing: 3px; cursor: pointer; box-shadow: inset 0 -3px 0 rgba(0,0,0,.18); }
+  .su-btn[disabled] { opacity: .6; }
+  .su-note { font-size: 14px; line-height: 1.45; color: var(--text-muted); text-align: center; }
+  .su-err { font-size: 14px; color: var(--danger-text); text-align: center; }
+  .su-done { font-family: 'Bebas Neue', sans-serif; font-size: 48px; letter-spacing: 4px; color: var(--gold); text-align: center; border: 1.5px dashed rgba(242,184,75,.55); border-radius: 14px; padding: 6px 0 2px; }
   .footer-note { text-align: center; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 12px; letter-spacing: 2.5px; color: #5E5874; margin: 8px 0 0; }
 </style>
 </head>
@@ -237,7 +249,8 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
-  import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+  import { getFirestore, doc, onSnapshot, runTransaction, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+  import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
   // Same public config as the app itself (src/firebase.js) - safe to
   // ship here for the same reason it's safe in the app bundle: access is
@@ -255,6 +268,7 @@
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
+  const auth = getAuth(app);
   const stage = document.getElementById('stage');
 
   function escapeHtml(s) {
@@ -533,6 +547,104 @@
   const params = new URLSearchParams(location.search);
   const gameId = params.get('game');
 
+  // Before the game starts (a New game with its invite open, or a planned
+  // game), this link is a sign-up page: name + I'm in, no app needed. The
+  // app shows the name on the host's player list (VIA LINK). Once the host
+  // taps START GAME the same link turns into the live view below.
+  // Same write path as the app's signUpForGame(): an anonymous sign-in,
+  // then one transaction that claims a spot (signupCount +1, checked
+  // against playerCap by firestore.rules) and writes signups/{uid}.
+  const SIGNED_KEY = 'kp_signed_' + gameId;
+  function signedName() { try { return localStorage.getItem(SIGNED_KEY); } catch (e) { return null; } }
+  function signupFacts(state) {
+    const bits = [];
+    if (state.venueName && state.gameTitle) bits.push(escapeHtml(state.venueName));
+    const when = state.scheduledFor?.toDate?.();
+    if (when) bits.push(escapeHtml(when.toLocaleString(undefined, { weekday: 'short', day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit' })));
+    return bits.join(' · ');
+  }
+  function spotsLine(state) {
+    const n = state.signupCount || 0;
+    if (state.status === 'planned' && state.playerCap) return `<b style="color:var(--gold)">${n}</b> of ${state.playerCap} spots claimed`;
+    return n ? `<b style="color:var(--gold)">${n}</b> signed up so far` : 'Be the first to sign up';
+  }
+  function renderSignup(state) {
+    const title = state.gameTitle || state.venueName || 'Killer Pool game';
+    const fee = state.entryFeeAmount > 0 ? `Entry <b style="color:var(--gold)">${Math.round(state.entryFeeAmount).toLocaleString()}</b> · ` : '';
+    // Re-render only the counts while the form is up, so a snapshot (someone
+    // else signing up) never wipes what this person is typing.
+    if (stage.dataset.mode === 'signup') {
+      const sp = document.getElementById('suSpots'); if (sp) sp.innerHTML = fee + spotsLine(state);
+      return;
+    }
+    stage.dataset.mode = 'signup';
+    const mine = signedName();
+    const full = state.status === 'planned' && state.playerCap && (state.signupCount || 0) >= state.playerCap;
+    stage.innerHTML = `
+      <div class="ticket">
+        <div class="ticket-top felt" style="gap:10px;border-bottom:1px solid var(--gold-line);border-radius:22px;">
+          <div class="round-badge"><span class="lbl">YOU'RE INVITED</span></div>
+          <div class="su-title">${escapeHtml(title)}</div>
+          ${signupFacts(state) ? `<div class="su-meta">${signupFacts(state)}</div>` : ''}
+          <div class="su-meta" id="suSpots">${fee}${spotsLine(state)}</div>
+        </div>
+      </div>
+      <div id="suBody"></div>
+    `;
+    const body = document.getElementById('suBody');
+    if (mine) { showDone(mine); return; }
+    if (full) { body.innerHTML = `<div class="su-card"><div class="su-err" style="color:var(--text-2)">This game is full.</div></div>`; return; }
+    body.innerHTML = `
+      <div class="su-card">
+        <label class="su-lbl" for="suName">YOUR NAME</label>
+        <input class="su-input" id="suName" maxlength="20" autocomplete="given-name" placeholder="The name the host will call out" />
+        <div class="su-err" id="suErr" hidden></div>
+      </div>
+      <button class="su-btn" id="suGo" style="margin-top:16px;">I'm in</button>
+      <p class="su-note" style="margin-top:12px;">No app or account needed. Your name appears on the host's player list.</p>
+    `;
+    const go = document.getElementById('suGo'), input = document.getElementById('suName'), err = document.getElementById('suErr');
+    input.addEventListener('keydown', (e) => { if (e.key === 'Enter') go.click(); });
+    go.addEventListener('click', async () => {
+      const name = input.value.trim().slice(0, 20);
+      if (!name) { err.textContent = 'Type your name first'; err.hidden = false; return; }
+      go.disabled = true; go.textContent = 'Signing you up…'; err.hidden = true;
+      try {
+        const cred = await signInAnonymously(auth);
+        const gameRef = doc(db, 'games', gameId);
+        const signupRef = doc(db, 'games', gameId, 'signups', cred.user.uid);
+        await runTransaction(db, async (tx) => {
+          const g = await tx.get(gameRef);
+          if (!g.exists()) throw new Error('This game no longer exists');
+          const d = g.data();
+          if (!(d.signupOpen === true || d.status === 'planned')) throw new Error('This game has already started');
+          if ((d.signupCount || 0) >= (d.playerCap || 0)) throw new Error('This game is full');
+          const mineSnap = await tx.get(signupRef);
+          if (!mineSnap.exists()) tx.update(gameRef, { signupCount: (d.signupCount || 0) + 1 });
+          tx.set(signupRef, { name, avatarPhoto: null, signedUpAt: serverTimestamp() });
+        });
+        try { localStorage.setItem(SIGNED_KEY, name); } catch (e) { /* private mode */ }
+        showDone(name);
+      } catch (e) {
+        console.error('Sign-up failed', e);
+        err.textContent = e?.message && !/permission|internal/i.test(e.message) ? e.message : "Couldn't sign you up — check your connection and try again";
+        err.hidden = false; go.disabled = false; go.textContent = "I'm in";
+      }
+    });
+  }
+  function showDone(name) {
+    const body = document.getElementById('suBody');
+    if (!body) return;
+    body.innerHTML = `
+      <div class="su-card" style="align-items:center;text-align:center;">
+        <div style="font-size:22px;font-weight:700;color:var(--success);">You're in!</div>
+        <div class="su-note" style="color:var(--text-2)">Give this name to the host when you arrive</div>
+        <div class="su-done" style="width:100%;">${escapeHtml(name)}</div>
+        <div class="su-note">Keep this page open: it turns into the live game when the host starts.</div>
+      </div>
+    `;
+  }
+
   if (!gameId) {
     renderMessage('NO GAME LINKED', 'This link is missing a game id — ask the organiser to re-share it.');
   } else {
@@ -545,6 +657,11 @@
           return;
         }
         const state = snap.data();
+        if (state.signupOpen === true || state.status === 'planned') {
+          renderSignup(state);
+          return;
+        }
+        delete stage.dataset.mode;
         if (state.gameOver) {
           renderWinner(state);
           return;
