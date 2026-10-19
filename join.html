@@ -646,7 +646,8 @@
   }
 
   if (!gameId) {
-    renderMessage('NO GAME LINKED', 'This link is missing a game id — ask the organiser to re-share it.');
+    // No game in the link: the home page lists live games and the rules.
+    location.replace('/home');
   } else {
     onSnapshot(
       doc(db, 'games', gameId),
