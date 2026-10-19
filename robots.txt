@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Disallow: /join.html
+Sitemap: https://killer.pocketpoolapp.com/sitemap.xml
