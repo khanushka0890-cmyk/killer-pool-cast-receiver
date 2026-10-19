@@ -1,5 +1,6 @@
 <!doctype html>
-<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<html lang="en-GB"><head><meta charset="utf-8"><script>try{var t=localStorage.getItem('kp_theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Killer Pool Rules: How to Play Killer (the Pub Game)</title>
 <meta name="description" content="Killer pool rules in plain English: setting the order with playing cards, lives, fouls, re-racking, extra lives, the confirmation shot and who wins the pot. Free printable score sheet.">
 <link rel="canonical" href="https://killer.pocketpoolapp.com/rules">
@@ -86,7 +87,7 @@ header {
   font-family: 'Bebas Neue', sans-serif;
   font-size: 30px;
   letter-spacing: 3px;
-  color: var(--accent);
+  color: var(--ink-accent);
   line-height: 1;
 }
 
@@ -150,7 +151,7 @@ h2 {
   font-weight: 400;
   font-size: 24px;
   letter-spacing: 2px;
-  color: var(--accent);
+  color: var(--ink-accent);
   margin: 0 0 14px;
   padding-bottom: 10px;
   border-bottom: 1px solid var(--divider);
@@ -166,7 +167,7 @@ p.muted { color: var(--text-muted); font-size: 15px; }
   color: var(--text);
   background: var(--accent-wash);
   border: 1px solid var(--accent-dim);
-  color: var(--accent);
+  color: var(--ink-accent);
   border-radius: 5px;
   padding: 1px 7px;
   font-size: 15px;
@@ -189,7 +190,7 @@ footer {
   flex-wrap: wrap;
 }
 footer a { color: var(--text-muted); text-decoration: none; border-bottom: 1px dotted var(--text-faint); }
-footer a:hover, a:focus-visible { color: var(--accent); border-color: var(--accent); }
+footer a:hover, a:focus-visible { color: var(--ink-accent); border-color: var(--ink-accent); }
 a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 @media (max-width: 480px) {
@@ -199,21 +200,108 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outlin
 }
 
 /* ── Rules page extras ───────────────────────────────────────────────── */
-.answer { background: var(--surface); border: 1px solid var(--surface-border); border-left: 3px solid var(--accent); border-radius: 14px; padding: 20px 22px; margin-bottom: 28px; }
-.answer p { margin: 0; }
+.wrap { max-width: 780px; }
+a { color: var(--ink-accent); }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.updated { margin-bottom: 20px; }
+.toc { display: flex; gap: 8px; overflow-x: auto; padding: 4px 0 6px; margin: 0 0 28px; scrollbar-width: none; }
+.toc::-webkit-scrollbar { display: none; }
+.toc a { flex-shrink: 0; font-size: 14px; font-weight: 600; color: var(--text); text-decoration: none; background: var(--surface); border: 1px solid var(--surface-border); border-radius: 999px; padding: 6px 14px; }
+.toc a:hover { border-color: var(--ink-accent); color: var(--ink-accent); }
+section { scroll-margin-top: 16px; }
+h3 { font-size: 17px; font-weight: 700; margin: 0 0 6px; line-height: 1.3; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.ill { display: block; max-width: 100%; height: auto; }
+.card { background: var(--surface); border: 1px solid var(--surface-border); border-radius: 14px; padding: 16px 18px; }
+.card p { font-size: 15.5px; line-height: 1.55; }
+.card.row { display: flex; align-items: center; gap: 16px; }
+.card.row .ill { flex-shrink: 0; }
+.card.row p { margin: 0; }
+.glance { margin-bottom: 44px; }
+.tiles { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+.tile { background: var(--surface); border: 1px solid var(--surface-border); border-radius: 14px; padding: 14px 10px 12px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 4px; }
+.tile .ill { width: 64px; height: 40px; margin-bottom: 4px; }
+.tile .t { font-family: 'Bebas Neue', sans-serif; font-size: 21px; letter-spacing: 1px; line-height: 1.1; }
+.tile .d { font-size: 13px; color: var(--text-muted); line-height: 1.3; }
+.tile.good { border-color: rgba(67,160,71,.5); }
+.tile.bad { border-color: rgba(239,83,80,.5); }
+.tile.gold { border-color: var(--accent-dim); background: var(--accent-wash); }
+.tile.gold .t { color: var(--ink-accent); }
+.need { display: grid; gap: 10px; }
+.phases { display: grid; grid-template-columns: 1fr; gap: 12px; }
+.phase { background: var(--surface); border: 1px solid var(--surface-border); border-radius: 14px; padding: 14px 18px 16px; }
+.phase__h { font-size: 12px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--ink-accent); margin-bottom: 10px; }
+.steps2 { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.step { display: grid; grid-template-columns: 30px 1fr; gap: 12px; align-items: start; font-size: 15.5px; line-height: 1.5; }
+.step .num { width: 30px; height: 30px; border-radius: 50%; background: var(--accent); color: #0a0a0a; font-weight: 700; font-size: 15px; display: flex; align-items: center; justify-content: center; }
+.step b { color: var(--text); }
+.badge { display: inline-block; font-size: 12px; font-weight: 700; border-radius: 999px; padding: 0 8px; line-height: 20px; vertical-align: 1px; }
+.badge.lose { background: rgba(239,83,80,.15); color: var(--lose-ink); border: 1px solid rgba(239,83,80,.5); }
+.badge.gain { background: rgba(67,160,71,.15); color: var(--gain-ink); border: 1px solid rgba(67,160,71,.5); }
+.pill { display: inline-block; font-family: 'Barlow', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; border-radius: 999px; padding: 2px 9px; background: var(--accent-wash); color: var(--ink-accent); border: 1px solid var(--accent-dim); line-height: 1.5; }
+h2 .pill { vertical-align: middle; margin-left: 6px; letter-spacing: 1.5px; }
+h2 { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.opts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px; }
+.opt { position: relative; display: flex; flex-direction: column; }
+.opt .ill { width: 72px; height: 48px; margin-bottom: 10px; }
+.opt p { margin: 0; color: var(--text-muted); }
+.opt.hl { border-color: var(--accent-dim); background: var(--accent-wash); }
+.opt.hl h3 { color: var(--ink-accent); }
+.opt__n { position: absolute; top: 12px; right: 14px; font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--text-faint); }
+.duo { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.card__h { display: flex; gap: 14px; align-items: center; margin-bottom: 12px; }
+.card__h .ill { width: 72px; height: 52px; flex-shrink: 0; }
+.card__h h3 { margin: 0 0 2px; font-size: 19px; }
+.card__h p { margin: 0; }
+.lead { font-weight: 600; margin-bottom: 10px !important; }
+.fork { display: grid; gap: 8px; }
+.fork__a { border: 1px solid var(--divider); border-radius: 10px; padding: 10px 12px; display: flex; flex-direction: column; gap: 2px; font-size: 15px; line-height: 1.45; }
+.fork__a .pill { align-self: flex-start; margin-bottom: 4px; }
+.fork__a span:last-child { color: var(--text-muted); }
+.bigbadge { width: 72px; height: 52px; flex-shrink: 0; border-radius: 12px; background: rgba(239,83,80,.15); border: 1px solid rgba(239,83,80,.5); color: var(--lose-ink); font-family: 'Bebas Neue', sans-serif; font-size: 26px; display: flex; align-items: center; justify-content: center; }
+.fouls { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+.foul { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; border: 1px solid var(--divider); border-radius: 10px; padding: 10px; font-size: 14px; line-height: 1.35; }
+.foul .ill { width: 40px; height: 40px; }
+.note { font-size: 14.5px; color: var(--text-muted); margin: 0; }
+.card.wide { justify-content: flex-start; }
+.card.wide .ill { width: 160px; height: 66px; }
+.branch { display: grid; grid-template-columns: 180px 1fr; gap: 12px; align-items: stretch; }
+.branch__start { background: var(--surface); border: 1px solid var(--accent-dim); border-radius: 14px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 14px; text-align: center; }
+.branch__start .ill { width: 64px; height: 40px; }
+.branch__outs { display: grid; gap: 10px; }
+.out { border-radius: 14px; padding: 12px 16px; font-size: 15.5px; line-height: 1.5; background: var(--surface); }
+.out__h { display: block; font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 1px; }
+.out.good { border: 1px solid rgba(67,160,71,.55); }
+.out.good .out__h { color: var(--gain-ink); }
+.out.bad { border: 1px solid rgba(239,83,80,.55); }
+.out.bad .out__h { color: var(--lose-ink); }
+ul.checks { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+ul.checks li { position: relative; background: var(--surface); border: 1px solid var(--surface-border); border-radius: 10px; padding: 10px 12px 10px 40px; font-size: 15px; line-height: 1.45; }
+ul.checks li::before { content: ""; position: absolute; left: 12px; top: 12px; width: 16px; height: 16px; border: 2px solid var(--accent); border-radius: 4px; }
+details { background: var(--surface); border: 1px solid var(--surface-border); border-radius: 12px; padding: 0 16px; margin-bottom: 8px; }
+summary { cursor: pointer; font-weight: 700; padding: 13px 0; list-style: none; display: flex; justify-content: space-between; gap: 12px; }
+summary::-webkit-details-marker { display: none; }
+summary::after { content: "+"; color: var(--ink-accent); font-size: 20px; line-height: 1; }
+details[open] summary::after { content: "\2212"; }
+details p { margin: 0 0 14px; color: var(--text-muted); }
 .cta { display: flex; align-items: center; gap: 14px; background: var(--accent-wash); border: 1px solid var(--accent-dim); border-radius: 14px; padding: 16px 18px; margin-bottom: 44px; }
 .cta p { margin: 0; flex: 1; font-size: 15px; color: var(--text); }
 .btn { display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 18px; border-radius: 22px; background: var(--accent); color: #0a0a0a; font-weight: 700; font-size: 15px; text-decoration: none; white-space: nowrap; border: none; cursor: pointer; font-family: 'Barlow', sans-serif; }
-.btn.line { background: transparent; color: var(--accent); border: 1.5px solid var(--accent); }
-ol.steps { margin: 0 0 14px; padding-left: 22px; }
-ol.steps li { margin-bottom: 10px; }
-ol.steps li::marker { color: var(--accent); font-weight: 700; }
+.btn.line { background: transparent; color: var(--ink-accent); border: 1.5px solid var(--accent); }
 table.sheet { width: 100%; border-collapse: collapse; margin: 6px 0 16px; font-size: 15px; }
 table.sheet th, table.sheet td { border: 1px solid var(--divider); padding: 7px 8px; text-align: left; }
 table.sheet th { color: var(--text-muted); font-weight: 600; font-size: 13px; letter-spacing: 1px; }
 table.sheet td.box { width: 44px; }
 table.sheet th:first-child, table.sheet td:first-child { width: 36px; }
-@media (max-width: 480px) { .cta { flex-direction: column; align-items: flex-start; } }
+@media (max-width: 720px) {
+  .tiles { grid-template-columns: repeat(2, 1fr); }
+  .tiles .tile.gold { grid-column: span 2; }
+  .opts, .duo, ul.checks { grid-template-columns: 1fr; }
+  .opt { flex-direction: row; flex-wrap: wrap; gap: 0 14px; }
+  .opt .ill { margin-bottom: 0; }
+  .opt > div, .opt h3 { flex: 1; }
+  .branch { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) { .cta { flex-direction: column; align-items: flex-start; } .card.row { gap: 12px; } }
 @media print {
   body { background: #fff; color: #000; }
   .wrap { max-width: none; padding: 0; }
@@ -223,6 +311,17 @@ table.sheet th:first-child, table.sheet td:first-child { width: 36px; }
   table.sheet th, table.sheet td { border-color: #000; color: #000; }
   table.sheet td { height: 28px; }
 }
+
+:root { --ink-accent: #FFD700; --lose-ink: #ff8a83; --gain-ink: #7ddc84; color-scheme: dark; }
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) { --bg: #f5f2ea; --surface: #ffffff; --surface-border: #e3ddd0; --divider: #e3ddd0; --accent-dim: #d9b84a; --accent-wash: #fff7d1; --text: #161a20; --text-muted: #59626e; --text-faint: #8a929c; --ink-accent: #8a6a00; --lose-ink: #c62828; --gain-ink: #2e7d32; color-scheme: light; } }
+:root[data-theme="light"] { --bg: #f5f2ea; --surface: #ffffff; --surface-border: #e3ddd0; --divider: #e3ddd0; --accent-dim: #d9b84a; --accent-wash: #fff7d1; --text: #161a20; --text-muted: #59626e; --text-faint: #8a929c; --ink-accent: #8a6a00; --lose-ink: #c62828; --gain-ink: #2e7d32; color-scheme: light; }
+h1 { line-height: 1.05; }
+header .theme { margin-left: auto; width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--surface-border); background: var(--surface); color: var(--text); font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+header .theme .sun { display: none; }
+:root[data-theme="light"] header .theme .sun { display: inline; }
+:root[data-theme="light"] header .theme .moon { display: none; }
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) header .theme .sun { display: inline; } :root:not([data-theme="dark"]) header .theme .moon { display: none; } }
+@media print { header .theme { display: none; } }
 </style>
 </head><body>
 <div class="wrap">
@@ -230,106 +329,138 @@ table.sheet th:first-child, table.sheet td:first-child { width: 36px; }
   <header>
     <div class="ball"><span>8</span></div>
     <div class="wordmark">KILLER POOL</div>
+    <button class="theme" type="button" aria-label="Switch light or dark" onclick="(function(){var r=document.documentElement,d=r.dataset.theme||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'),n=d==='light'?'dark':'light';r.dataset.theme=n;try{localStorage.setItem('kp_theme',n)}catch(e){}})()"><span class="moon">&#9790;</span><span class="sun">&#9728;</span></button>
   </header>
 
   <div class="eyebrow">Rules</div>
   <h1>Killer pool rules: how to play killer</h1>
   <p class="updated">The pub game for any number of players &middot; free printable score sheet below</p>
 
-  <div class="answer">
-    <p><b>In short:</b> everyone starts with the same number of lives, usually three. Players take one shot each in a fixed order. Pot a ball and you keep your lives; miss and you lose one. Lose all your lives and you're out. The last player left wins the pot.</p>
-  </div>
+  <nav class="toc" aria-label="Jump to">
+    <a href="#play">How to play</a><a href="#order">Order</a><a href="#rerack">Re-racking &amp; fouls</a><a href="#extra">Extra lives</a><a href="#lasttwo">Last two</a><a href="#confirm">Confirmation shot</a><a href="#faq">Questions</a><a href="#sheet">Score sheet</a>
+  </nav>
+
+  <section class="glance" aria-label="In short">
+    <p class="sr">In short: everyone starts with the same number of lives, usually three. Players take one shot each in a fixed order. Pot a ball and you keep your lives; miss and you lose one. Lose all your lives and you're out. The last player left wins the pot.</p>
+    <div class="tiles">
+      <div class="tile"><svg class="ill" viewBox="0 0 64 40" width="64" height="40" role="img" aria-label="Three lives"><path transform="translate(0 6) scale(1.0)" d="M12 21s-7.5-4.6-10-9.2C.3 8.4 2 4.5 5.8 4.5c2.3 0 3.6 1.3 4.2 2.4h.1c.6-1.1 1.9-2.4 4.2-2.4C18 4.5 19.7 8.4 18 11.8 15.5 16.4 12 21 12 21z" fill="#ef5350"/><path transform="translate(21 6) scale(1.0)" d="M12 21s-7.5-4.6-10-9.2C.3 8.4 2 4.5 5.8 4.5c2.3 0 3.6 1.3 4.2 2.4h.1c.6-1.1 1.9-2.4 4.2-2.4C18 4.5 19.7 8.4 18 11.8 15.5 16.4 12 21 12 21z" fill="#ef5350"/><path transform="translate(42 6) scale(1.0)" d="M12 21s-7.5-4.6-10-9.2C.3 8.4 2 4.5 5.8 4.5c2.3 0 3.6 1.3 4.2 2.4h.1c.6-1.1 1.9-2.4 4.2-2.4C18 4.5 19.7 8.4 18 11.8 15.5 16.4 12 21 12 21z" fill="#ef5350"/></svg><span class="t">3 lives each</span><span class="d">Same for everyone</span></div>
+      <div class="tile"><svg class="ill" viewBox="0 0 64 40" width="64" height="40" role="img" aria-label="One shot"><line x1="2" y1="34" x2="34" y2="20" stroke="#c8a165" stroke-width="4" stroke-linecap="round"/><circle cx="42" cy="17" r="7" fill="#f4f4f4" stroke="#9aa3ad" stroke-width="1"/><circle cx="56" cy="12" r="6" fill="#e53935"/><circle cx="56" cy="12" r="2.88" fill="#fff"/><text x="56" y="13.2" text-anchor="middle" font-family="Barlow,sans-serif" font-weight="700" font-size="3.5999999999999996" fill="#0a0a0a">3</text></svg><span class="t">One shot</span><span class="d">Then the next player</span></div>
+      <div class="tile good"><svg class="ill" viewBox="0 0 64 40" width="64" height="40" role="img" aria-label="Pot is safe"><circle cx="32" cy="22" r="14" fill="#0a0a0a" stroke="#3b2a1a" stroke-width="3"/><circle cx="32" cy="14" r="7" fill="#1e88e5"/><circle cx="32" cy="14" r="3.36" fill="#fff"/><text x="32" y="15.4" text-anchor="middle" font-family="Barlow,sans-serif" font-weight="700" font-size="4.2" fill="#0a0a0a">2</text><path d="M50 8l4 4 8-9" stroke="#43a047" stroke-width="3.5" fill="none" stroke-linecap="round"/></svg><span class="t">Pot = safe</span><span class="d">Keep your lives</span></div>
+      <div class="tile bad"><svg class="ill" viewBox="0 0 64 40" width="64" height="40" role="img" aria-label="Miss loses a life"><path transform="translate(8 6) scale(1.0)" d="M12 21s-7.5-4.6-10-9.2C.3 8.4 2 4.5 5.8 4.5c2.3 0 3.6 1.3 4.2 2.4h.1c.6-1.1 1.9-2.4 4.2-2.4C18 4.5 19.7 8.4 18 11.8 15.5 16.4 12 21 12 21z" fill="#4a5568"/><path d="M40 12l14 14M54 12L40 26" stroke="#ef5350" stroke-width="4" stroke-linecap="round"/></svg><span class="t">Miss = &minus;1 life</span><span class="d">No lives left, you're out</span></div>
+      <div class="tile gold"><svg class="ill" viewBox="0 0 64 40" width="64" height="40" role="img" aria-label="Last one wins"><path d="M20 4h24v8a12 12 0 0 1-24 0z" fill="#FFD700"/><path d="M20 7h-7a7 7 0 0 0 9 9M44 7h7a7 7 0 0 1-9 9" stroke="#FFD700" stroke-width="3" fill="none"/><rect x="29" y="24" width="6" height="7" fill="#FFD700"/><rect x="22" y="31" width="20" height="5" rx="1.5" fill="#FFD700"/></svg><span class="t">Last one wins</span><span class="d">They take the pot</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>What you need</h2>
+    <div class="need">
+      <div class="card row"><svg class="ill" viewBox="0 0 56 40" width="56" height="40" role="img" aria-label="Pool table"><rect x="2" y="6" width="52" height="30" rx="5" fill="#5d3a1a"/><rect x="7" y="11" width="42" height="20" rx="2" fill="#1f6f4a"/><circle cx="7" cy="11" r="2.6" fill="#0a0a0a"/><circle cx="28" cy="10" r="2.6" fill="#0a0a0a"/><circle cx="49" cy="11" r="2.6" fill="#0a0a0a"/><circle cx="7" cy="31" r="2.6" fill="#0a0a0a"/><circle cx="28" cy="32" r="2.6" fill="#0a0a0a"/><circle cx="49" cy="31" r="2.6" fill="#0a0a0a"/><circle cx="20" cy="21" r="3.5" fill="#f4f4f4" stroke="#9aa3ad" stroke-width="1"/><circle cx="36" cy="19" r="3.5" fill="#e53935"/><circle cx="39" cy="24" r="3.5" fill="#fdd835"/></svg><p>Any pool table (English 8-ball or American, it doesn't matter) and a full rack of balls.</p></div>
+      <div class="card row"><svg class="ill" viewBox="0 0 56 40" width="56" height="40" role="img" aria-label="Players"><circle cx="12" cy="14" r="6" fill="#8e7cc3"/><path d="M2 36a10 10 0 0 1 20 0z" fill="#8e7cc3"/><circle cx="28" cy="14" r="6" fill="#4fc3f7"/><path d="M18 36a10 10 0 0 1 20 0z" fill="#4fc3f7"/><circle cx="44" cy="14" r="6" fill="#ffb74d"/><path d="M34 36a10 10 0 0 1 20 0z" fill="#ffb74d"/></svg><p>Three or more players. Four to twenty is the sweet spot.</p></div>
+      <div class="card row"><svg class="ill" viewBox="0 0 56 40" width="56" height="40" role="img" aria-label="Entry fee"><ellipse cx="22" cy="32" rx="12" ry="4" fill="#FFD700" stroke="#a58800"/><ellipse cx="22" cy="27" rx="12" ry="4" fill="#FFD700" stroke="#a58800"/><ellipse cx="22" cy="22" rx="12" ry="4" fill="#FFD700" stroke="#a58800"/><ellipse cx="22" cy="17" rx="12" ry="4" fill="#FFD700" stroke="#a58800"/><rect x="34" y="12" width="20" height="13" rx="2" fill="#66bb6a" transform="rotate(-12 44 18)"/></svg><p>An entry fee per player if you're playing for a pot, and something to keep score with.</p></div>
+    </div>
+  </section>
+
+  <section id="play">
+    <h2>How to play</h2>
+    <div class="phases">
+      <div class="phase">
+        <div class="phase__h">Before you start</div>
+        <ol class="steps2">
+          <li class="step"><span class="num">1</span><div><b>Pay in.</b> Everyone puts the entry fee in the pot.</div></li>
+          <li class="step"><span class="num">2</span><div><b>Decide the order.</b> Fixed for the whole game, or shuffled every round (see <a href="#order">Setting the order</a>).</div></li>
+          <li class="step"><span class="num">3</span><div><b>Set the lives.</b> Each player starts with three lives (two for big groups).</div></li>
+        </ol>
+      </div>
+      <div class="phase">
+        <div class="phase__h">Playing</div>
+        <ol class="steps2" start="4">
+          <li class="step"><span class="num">4</span><div><b>Break: two shots.</b> The first player breaks and gets two shots on the break. If nothing goes in off the break, they have another go. Potting on the break counts as a pot.</div></li>
+          <li class="step"><span class="num">5</span><div><b>One shot each.</b> On your turn you get one shot and must pot a ball. Any ball counts, colours or stripes, spots or solids.</div></li>
+          <li class="step"><span class="num">6</span><div><b>Pot = safe.</b> Keep your lives. Play passes to the next player; you don't shoot again.</div></li>
+          <li class="step"><span class="num">7</span><div><b>Miss = lose a life.</b> Fail to pot and you lose a life. <span class="badge lose">&minus;1 ♥</span></div></li>
+          <li class="step"><span class="num">8</span><div><b>Out of lives = out.</b> Lose your last life and you're knocked out. Play skips you from then on.</div></li>
+        </ol>
+      </div>
+      <div class="phase">
+        <div class="phase__h">Keep going</div>
+        <ol class="steps2" start="9">
+          <li class="step"><span class="num">9</span><div><b>Re-rack.</b> When the table is empty, or down to one ball if you agree, rack again (see <a href="#rerack">Re-racking</a>).</div></li>
+          <li class="step"><span class="num">10</span><div><b>Last player standing wins</b> the pot.</div></li>
+        </ol>
+      </div>
+    </div>
+  </section>
 
   <div class="cta">
     <p>Keep score on your phone instead of the chalkboard: lives, turns and who's out, plus the game on the pub TV.</p>
     <a class="btn" href="https://apps.apple.com/app/id6802345932">Get Killer Pool</a>
   </div>
 
-  <section>
-    <h2>What you need</h2>
-    <ul class="plain">
-      <li>Any pool table (English 8-ball or American, it doesn't matter) and a full rack of balls.</li>
-      <li>Three or more players. Four to twenty is the sweet spot.</li>
-      <li>An entry fee per player if you're playing for a pot, and something to keep score with.</li>
-    </ul>
-  </section>
-
-  <section>
-    <h2>How to play</h2>
-    <ol class="steps">
-      <li><b>Pay in.</b> Everyone puts the entry fee in the pot.</li>
-      <li><b>Decide the order.</b> Agree first whether the order stays <b>fixed</b> for the whole game or is <b>shuffled</b> every round (see <a href="#order" style="color:#FFD700;">Setting the order</a>).</li>
-      <li><b>Set the lives.</b> Each player starts with three lives (two for big groups).</li>
-      <li><b>Break: two shots.</b> The first player breaks and gets two shots on the break. If nothing goes in off the break, they have another go. Potting on the break counts as a pot.</li>
-      <li><b>One shot each.</b> On your turn you get one shot and must pot a ball. Any ball counts, colours or stripes, spots or solids.</li>
-      <li><b>Pot = safe.</b> Pot a ball and you keep your lives. Play passes to the next player; you don't shoot again.</li>
-      <li><b>Miss = lose a life.</b> Fail to pot and you lose a life.</li>
-      <li><b>Out of lives = out.</b> When you lose your last life you're knocked out. Play skips you from then on.</li>
-      <li><b>Re-rack.</b> When the table is empty, or down to one ball if you agree, rack again (see <a href="#rerack" style="color:#FFD700;">Re-racking</a>).</li>
-      <li><b>Last player standing wins</b> the pot.</li>
-    </ol>
-  </section>
-
   <section id="order">
     <h2>Setting the order</h2>
-    <p>Agree before the break whether the order is fixed or shuffled.</p>
-    <ul class="plain">
-      <li><b>Fixed:</b> write the names on the board in the order people paid in, or draw them once. That order stays for the whole game.</li>
-      <li><b>Shuffled:</b> deal one regular playing card to each player. Lowest card shoots first, highest last. To shuffle every round, collect the cards and deal again at the start of each round.</li>
-      <li><b>Drawn as you go:</b> after each shot, the player who just shot draws the next shooter: a card from the pack, or a name from a hat. Nobody knows who's up next, so the order stays random all game.</li>
-    </ul>
+    <p>Agree before the break whether the order is fixed or shuffled. Three ways to do it:</p>
+    <div class="opts">
+      <div class="card opt"><span class="opt__n">A</span><svg class="ill" viewBox="0 0 72 48" width="72" height="48" role="img" aria-label="Fixed list"><text x="6" y="12" font-family="Barlow,sans-serif" font-weight="700" font-size="10" fill="#FFD700">1</text><rect x="16" y="5" width="48" height="7" rx="3.5" fill="#78909c"/><text x="6" y="24" font-family="Barlow,sans-serif" font-weight="700" font-size="10" fill="#FFD700">2</text><rect x="16" y="17" width="40" height="7" rx="3.5" fill="#78909c"/><text x="6" y="36" font-family="Barlow,sans-serif" font-weight="700" font-size="10" fill="#FFD700">3</text><rect x="16" y="29" width="32" height="7" rx="3.5" fill="#78909c"/><text x="6" y="48" font-family="Barlow,sans-serif" font-weight="700" font-size="10" fill="#FFD700">4</text><rect x="16" y="41" width="24" height="7" rx="3.5" fill="#78909c"/></svg><h3>Fixed</h3><p>Write the names on the board in the order people paid in, or draw them once. That order stays for the whole game.</p></div>
+      <div class="card opt"><span class="opt__n">B</span><svg class="ill" viewBox="0 0 72 48" width="72" height="48" role="img" aria-label="Playing cards"><g transform="rotate(-14 21 25)"><rect x="10" y="10" width="22" height="30" rx="3" fill="#fafafa" stroke="#cfd8dc"/><text x="21" y="29" text-anchor="middle" font-family="Barlow,sans-serif" font-weight="700" font-size="11" fill="#0a0a0a">2♣</text></g><g transform="rotate(0 36 22)"><rect x="25" y="7" width="22" height="30" rx="3" fill="#fafafa" stroke="#cfd8dc"/><text x="36" y="26" text-anchor="middle" font-family="Barlow,sans-serif" font-weight="700" font-size="11" fill="#e53935">7♥</text></g><g transform="rotate(14 51 25)"><rect x="40" y="10" width="22" height="30" rx="3" fill="#fafafa" stroke="#cfd8dc"/><text x="51" y="29" text-anchor="middle" font-family="Barlow,sans-serif" font-weight="700" font-size="11" fill="#0a0a0a">K♠</text></g></svg><h3>Shuffled with cards</h3><p>Deal one regular playing card to each player. Lowest card shoots first, highest last. To shuffle every round, collect the cards and deal again at the start of each round.</p></div>
+      <div class="card opt"><span class="opt__n">C</span><svg class="ill" viewBox="0 0 72 48" width="72" height="48" role="img" aria-label="Drawn from a hat"><rect x="20" y="6" width="32" height="28" rx="3" fill="#263238"/><rect x="20" y="24" width="32" height="5" fill="#b71c1c"/><ellipse cx="36" cy="36" rx="26" ry="6" fill="#263238"/><g transform="rotate(22 59 15)"><rect x="48" y="0" width="22" height="30" rx="3" fill="#fafafa" stroke="#cfd8dc"/><text x="59" y="19" text-anchor="middle" font-family="Barlow,sans-serif" font-weight="700" font-size="11" fill="#0a0a0a">?</text></g></svg><h3>Drawn as you go</h3><p>After each shot, the player who just shot draws the next shooter: a card from the pack, or a name from a hat. Nobody knows who's up next, so the order stays random all game.</p></div>
+    </div>
   </section>
 
   <section id="rerack">
-    <h2>Re-racking</h2>
-    <p>The table is re-racked when it's empty. If you agree, it can also be re-racked when just <b>one ball</b> is left. Then the player whose turn it is chooses:</p>
-    <ul class="plain">
-      <li><b>Re-rack and break.</b> Their break is their one shot.</li>
-      <li><b>Play the last ball.</b> If they clear it, the table is empty and the next player breaks with <b>two shots</b>.</li>
-    </ul>
+    <h2>Re-racking &amp; fouls</h2>
+    <div class="duo">
+      <div class="card">
+        <div class="card__h"><svg class="ill" viewBox="0 0 72 52" width="72" height="52" role="img" aria-label="Re-rack"><path d="M36 1L58 46H14z" fill="none" stroke="#c8a165" stroke-width="2.5" stroke-linejoin="round"/><circle cx="36.0" cy="8" r="4.2" fill="#e53935"/><circle cx="31.5" cy="16" r="4.2" fill="#fdd835"/><circle cx="40.5" cy="16" r="4.2" fill="#1e88e5"/><circle cx="27.0" cy="24" r="4.2" fill="#1e88e5"/><circle cx="36.0" cy="24" r="4.2" fill="#43a047"/><circle cx="45.0" cy="24" r="4.2" fill="#8e24aa"/><circle cx="22.5" cy="32" r="4.2" fill="#43a047"/><circle cx="31.5" cy="32" r="4.2" fill="#8e24aa"/><circle cx="40.5" cy="32" r="4.2" fill="#e53935"/><circle cx="49.5" cy="32" r="4.2" fill="#fdd835"/><circle cx="18.0" cy="40" r="4.2" fill="#8e24aa"/><circle cx="27.0" cy="40" r="4.2" fill="#e53935"/><circle cx="36.0" cy="40" r="4.2" fill="#fdd835"/><circle cx="45.0" cy="40" r="4.2" fill="#1e88e5"/><circle cx="54.0" cy="40" r="4.2" fill="#43a047"/></svg><div><h3>Re-racking</h3><p class="muted">When the table is empty, or at <b>one ball</b> left if you agree.</p></div></div>
+        <p class="lead">One ball left? The player whose turn it is chooses:</p>
+        <div class="fork">
+          <div class="fork__a"><span class="pill">Option 1</span><b>Re-rack and break.</b><span>Their break is their one shot.</span></div>
+          <div class="fork__a"><span class="pill">Option 2</span><b>Play the last ball.</b><span>If they clear it, the next player breaks with <b>two shots</b>.</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card__h"><span class="bigbadge">&minus;1 ♥</span><div><h3>Fouls</h3><p class="muted">A foul costs a life, the same as a miss.</p></div></div>
+        <div class="fouls">
+          <div class="foul"><svg class="ill" viewBox="0 0 40 40" width="40" height="40" role="img" aria-label="White potted"><circle cx="20" cy="22" r="13" fill="#0a0a0a"/><circle cx="20" cy="16" r="7" fill="#f4f4f4" stroke="#9aa3ad" stroke-width="1"/></svg><span>Potting the white (in-off)</span></div>
+          <div class="foul"><svg class="ill" viewBox="0 0 40 40" width="40" height="40" role="img" aria-label="Missing every ball"><circle cx="13" cy="20" r="6" fill="#f4f4f4" stroke="#9aa3ad" stroke-width="1"/><path d="M20 20h10" stroke="#78909c" stroke-width="2" stroke-dasharray="3 3"/><circle cx="32" cy="10" r="5" fill="#e53935"/></svg><span>Missing every ball</span></div>
+          <div class="foul"><svg class="ill" viewBox="0 0 40 40" width="40" height="40" role="img" aria-label="Ball off the table"><rect x="2" y="22" width="26" height="14" rx="3" fill="#1f6f4a"/><circle cx="32" cy="10" r="5" fill="#1e88e5"/><path d="M24 22q4-10 8-7" stroke="#78909c" stroke-width="2" fill="none" stroke-dasharray="3 3"/></svg><span>Knocking a ball off the table</span></div>
+          <div class="foul"><svg class="ill" viewBox="0 0 40 40" width="40" height="40" role="img" aria-label="Touching a ball"><circle cx="26" cy="26" r="8" fill="#fdd835"/><path d="M6 8q6 2 10 10l3 4" stroke="#e0b089" stroke-width="5" stroke-linecap="round" fill="none"/></svg><span>Touching a ball with your hand, clothes or the cue</span></div>
+        </div>
+        <p class="note">After a foul the next player usually has the white in hand: behind the line in English pool, anywhere on the table in American pool. Some pubs make a foul cost two lives. Agree before you start.</p>
+      </div>
+    </div>
   </section>
 
-  <section>
-    <h2>Fouls</h2>
-    <p>A foul costs a life, the same as a miss. The usual fouls:</p>
-    <ul class="plain">
-      <li>Potting the white (in-off).</li>
-      <li>Missing every ball.</li>
-      <li>Knocking a ball off the table.</li>
-      <li>Touching a ball with your hand, clothes or the cue.</li>
-    </ul>
-    <p>After a foul the next player usually has the white in hand: behind the line in English pool, anywhere on the table in American pool. Some pubs make a foul cost two lives. Agree before you start.</p>
-  </section>
-
-  <section>
-    <h2>Extra lives (if agreed)</h2>
+  <section id="extra">
+    <h2>Extra lives <span class="pill agreed">If agreed</span></h2>
     <p>Extra lives are a house rule, not always played. Agree them before you start:</p>
-    <ul class="plain">
-      <li><b>Potting the black:</b> an extra life. The black stays down; it isn't put back on the table.</li>
-      <li><b>Potting two balls in one shot:</b> an extra life, if agreed. Some pubs only give it if you <b>nominate both balls</b> before you shoot.</li>
-      <li><b>A cap:</b> most pubs don't let anyone go above their starting number of lives.</li>
-    </ul>
-    <p>Without these rules, potting the black or two balls simply counts as a pot.</p>
+    <div class="opts">
+      <div class="card opt"><svg class="ill" viewBox="0 0 72 48" width="72" height="48" role="img" aria-label="Black gives an extra life"><circle cx="26" cy="24" r="14" fill="#111"/><circle cx="26" cy="24" r="6.72" fill="#fff"/><text x="26" y="26.8" text-anchor="middle" font-family="Barlow,sans-serif" font-weight="700" font-size="8.4" fill="#0a0a0a">8</text><path transform="translate(44 6) scale(1.05)" d="M12 21s-7.5-4.6-10-9.2C.3 8.4 2 4.5 5.8 4.5c2.3 0 3.6 1.3 4.2 2.4h.1c.6-1.1 1.9-2.4 4.2-2.4C18 4.5 19.7 8.4 18 11.8 15.5 16.4 12 21 12 21z" fill="#43a047"/><text x="57" y="44" text-anchor="middle" font-family="Barlow,sans-serif" font-weight="700" font-size="12" fill="#43a047">+1</text></svg><h3>Pot the black <span class="badge gain">+1 ♥</span></h3><p>An extra life. The black stays down; it isn't put back on the table.</p></div>
+      <div class="card opt"><svg class="ill" viewBox="0 0 72 48" width="72" height="48" role="img" aria-label="Two balls, one shot"><circle cx="16" cy="26" r="11" fill="#e53935"/><circle cx="16" cy="26" r="5.279999999999999" fill="#fff"/><text x="16" y="28.2" text-anchor="middle" font-family="Barlow,sans-serif" font-weight="700" font-size="6.6" fill="#0a0a0a">3</text><circle cx="36" cy="22" r="11" fill="#1e88e5"/><circle cx="36" cy="22" r="5.279999999999999" fill="#fff"/><text x="36" y="24.2" text-anchor="middle" font-family="Barlow,sans-serif" font-weight="700" font-size="6.6" fill="#0a0a0a">2</text><path transform="translate(48 6) scale(1.0)" d="M12 21s-7.5-4.6-10-9.2C.3 8.4 2 4.5 5.8 4.5c2.3 0 3.6 1.3 4.2 2.4h.1c.6-1.1 1.9-2.4 4.2-2.4C18 4.5 19.7 8.4 18 11.8 15.5 16.4 12 21 12 21z" fill="#43a047"/><text x="60" y="44" text-anchor="middle" font-family="Barlow,sans-serif" font-weight="700" font-size="12" fill="#43a047">+1</text></svg><h3>Two balls, one shot <span class="badge gain">+1 ♥</span></h3><p>An extra life, if agreed. Some pubs only give it if you <b>nominate both balls</b> before you shoot.</p></div>
+      <div class="card opt"><svg class="ill" viewBox="0 0 72 48" width="72" height="48" role="img" aria-label="Lives capped"><path transform="translate(2 12) scale(0.95)" d="M12 21s-7.5-4.6-10-9.2C.3 8.4 2 4.5 5.8 4.5c2.3 0 3.6 1.3 4.2 2.4h.1c.6-1.1 1.9-2.4 4.2-2.4C18 4.5 19.7 8.4 18 11.8 15.5 16.4 12 21 12 21z" fill="#ef5350"/><path transform="translate(24 12) scale(0.95)" d="M12 21s-7.5-4.6-10-9.2C.3 8.4 2 4.5 5.8 4.5c2.3 0 3.6 1.3 4.2 2.4h.1c.6-1.1 1.9-2.4 4.2-2.4C18 4.5 19.7 8.4 18 11.8 15.5 16.4 12 21 12 21z" fill="#ef5350"/><path transform="translate(46 12) scale(0.95)" d="M12 21s-7.5-4.6-10-9.2C.3 8.4 2 4.5 5.8 4.5c2.3 0 3.6 1.3 4.2 2.4h.1c.6-1.1 1.9-2.4 4.2-2.4C18 4.5 19.7 8.4 18 11.8 15.5 16.4 12 21 12 21z" fill="#ef5350"/><line x1="2" y1="8" x2="70" y2="8" stroke="#FFD700" stroke-width="3" stroke-dasharray="5 4"/></svg><h3>A cap</h3><p>Most pubs don't let anyone go above their starting number of lives.</p></div>
+    </div>
+    <p class="note">Without these rules, potting the black or two balls simply counts as a pot.</p>
   </section>
 
-  <section>
+  <section id="lasttwo">
     <h2>The last two players</h2>
-    <p>Play carries on as normal, one shot each, until one of them runs out of lives.</p>
+    <div class="card row wide"><svg class="ill" viewBox="0 0 160 66" width="160" height="66" role="img" aria-label="The last two players"><circle cx="36" cy="16" r="9" fill="#8e7cc3"/><path d="M22 46a14 14 0 0 1 28 0z" fill="#8e7cc3"/><path transform="translate(22 50) scale(0.55)" d="M12 21s-7.5-4.6-10-9.2C.3 8.4 2 4.5 5.8 4.5c2.3 0 3.6 1.3 4.2 2.4h.1c.6-1.1 1.9-2.4 4.2-2.4C18 4.5 19.7 8.4 18 11.8 15.5 16.4 12 21 12 21z" fill="#ef5350"/><path transform="translate(36 50) scale(0.55)" d="M12 21s-7.5-4.6-10-9.2C.3 8.4 2 4.5 5.8 4.5c2.3 0 3.6 1.3 4.2 2.4h.1c.6-1.1 1.9-2.4 4.2-2.4C18 4.5 19.7 8.4 18 11.8 15.5 16.4 12 21 12 21z" fill="#ef5350"/><text x="80" y="36" text-anchor="middle" font-family="Bebas Neue,sans-serif" font-size="22" style="fill:var(--ink-accent)">VS</text><circle cx="124" cy="16" r="9" fill="#ffb74d"/><path d="M110 46a14 14 0 0 1 28 0z" fill="#ffb74d"/><path transform="translate(110 50) scale(0.55)" d="M12 21s-7.5-4.6-10-9.2C.3 8.4 2 4.5 5.8 4.5c2.3 0 3.6 1.3 4.2 2.4h.1c.6-1.1 1.9-2.4 4.2-2.4C18 4.5 19.7 8.4 18 11.8 15.5 16.4 12 21 12 21z" fill="#ef5350"/><path transform="translate(124 50) scale(0.55)" d="M12 21s-7.5-4.6-10-9.2C.3 8.4 2 4.5 5.8 4.5c2.3 0 3.6 1.3 4.2 2.4h.1c.6-1.1 1.9-2.4 4.2-2.4C18 4.5 19.7 8.4 18 11.8 15.5 16.4 12 21 12 21z" fill="#4a5568"/></svg><p>Play carries on as normal, one shot each, until one of them runs out of lives.</p></div>
   </section>
 
-  <section>
-    <h2>The confirmation shot (if agreed)</h2>
-    <p>Some pubs make the winner earn it:</p>
-    <ol class="steps">
-      <li>When only one player has lives left, they don't win straight away. They take one more shot: the <b>confirmation shot</b>.</li>
-      <li><b>Pot it</b> and they win the pot.</li>
-      <li><b>Miss it</b> and they lose their last life too. Nobody wins: the pot <b>carries over</b>, and a new game starts with everyone back in (and usually a fresh entry fee on top).</li>
-    </ol>
+  <section id="confirm">
+    <h2>The confirmation shot <span class="pill agreed">If agreed</span></h2>
+    <p>Some pubs make the winner earn it. When only one player has lives left, they don't win straight away. They take one more shot: the <b>confirmation shot</b>.</p>
+    <div class="branch">
+      <div class="branch__start"><svg class="ill" viewBox="0 0 64 40" width="64" height="40" role="img" aria-label="One shot"><line x1="2" y1="34" x2="34" y2="20" stroke="#c8a165" stroke-width="4" stroke-linecap="round"/><circle cx="42" cy="17" r="7" fill="#f4f4f4" stroke="#9aa3ad" stroke-width="1"/><circle cx="56" cy="12" r="6" fill="#e53935"/><circle cx="56" cy="12" r="2.88" fill="#fff"/><text x="56" y="13.2" text-anchor="middle" font-family="Barlow,sans-serif" font-weight="700" font-size="3.5999999999999996" fill="#0a0a0a">3</text></svg><b>Confirmation shot</b></div>
+      <div class="branch__outs">
+        <div class="out good"><span class="out__h">Pot it</span>They win the pot.</div>
+        <div class="out bad"><span class="out__h">Miss it</span>They lose their last life too. Nobody wins: the pot <b>carries over</b>, and a new game starts with everyone back in (and usually a fresh entry fee on top).</div>
+      </div>
+    </div>
   </section>
 
   <section>
     <h2>House rules worth agreeing first</h2>
-    <ul class="plain">
+    <ul class="checks">
       <li>How many lives each player starts with.</li>
       <li>Whether a foul costs one life or two.</li>
       <li>Whether the order is fixed, shuffled with playing cards every round, or drawn by each player as you go.</li>
@@ -342,15 +473,20 @@ table.sheet th:first-child, table.sheet td:first-child { width: 36px; }
 
   <section>
     <h2>Killer, Kelly pool and cutthroat</h2>
-    <p>They're all group games, but they're different. In <b>killer</b> you lose lives for missing. In <b>Kelly pool</b> each player secretly draws a numbered ball and wins by potting it. In <b>cutthroat</b> three players each own a group of balls and try to clear everyone else's.</p>
+    <p>They're all group games, but they're different.</p>
+    <div class="opts">
+      <div class="card opt hl"><h3>Killer</h3><p>You lose lives for missing. Last player left wins.</p></div>
+      <div class="card opt"><h3>Kelly pool</h3><p>Each player secretly draws a numbered ball and wins by potting it.</p></div>
+      <div class="card opt"><h3>Cutthroat</h3><p>Three players each own a group of balls and try to clear everyone else's.</p></div>
+    </div>
   </section>
 
-  <section>
+  <section id="faq">
     <h2>Questions</h2>
-    <p><b>How many lives do you get in killer?</b><br>Three is the usual pub rule; two keeps big games short.</p>
-    <p><b>Do you have to pot your own colour?</b><br>No. Any ball counts in killer.</p>
-    <p><b>Do you get another shot if you pot?</b><br>No. One shot each, then it's the next player's turn.</p>
-    <p><b>How long does a game take?</b><br>About 20 to 40 minutes for ten players with three lives.</p>
+    <details open><summary>How many lives do you get in killer?</summary><p>Three is the usual pub rule; two keeps big games short.</p></details>
+    <details><summary>Do you have to pot your own colour?</summary><p>No. Any ball counts in killer.</p></details>
+    <details><summary>Do you get another shot if you pot?</summary><p>No. One shot each, then it's the next player's turn.</p></details>
+    <details><summary>How long does a game take?</summary><p>About 20 to 40 minutes for ten players with three lives.</p></details>
   </section>
 
   <section id="sheet">
