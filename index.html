@@ -4,6 +4,18 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Killer Pool — Cast Receiver</title>
+<script>
+  // This root URL is the Chromecast receiver, but people also open
+  // killer.pocketpoolapp.com on a phone (e.g. from the Pocket Pool site)
+  // and saw only "waiting for organiser". Every Cast receiver's user agent
+  // has "CrKey"; anything else that's clearly a phone or computer goes to
+  // the home page (rules + live games). ?tv keeps this screen for previews.
+  (function () {
+    var ua = navigator.userAgent;
+    if (/CrKey/.test(ua) || /[?&]tv\b/.test(location.search)) return;
+    if (/iPhone|iPad|iPod|Android|Macintosh|Windows|CrOS|X11/.test(ua)) location.replace('/home');
+  })();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
 <style>
