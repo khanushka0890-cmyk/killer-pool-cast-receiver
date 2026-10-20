@@ -265,6 +265,171 @@
   .tv-ro__foot .tv-qr__cap { white-space: nowrap; font: 700 calc(26 * var(--u))/1.3 'Barlow Condensed', sans-serif; letter-spacing: calc(2 * var(--u)); padding-left: 0; color: var(--gold-text); text-align: left; }
   /* Hearts for lives (new layout) */
   .tv-lives svg { width: calc(34 * var(--u)); height: calc(31 * var(--u)); display: block; flex-shrink: 0; }
+
+  /* ── 13+ players (build 50): every player on the felt, current player on the stub.
+     Only used when the app sends `roster` (build 50+); older apps keep the layouts above. */
+/* Big game (13+ players): every player on the felt, current player on the stub */
+.tv-ticket.big{left:calc(56 * var(--u));top:calc(36 * var(--u));width:calc(1168 * var(--u));height:calc(648 * var(--u));}
+.tv-main.big{padding:calc(28 * var(--u)) calc(28 * var(--u)) calc(28 * var(--u)) calc(32 * var(--u));gap:calc(18 * var(--u));}
+.kb-head{display:flex;align-items:center;gap:calc(18 * var(--u));height:calc(44 * var(--u));}
+.kb-title{flex:1 1 auto;min-width:0;text-align:right;font:400 calc(34 * var(--u))/1 'Bebas Neue',sans-serif;letter-spacing:calc(3 * var(--u));color:#fff;padding-top:calc(4 * var(--u));white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.kb-count{font:500 calc(20 * var(--u))/1 'Barlow',sans-serif;color:var(--text-2);white-space:nowrap;}
+.kb-count b{font:400 calc(34 * var(--u))/1 'Bebas Neue',sans-serif;color:var(--gold);vertical-align:calc(-3 * var(--u));margin-right:calc(3 * var(--u));}
+.kb-grid{flex:1 1 auto;min-height:0;display:grid;grid-auto-flow:column;grid-template-rows:repeat(12,minmax(0,1fr));grid-template-columns:repeat(3,minmax(0,1fr));gap:calc(5 * var(--u)) calc(14 * var(--u));}
+.kb-row{display:flex;align-items:center;gap:calc(10 * var(--u));padding:0 calc(10 * var(--u)) 0 calc(6 * var(--u));border-radius:calc(9 * var(--u));background:rgba(11,10,18,.32);min-width:0;}
+.kb-num{flex-shrink:0;min-width:calc(30 * var(--u));height:calc(24 * var(--u));box-sizing:border-box;padding:0 calc(5 * var(--u));border-radius:calc(6 * var(--u));background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font:400 calc(20 * var(--u))/1 'Bebas Neue',sans-serif;color:var(--text-2);padding-top:calc(2 * var(--u));}
+.kb-name{flex:1 1 auto;min-width:0;font:600 calc(19 * var(--u))/1 'Barlow',sans-serif;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.kb-hearts{display:flex;gap:calc(3 * var(--u));flex-shrink:0;}
+.kb-hearts svg{width:calc(15 * var(--u));height:calc(14 * var(--u));}
+.kb-tag{flex-shrink:0;font:700 calc(12 * var(--u))/1 'Barlow Condensed',sans-serif;letter-spacing:calc(1.5 * var(--u));color:#B79CF0;padding:calc(4 * var(--u)) calc(6 * var(--u));border-radius:calc(6 * var(--u));background:rgba(183,156,240,.14);}
+.kb-row.is-now{background:var(--gold);}
+.kb-row.is-now .kb-num{background:rgba(26,16,48,.18);color:#1A1030;}
+.kb-row.is-now .kb-name{color:#1A1030;font-weight:700;}
+.kb-row.is-now .kb-hearts path{fill:#1A1030;}
+.kb-row.is-next{box-shadow:inset 0 0 0 1.5px rgba(183,156,240,.75);background:rgba(183,156,240,.12);}
+.kb-row.is-out{background:transparent;box-shadow:inset 0 0 0 1px rgba(255,255,255,.06);}
+.kb-row.is-out .kb-num{color:#6A6388;background:transparent;}
+.kb-row.is-out .kb-name{color:#6A6388;font-weight:500;text-decoration:line-through;text-decoration-color:rgba(106,99,136,.7);}
+.kb-out{font:700 calc(13 * var(--u))/1 'Barlow Condensed',sans-serif;letter-spacing:calc(1.5 * var(--u));color:#6A6388;}
+
+.tv-stub.big{width:calc(368 * var(--u));justify-content:flex-start;align-items:stretch;gap:0;padding:calc(24 * var(--u)) calc(30 * var(--u)) calc(24 * var(--u)) calc(20 * var(--u));}
+.kb-now{display:flex;flex-direction:column;align-items:center;text-align:center;gap:calc(10 * var(--u));}
+.kb-now .tv-avatar{width:calc(104 * var(--u));height:calc(104 * var(--u));}
+.kb-now .tv-avatar__inner{font-size:calc(52 * var(--u));}
+.kb-nowname{display:flex;align-items:baseline;justify-content:center;gap:calc(12 * var(--u));max-width:100%;}
+.kb-nownum{font:400 calc(44 * var(--u))/1 'Bebas Neue',sans-serif;color:var(--gold);}
+.kb-nowname .tv-name{font-size:calc(64 * var(--u));line-height:.8;padding-top:calc(6 * var(--u));}
+.kb-now .tv-lives{padding-top:calc(4 * var(--u));justify-content:center;}
+.kb-now .tv-next{align-self:center;margin:calc(10 * var(--u)) 0 0;}
+.kb-sep{height:1px;background:rgba(255,255,255,.08);margin:calc(16 * var(--u)) 0 calc(14 * var(--u));}
+.kb-round{display:flex;align-items:baseline;justify-content:space-between;}
+.kb-round__l{font:700 calc(17 * var(--u))/1 'Barlow Condensed',sans-serif;letter-spacing:calc(3 * var(--u));color:var(--text-2);}
+.kb-round__l b{font:400 calc(30 * var(--u))/1 'Bebas Neue',sans-serif;color:var(--gold);letter-spacing:0;margin-left:calc(6 * var(--u));}
+.kb-shoot{font:500 calc(22 * var(--u))/1 'Barlow',sans-serif;color:var(--text-2);}
+.kb-shoot b{color:#fff;font-weight:700;}
+.kb-foot{margin-top:auto;display:flex;align-items:center;gap:calc(14 * var(--u));}
+.kb-foot .tv-qr{padding:calc(6 * var(--u));border-radius:calc(10 * var(--u));}
+.kb-foot .tv-qr svg{width:calc(80 * var(--u));height:calc(80 * var(--u));}
+.kb-foot .tv-ro__pot{flex:1;flex-direction:column;align-items:flex-start;gap:calc(4 * var(--u));padding:calc(12 * var(--u)) calc(14 * var(--u));}
+.kb-foot .tv-ro__pot-val{font-size:calc(46 * var(--u));}
+.kb-scan{font:600 calc(13 * var(--u))/1.2 'Barlow Condensed',sans-serif;letter-spacing:calc(1.5 * var(--u));color:var(--text-2);margin-top:calc(8 * var(--u));text-align:center;}
+
+/* Owner comments 2026-10-20: round + still-in as badges top-left, brand as one line under the list, # beside UP NOW */
+.kb-head{gap:calc(10 * var(--u));}
+.kb-title{flex:1 1 auto;min-width:calc(160 * var(--u));text-align:left;font-size:calc(36 * var(--u));}
+.kb-badge{flex-shrink:0;display:inline-flex;align-items:center;gap:calc(8 * var(--u));height:calc(40 * var(--u));box-sizing:border-box;padding:0 calc(16 * var(--u));border-radius:calc(20 * var(--u));background:var(--stub);border:1px solid #4A4463;
+  font:700 calc(16 * var(--u))/1 'Barlow Condensed',sans-serif;letter-spacing:calc(2 * var(--u));color:var(--text-2);white-space:nowrap;}
+.kb-badge b{font:400 calc(28 * var(--u))/1 'Bebas Neue',sans-serif;letter-spacing:0;color:var(--gold);padding-top:calc(3 * var(--u));}
+.kb-badge i{width:1px;height:calc(18 * var(--u));background:#4A4463;margin:0 calc(4 * var(--u));}
+.kb-brandline{display:flex;align-items:center;gap:calc(10 * var(--u));height:calc(40 * var(--u));padding-top:calc(2 * var(--u));}
+.kb-brandline__ball{width:calc(34 * var(--u));height:calc(34 * var(--u));flex-shrink:0;}
+.kb-brandline__lockup{display:flex;flex-direction:column;align-items:flex-start;gap:calc(2 * var(--u));}
+.kb-brandline__name{font:400 calc(22 * var(--u))/1 'Bebas Neue',sans-serif;letter-spacing:calc(2.5 * var(--u));color:var(--gold);padding-top:calc(3 * var(--u));}
+.kb-brandline__sub{font:600 calc(12 * var(--u))/1 'Barlow Condensed',sans-serif;letter-spacing:calc(5 * var(--u));color:#CBC2E0;}
+.kb-brandline .tv-live{margin-left:auto;height:calc(28 * var(--u));background:#3A1A22;}
+.tv-upnow{display:inline-flex;align-items:center;gap:calc(10 * var(--u));}
+.kb-upnum{font:400 calc(26 * var(--u))/1 'Bebas Neue',sans-serif;letter-spacing:calc(1 * var(--u));color:#B8924A;padding-top:calc(3 * var(--u));}
+.kb-now{flex:1 1 auto;justify-content:center;}
+.kb-now .tv-avatar{width:calc(132 * var(--u));height:calc(132 * var(--u));}
+.kb-now .tv-avatar__inner{font-size:calc(64 * var(--u));}
+.kb-nowname .tv-name{font-size:calc(72 * var(--u));text-align:center;}
+/* QR footer like the regular roster TV: bigger QR, gold "Scan to follow along" beside it */
+.kb-scanfoot{align-items:center;justify-content:flex-start;gap:calc(18 * var(--u));padding-top:calc(18 * var(--u));border-top:1px solid #3A2F5C;}
+.kb-scanfoot .tv-qr{padding:calc(8 * var(--u));border-radius:calc(12 * var(--u));}
+.kb-scanfoot .tv-qr svg{width:calc(128 * var(--u));height:calc(128 * var(--u));}
+.kb-scanfoot__txt{font:700 calc(28 * var(--u))/1.25 'Barlow Condensed',sans-serif;letter-spacing:calc(2 * var(--u));color:var(--gold-text);}
+/* Owner 2026-10-20: prize pot big in the header, players still in at the bottom, 17/34 at the end of the progress line */
+.kb-pot{flex-shrink:0;display:flex;align-items:baseline;gap:calc(12 * var(--u));}
+.kb-pot__lbl{font:700 calc(16 * var(--u))/1 'Barlow Condensed',sans-serif;letter-spacing:calc(3 * var(--u));color:var(--gold-text);}
+.kb-pot__val{font:400 calc(52 * var(--u))/1 'Bebas Neue',sans-serif;letter-spacing:calc(1 * var(--u));color:var(--gold);padding-top:calc(4 * var(--u));}
+.kb-head{height:calc(52 * var(--u));}
+.kb-progrow{display:flex;align-items:center;gap:calc(12 * var(--u));flex-shrink:0;}
+.kb-progrow .kb-progress{flex:1 1 auto;}
+.kb-progcnt{flex-shrink:0;font:500 calc(18 * var(--u))/1 'Barlow',sans-serif;color:var(--text-2);font-variant-numeric:tabular-nums;}
+.kb-progcnt b{font-weight:600;color:var(--gold);}
+.kb-foot{justify-content:center;}
+/* Owner 2026-10-20: just 34/36 in the corner, round progress as the separator line, round as a small tag on the right */
+.kb-cnt{flex-shrink:0;font:500 calc(24 * var(--u))/1 'Barlow',sans-serif;color:var(--text-2);font-variant-numeric:tabular-nums;}
+.kb-cnt b{font-weight:500;color:var(--gold);}
+.tv-main.big{gap:calc(14 * var(--u));}
+.kb-progress{height:calc(4 * var(--u));border-radius:calc(2 * var(--u));background:#3A2F5C;overflow:hidden;flex-shrink:0;}
+.kb-progress span{display:block;height:100%;border-radius:inherit;background:var(--gold);}
+.kb-roundtag{align-self:center;margin-bottom:calc(16 * var(--u));height:calc(26 * var(--u));display:inline-flex;align-items:center;gap:calc(6 * var(--u));padding:0 calc(12 * var(--u));border-radius:calc(13 * var(--u));border:1px solid #4A4463;font:600 calc(14 * var(--u))/1 'Barlow Condensed',sans-serif;letter-spacing:calc(2 * var(--u));color:var(--text-2);}
+.kb-roundtag b{font-weight:600;color:var(--gold);}
+.kb-toshoot{margin-left:auto;font:500 calc(18 * var(--u))/1 'Barlow',sans-serif;color:var(--text-2);white-space:nowrap;}
+.kb-toshoot b{font-weight:600;color:var(--gold);}
+/* Tick: this player has already shot this round (all ticks clear when a new round starts) */
+.kb-tick{width:calc(14 * var(--u));height:calc(14 * var(--u));margin-left:calc(6 * var(--u));vertical-align:calc(-1 * var(--u));color:#7DD3A0;flex-shrink:0;}
+/* Up now block: sits higher, with clear steps label -> photo -> name -> lives -> next up */
+.kb-now{flex:0 0 auto;justify-content:flex-start;gap:0;padding-top:calc(14 * var(--u));}
+.kb-now .tv-upnow{margin-bottom:calc(18 * var(--u));}
+.kb-now .tv-avatar{margin-bottom:calc(22 * var(--u));}
+.kb-now .kb-nowname{margin-bottom:calc(14 * var(--u));}
+.kb-now .tv-lives{padding-top:0;}
+.kb-now .tv-next{margin:calc(26 * var(--u)) 0 0;}
+/* Prize pot box: same height as the QR card, top and bottom edges lined up (the caption sits under the QR) */
+.kb-foot{align-items:flex-start;}
+.kb-foot .tv-ro__pot{height:calc(92 * var(--u));box-sizing:border-box;justify-content:center;padding:0 calc(16 * var(--u));}
+/* Room for the bigger QR: slightly smaller photo/name, tighter steps */
+.kb-now{padding-top:calc(4 * var(--u));}
+.kb-now .kb-roundtag{margin-bottom:calc(12 * var(--u));}
+.kb-now .tv-upnow{margin-bottom:calc(14 * var(--u));}
+.kb-now .tv-avatar{width:calc(112 * var(--u));height:calc(112 * var(--u));margin-bottom:calc(18 * var(--u));}
+.kb-now .tv-avatar__inner{font-size:calc(56 * var(--u));}
+.kb-nowname .tv-name{font-size:calc(64 * var(--u));}
+.kb-now .kb-nowname{margin-bottom:calc(10 * var(--u));}
+.kb-now .tv-next{margin:calc(20 * var(--u)) 0 0;}
+.kb-scanfoot .tv-qr svg{width:calc(116 * var(--u));height:calc(116 * var(--u));}
+/* Owner 2026-10-20 (2): numbers in photo-less avatars, no UP NOW label, #number beside the name (outside its centring), quieter NEXT UP */
+.kb-nowname .tv-name{position:relative;overflow:visible;}
+.kb-namenum{position:absolute;left:100%;top:50%;transform:translateY(-50%);margin-left:calc(12 * var(--u));font:400 calc(28 * var(--u))/1 'Bebas Neue',sans-serif;letter-spacing:calc(1 * var(--u));color:#B8924A;}
+.kb-now .tv-avatar__inner{font-size:calc(52 * var(--u));}
+.kb-now .kb-roundtag{margin-bottom:calc(20 * var(--u));}
+.kb-nextnum{font:700 calc(18 * var(--u))/1 'Barlow',sans-serif;color:#fff;}
+.tv-next .tv-next__av{width:calc(40 * var(--u));height:calc(40 * var(--u));padding-top:0;}
+.kb-now .tv-next{padding:0 calc(22 * var(--u)) 0 calc(8 * var(--u));height:calc(56 * var(--u));gap:calc(12 * var(--u));}
+.kb-now .tv-next__lbl{font:600 calc(12 * var(--u))/1 'Barlow Condensed',sans-serif;letter-spacing:calc(2.5 * var(--u));color:#8C86A3;}
+.kb-now .tv-next__name{font-size:calc(22 * var(--u));}
+/* Next up is secondary: clear space from the hearts above */
+.kb-now .tv-next{margin-top:calc(44 * var(--u));}
+/* 13-16 players: two columns of 7-8, bigger rows */
+.kb-grid.mid{grid-template-rows:repeat(7,minmax(0,1fr));grid-template-columns:repeat(2,minmax(0,1fr));gap:calc(8 * var(--u)) calc(16 * var(--u));}
+.kb-grid.mid .kb-row{padding:0 calc(14 * var(--u)) 0 calc(8 * var(--u));gap:calc(12 * var(--u));border-radius:calc(11 * var(--u));}
+.kb-grid.mid .kb-num{min-width:calc(38 * var(--u));height:calc(32 * var(--u));font-size:calc(26 * var(--u));}
+.kb-grid.mid .kb-name{font-size:calc(26 * var(--u));}
+.kb-grid.mid .kb-hearts svg{width:calc(22 * var(--u));height:calc(20 * var(--u));}
+.kb-grid.mid .kb-tick{width:calc(18 * var(--u));height:calc(18 * var(--u));}
+.kb-grid.mid .kb-out{font-size:calc(16 * var(--u));}
+/* End screens (winner / no winner) on the new layout */
+.kb-end{gap:0;padding-top:calc(4 * var(--u));}
+.kb-end .kb-roundtag{margin-bottom:calc(22 * var(--u));}
+.kb-endlbl{font:700 calc(18 * var(--u))/1 'Barlow Condensed',sans-serif;letter-spacing:calc(5 * var(--u));padding-left:calc(5 * var(--u));color:var(--gold-text);margin-bottom:calc(10 * var(--u));}
+.kb-endsub{font:500 calc(20 * var(--u))/1.3 'Barlow',sans-serif;color:var(--text-2);margin-top:calc(10 * var(--u));}
+.kb-endpot{margin-top:calc(30 * var(--u));display:flex;flex-direction:column;align-items:center;gap:calc(6 * var(--u));}
+.kb-endpot__lbl{font:600 calc(14 * var(--u))/1 'Barlow Condensed',sans-serif;letter-spacing:calc(3 * var(--u));color:#8C86A3;}
+.kb-endpot__val{font:400 calc(60 * var(--u))/1 'Bebas Neue',sans-serif;letter-spacing:calc(1 * var(--u));color:var(--gold);}
+.kb-endicon{width:calc(112 * var(--u));height:calc(112 * var(--u));border-radius:50%;box-sizing:border-box;border:calc(3 * var(--u)) solid #4A4463;background:var(--felt);display:flex;align-items:center;justify-content:center;color:var(--gold);margin-bottom:calc(18 * var(--u));}
+.kb-endicon svg{width:calc(48 * var(--u));height:calc(48 * var(--u));}
+.kb-end .tv-avatar{margin-bottom:calc(18 * var(--u));}
+.kb-place{flex-shrink:0;font:700 calc(15 * var(--u))/1 'Barlow Condensed',sans-serif;letter-spacing:calc(1.5 * var(--u));color:#8C86A3;}
+.kb-row.is-win .kb-place{color:#1A1030;}
+.kb-row.is-podium .kb-place{color:var(--gold-text);}
+.kb-row.is-done{background:rgba(11,10,18,.32);}
+.kb-row.is-done .kb-name{color:#CBC2E0;font-weight:500;}
+.kb-row.is-done .kb-num{color:#8C86A3;}
+.kb-row.is-win{background:var(--gold);}
+.kb-row.is-win .kb-num{background:rgba(26,16,48,.18);color:#1A1030;}
+.kb-row.is-win .kb-name{color:#1A1030;font-weight:700;}
+.kb-row.is-win .kb-trophy{width:calc(20 * var(--u));height:calc(20 * var(--u));color:#1A1030;margin-left:calc(8 * var(--u));vertical-align:calc(-2 * var(--u));}
+.kb-progcnt.end{color:var(--text-2);}
+.kb-scanfoot .tv-qr svg{display:block;}
+.kb-scanfoot{justify-content:center;}
+.kb-scanfoot__txt{font-size:calc(26 * var(--u));}
+.kb-nextlbl{display:flex;flex-direction:column;gap:calc(2 * var(--u));align-items:flex-start;}
+.kb-now .tv-avatar__inner img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.tv-next__av img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
+.kb-now .tv-lives svg{width:calc(30 * var(--u));height:calc(28 * var(--u));}
+.kb-hearts svg{display:block;}
 </style>
 </head>
 <body>
@@ -702,6 +867,119 @@
     if (roster) startAutoScroll();
   }
 
+
+  // ── 13+ players (build 50) ─────────────────────────────────────────────
+  // The app sends `roster` (every player, in player-number order) only for
+  // games with 13 or more players; older apps never send it, so they keep
+  // the layouts above. Row: { n, name, l (lives), o (out), s (shot this
+  // round), now, nx (next up), r (round they went out), place (1-3) }.
+  const TICK_SVG = '<svg class="kb-tick" viewBox="0 0 16 16" fill="currentColor" role="img" aria-label="shot this round"><path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/></svg>';
+  const TROPHY_SVG = '<svg class="kb-trophy" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M2.5.5A.5.5 0 0 1 3 0h10a.5.5 0 0 1 .5.5q0 .807-.034 1.536a3 3 0 1 1-1.133 5.89c-.79 1.865-1.878 2.777-2.833 3.011v2.173l1.425.356c.194.048.377.135.537.255L13.3 15.1a.5.5 0 0 1-.3.9H3a.5.5 0 0 1-.3-.9l1.838-1.379c.16-.12.343-.207.537-.255L6.5 13.11v-2.173c-.955-.234-2.043-1.146-2.833-3.012a3 3 0 1 1-1.132-5.89A33 33 0 0 1 2.5.5m.099 2.54a2 2 0 0 0 .72 3.935c-.333-1.05-.588-2.346-.72-3.935m10.083 3.935a2 2 0 0 0 .72-3.935c-.133 1.59-.388 2.885-.72 3.935M3.504 1q.01.775.056 1.469c.13 2.028.457 3.546.87 4.667C5.294 9.48 6.484 10 7 10a.5.5 0 0 1 .5.5v2.61a1 1 0 0 1-.757.97l-1.426.356a.5.5 0 0 0-.179.085L4.5 15h7l-.638-.479a.5.5 0 0 0-.18-.085l-1.425-.356a1 1 0 0 1-.757-.97V10.5A.5.5 0 0 1 9 10c.516 0 1.706-.52 2.57-2.864.413-1.12.74-2.64.87-4.667q.045-.694.056-1.469z"/></svg>';
+  const REPEAT_SVG = '<svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41m-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9"/> <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5 5 0 0 0 8 3M3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9z"/></svg>';
+  const BRANDLINE = '<footer class="kb-brandline">' + BRAND_BALL_SVG.replace('tv-brand__ball', 'kb-brandline__ball') + '<span class="kb-brandline__lockup"><span class="kb-brandline__name">KILLER POOL</span><span class="kb-brandline__sub">ELIMINATION</span></span>';
+  function bigGridHtml(rows) {
+    const n = rows.length;
+    const cols = n <= 16 ? 2 : n <= 45 ? 3 : 4;
+    const per = Math.ceil(n / cols);
+    return `<div class="kb-grid${cols === 2 ? ' mid' : ''}" style="grid-template-columns:repeat(${cols},minmax(0,1fr));grid-template-rows:repeat(${per},minmax(0,1fr))">${rows.join('')}</div>`;
+  }
+  function bigHeadHtml(title, potLbl, potVal) {
+    const pot = potVal ? `<span class="kb-pot"><span class="kb-pot__lbl">${potLbl}</span><span class="kb-pot__val">${potVal}</span></span>` : '';
+    return `<header class="kb-head"><span class="kb-title">${escapeHtml(title || '')}</span>${pot}</header>`;
+  }
+  function bigProgHtml(pct, label) {
+    return `<div class="kb-progrow"><div class="kb-progress" role="img" aria-label="${label.replace(/<[^>]+>/g, '')}"><span style="width:${Math.max(0, Math.min(100, pct))}%"></span></div><span class="kb-progcnt">${label}</span></div>`;
+  }
+  function bigAvatarHtml(photo, color, num) {
+    const inner = photo
+      ? `<div class="tv-avatar__inner"><img src="${photo}" alt="" /></div>`
+      : `<div class="tv-avatar__inner" style="background:${color || '#546e7a'}">${num ?? '?'}</div>`;
+    return `<div class="tv-avatar">${inner}</div>`;
+  }
+  function bigNameHtml(name, num) {
+    return `<div class="kb-nowname"><span class="tv-name">${escapeHtml(name || '')}${num ? `<span class="kb-namenum">#${num}</span>` : ''}</span></div>`;
+  }
+  function bigScanHtml(gameId, caption) {
+    const svg = qrSvg(gameId);
+    if (!svg) return '';
+    return `<div class="kb-foot kb-scanfoot" style="margin-top:auto"><div class="tv-qr">${svg}</div><span class="kb-scanfoot__txt">${caption}</span></div>`;
+  }
+  function bigShell(label, mainHtml, stubHtml) {
+    return `<div class="tv-ticket big">
+        <section class="tv-main felt big">${mainHtml}</section>
+        <div class="tv-perf" aria-hidden="true"><span class="tv-perf__felt felt"></span><span class="tv-perf__line"></span><span class="tv-perf__hole tv-perf__hole--top"></span><span class="tv-perf__hole tv-perf__hole--bot"></span></div>
+        <aside class="tv-stub big" aria-label="${label}">${stubHtml}</aside>
+      </div>`;
+  }
+  function renderBig(state) {
+    stage.className = 'tv-stage';
+    const roster = state.roster;
+    const total = roster.length;
+    const hearts = (l) => heartsRow(l, state.defaultLives).replace(/<svg /g, '<svg width="15" height="15" ');
+    if (state.type === 'winner') {
+      const rows = roster.map(p => {
+        if (p.place === 1) return `<div class="kb-row is-win"><span class="kb-num">${p.n}</span><span class="kb-name">${escapeHtml(p.name)}${TROPHY_SVG}</span><span class="kb-place">WINNER</span></div>`;
+        const out = p.r ? `OUT · R${p.r}` : 'OUT';
+        if (p.place === 2 || p.place === 3) return `<div class="kb-row is-done is-podium"><span class="kb-num">${p.n}</span><span class="kb-name">${escapeHtml(p.name)}</span><span class="kb-place">${p.place === 2 ? '2ND' : '3RD'} · ${out}</span></div>`;
+        return `<div class="kb-row is-done"><span class="kb-num">${p.n}</span><span class="kb-name">${escapeHtml(p.name)}</span><span class="kb-place">${out}</span></div>`;
+      });
+      const rounds = state.rounds ?? 1;
+      const main = bigHeadHtml(state.gameTitle, 'GAME OVER', `${rounds} ROUND${rounds === 1 ? '' : 'S'}`).replace('class="kb-pot__val"', 'class="kb-pot__val" style="font-size:calc(40 * var(--u))"')
+        + bigProgHtml(100, 'Final standings').replace('class="kb-progcnt"', 'class="kb-progcnt end"')
+        + bigGridHtml(rows)
+        + BRANDLINE + `<span class="kb-toshoot"><b>${state.playersBeaten ?? total - 1}</b>/${total} players beaten</span></footer>`;
+      const stub = `<div class="kb-now kb-end">
+          <span class="kb-roundtag">ROUND <b>${rounds}</b></span>
+          <span class="kb-endlbl">WINNER</span>
+          ${bigAvatarHtml(state.winnerAvatar, state.winnerAvatarColor, state.winnerNum)}
+          ${bigNameHtml(state.winnerName, state.winnerNum)}
+          <span class="kb-endsub">Last player standing</span>
+          ${state.potTotal > 0 ? `<div class="kb-endpot"><span class="kb-endpot__lbl">WINS THE POT</span><span class="kb-endpot__val">${fmtPot(state.potTotal)}</span></div>` : ''}
+        </div>${bigScanHtml(state.gameId, 'SCAN FOR<br>THE RESULT')}`;
+      stage.innerHTML = bigShell('Winner', main, stub);
+      return;
+    }
+    if (state.type === 'roundEnded') {
+      const rows = roster.map(p => `<div class="kb-row"><span class="kb-num">${p.n}</span><span class="kb-name">${escapeHtml(p.name)}</span><span class="kb-hearts">${hearts(p.l)}</span></div>`);
+      const main = bigHeadHtml(state.gameTitle, 'POT ROLLS OVER', state.potRollover > 0 ? fmtPot(state.potRollover) : '')
+        + bigProgHtml(0, 'Restart · full lives').replace('class="kb-progcnt"', 'class="kb-progcnt end"')
+        + bigGridHtml(rows)
+        + BRANDLINE + `<span class="kb-toshoot"><b>${total}</b> players back in</span></footer>`;
+      const stub = `<div class="kb-now kb-end">
+          <span class="kb-roundtag">ROUND <b>${state.round ?? 1}</b> RESULT</span>
+          <div class="kb-endicon">${REPEAT_SVG}</div>
+          <div class="kb-nowname"><span class="tv-name">No winner</span></div>
+          <span class="kb-endsub">Nobody confirmed the win.<br>Everyone is back in with full lives.</span>
+        </div>${bigScanHtml(state.gameId, 'SCAN TO<br>FOLLOW ALONG')}`;
+      stage.innerHTML = bigShell('Round result', main, stub);
+      return;
+    }
+    // Live game
+    const alive = roster.filter(p => !p.o).length;
+    const shot = state.playedThisRoundCount ?? roster.filter(p => p.s).length;
+    const rows = roster.map(p => {
+      if (p.o) return `<div class="kb-row is-out"><span class="kb-num">${p.n}</span><span class="kb-name">${escapeHtml(p.name)}</span><span class="kb-out">OUT</span></div>`;
+      const cls = p.now ? ' is-now' : p.nx ? ' is-next' : '';
+      return `<div class="kb-row${cls}"><span class="kb-num">${p.n}</span><span class="kb-name">${escapeHtml(p.name)}${p.s && !p.now ? TICK_SVG : ''}</span><span class="kb-hearts">${hearts(p.l)}</span></div>`;
+    });
+    const hasNext = !!(state.showTurnOrder && state.nextPlayerName);
+    const main = bigHeadHtml(state.gameTitle, 'PRIZE POT', state.potTotal > 0 ? fmtPot(state.potTotal) : '')
+      + bigProgHtml(alive ? Math.round(100 * shot / alive) : 0, `<b>${shot}</b>/${alive}`)
+      + bigGridHtml(rows)
+      + BRANDLINE + `<span class="kb-toshoot"><b>${alive}</b>/${total} players still in</span></footer>`;
+    const nextAv = state.nextPlayerAvatar
+      ? `<span class="tv-next__av"><img src="${state.nextPlayerAvatar}" alt="" /></span>`
+      : `<span class="tv-next__av" style="background:${state.nextPlayerAvatarColor || '#3D4A9E'}"><span class="kb-nextnum">${state.nextPlayerNum ?? '?'}</span></span>`;
+    const stub = `<div class="kb-now">
+        <span class="kb-roundtag">ROUND <b>${state.round ?? 1}</b></span>
+        ${bigAvatarHtml(state.currentPlayerAvatar, state.currentPlayerAvatarColor, state.currentPlayerNum)}
+        ${bigNameHtml(state.currentPlayerName, state.currentPlayerNum)}
+        <div class="tv-lives" aria-label="${state.lives ?? 0} lives left">${heartsRow(state.lives ?? 0, state.defaultLives)}</div>
+        ${hasNext ? `<div class="tv-next" aria-label="Next up: ${escapeHtml(state.nextPlayerName)}">${nextAv}<div class="kb-nextlbl"><span class="tv-next__lbl">NEXT UP</span><span class="tv-next__name">${escapeHtml(state.nextPlayerName)}</span></div></div>` : ''}
+      </div>${bigScanHtml(state.gameId, 'SCAN TO<br>FOLLOW ALONG')}`;
+    stage.innerHTML = bigShell('Now shooting', main, stub);
+  }
+
   function escapeHtml(s) {
     return String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
   }
@@ -715,6 +993,7 @@
     context.addCustomMessageListener(NAMESPACE, (event) => {
       const data = event.data;
       if (!data || data.type === 'idle') { renderIdle(); return; }
+      if (Array.isArray(data.roster) && data.roster.length && ['game', 'winner', 'roundEnded'].includes(data.type)) { renderBig(data); return; }
       if (data.type === 'game') { renderGame(data); return; }
       if (data.type === 'winner') { renderWinner(data); return; }
       if (data.type === 'roundEnded') { renderRoundEnded(data); return; }
@@ -724,7 +1003,7 @@
     options.disableIdleTimeout = true; // keep the receiver alive between rounds
     context.start(options);
   } else {
-    window.__tv = { renderIdle, renderGame, renderWinner, renderRoundEnded };
+    window.__tv = { renderIdle, renderGame, renderWinner, renderRoundEnded, renderBig };
     console.warn('Cast SDK not available — showing idle state (expected in a plain browser preview).');
   }
 </script>
