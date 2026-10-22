@@ -890,9 +890,13 @@
     // 45, four after that (long names shorten; the numbers identify people).
     const cols = n <= 20 ? 2 : n <= 45 ? 3 : 4;
     const per = Math.ceil(n / cols);
+    // Two columns (up to 20 players): rows are at most full size and line up
+    // at the top, so 3-8 players don't stretch into giant bars; they only
+    // shrink when there are many rows.
+    const track = cols === 2 ? 'minmax(0,calc(56 * var(--u)))' : 'minmax(0,1fr)';
     // Three columns with few rows (21-27 players): bigger text so the rows don't look empty.
     const size = cols === 2 ? ' mid' : cols === 3 && per <= 9 ? ' roomy' : '';
-    return `<div class="kb-grid${size}" style="grid-template-columns:repeat(${cols},minmax(0,1fr));grid-template-rows:repeat(${per},minmax(0,1fr))">${rows.join('')}</div>`;
+    return `<div class="kb-grid${size}" style="grid-template-columns:repeat(${cols},minmax(0,1fr));grid-template-rows:repeat(${per},${track});align-content:start">${rows.join('')}</div>`;
   }
   function bigHeadHtml(title, potLbl, potVal) {
     const pot = potVal ? `<span class="kb-pot"><span class="kb-pot__lbl">${potLbl}</span><span class="kb-pot__val">${potVal}</span></span>` : '';
