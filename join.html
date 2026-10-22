@@ -276,7 +276,9 @@
   }
 
   function avatarHtml(p, size) {
-    const initial = escapeHtml((p.name?.[0] || '?').toUpperCase());
+    // No photo: the player's number (app build 52+, same on the TV and the
+    // organiser's phone), else the initial for games from older apps.
+    const initial = p.num != null ? escapeHtml(String(p.num)) : escapeHtml((p.name?.[0] || '?').toUpperCase());
     const fontSize = Math.round(size * 0.44);
     if (p.avatarPhoto) return `<div class="av" style="width:${size}px;height:${size}px;"><img src="${p.avatarPhoto}" alt="" /></div>`;
     return `<div class="av" style="width:${size}px;height:${size}px;font-size:${fontSize}px;background:${p.avatarColor || '#546e7a'};">${initial}</div>`;
@@ -421,7 +423,7 @@
     // renderPlayers.
     const turnInfo = `
       <span class="up-now-label">UP NOW</span>
-      ${avatarHtml({ name: state.currentPlayerName, avatarPhoto: state.currentPlayerAvatar, avatarColor: state.currentPlayerAvatarColor }, 72)}
+      ${avatarHtml({ name: state.currentPlayerName, num: state.currentPlayerNum, avatarPhoto: state.currentPlayerAvatar, avatarColor: state.currentPlayerAvatarColor }, 72)}
       <div class="player-name">${escapeHtml(state.currentPlayerName || '')}</div>
       <div class="pips">${pips}</div>
     `;
@@ -466,9 +468,9 @@
 
     const players = Array.isArray(state.players) ? state.players : [];
     const out = players.filter(p => p.eliminated).sort((a, b) => (b.eliminatedInRound ?? 0) - (a.eliminatedInRound ?? 0));
-    const winner = { name: state.winnerName || 'Winner', avatarPhoto: state.winnerAvatar, avatarColor: state.winnerAvatarColor };
+    const winner = { name: state.winnerName || 'Winner', num: state.winnerNum, avatarPhoto: state.winnerAvatar, avatarColor: state.winnerAvatarColor };
     const runnerUp = state.runnerUpName
-      ? { name: state.runnerUpName, avatarPhoto: state.runnerUpAvatar, avatarColor: state.runnerUpAvatarColor }
+      ? { name: state.runnerUpName, num: state.runnerUpNum, avatarPhoto: state.runnerUpAvatar, avatarColor: state.runnerUpAvatarColor }
       : out[0] || null;
     const total = state.totalPlayers ?? players.length;
     const beaten = state.playersBeaten ?? Math.max(total - 1, 0);
