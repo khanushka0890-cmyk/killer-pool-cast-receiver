@@ -65,6 +65,10 @@
   }
   .round-badge .lbl { font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 12px; letter-spacing: 2px; color: var(--text-2); }
   .round-badge .num { font-family: 'Bebas Neue', sans-serif; font-size: 26px; line-height: 26px; color: var(--gold); padding-top: 3px; }
+  /* Owner 2026-10-22: the game's name on the follow-along page */
+  .game-head { display: flex; flex-direction: column; align-items: center; gap: 2px; text-align: center; max-width: 100%; margin-bottom: 2px; }
+  .game-head .t { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-weight: 700; font-size: 22px; line-height: 1.2; color: #fff; overflow-wrap: anywhere; }
+  .game-head .v { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 15px; color: #E4DEF2; }
   .up-now-label { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 3px; padding-left: 3px; color: var(--gold-text); margin-top: 8px; }
   .player-name { font-family: 'Bebas Neue', sans-serif; font-size: clamp(52px, 16vw, 88px); line-height: 1; letter-spacing: 2px; padding-left: 2px; color: var(--gold); word-break: break-word; text-align: center; }
   .pips { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
@@ -406,6 +410,11 @@
     `;
   }
 
+  function gameHeadHtml(state) {
+    const title = (state.gameTitle || '').trim(), venue = (state.venueName || '').trim();
+    if (!title && !venue) return '';
+    return `<div class="game-head"><span class="t">${escapeHtml(title || venue)}</span>${title && venue ? `<span class="v">${escapeHtml(venue)}</span>` : ''}</div>`;
+  }
   function renderGame(state) {
     // Same shape the app sends to the Chromecast receiver (see
     // Cast.sendGame in KillerPool.jsx / updateGameLiveState in
@@ -435,6 +444,7 @@
     stage.innerHTML = `
       <div class="ticket">
         <div class="ticket-top felt">
+          ${gameHeadHtml(state)}
           <div class="round-badge"><span class="lbl">ROUND</span><span class="num">${state.round ?? 1}</span></div>
           ${turnInfo}
         </div>
@@ -476,7 +486,7 @@
     const beaten = state.playersBeaten ?? Math.max(total - 1, 0);
     const rounds = state.rounds ?? state.round ?? 1;
     const pot = state.potTotal ?? ((state.potRollover || 0) + (state.entryFeeAmount || 0) * total);
-    const chip = [state.venueName ? escapeHtml(state.venueName.toUpperCase()) : null, `${rounds} ROUND${rounds === 1 ? '' : 'S'}`].filter(Boolean).join(' · ');
+    const chip = `${rounds} ROUND${rounds === 1 ? '' : 'S'}`;
     const colors = ['var(--gold)', 'var(--text-2)', '#C6905E'];
     const places = [winner, ...out].slice(0, 3).map((p, i) => `
       <div class="place ${i === 0 ? 'first' : ''}">
@@ -489,11 +499,11 @@
     stage.innerHTML = `
       <div class="ticket">
         <div class="ticket-top felt" style="gap:8px;">
+          ${gameHeadHtml(state)}
           <div class="round-badge"><span class="lbl">${chip}</span></div>
           <div class="crown-av">${CROWN_SVG}<div class="crown-av__in">${avatarHtml(winner, 96)}</div></div>
           <span class="win-label">WINNER</span>
           <span class="win-name">${escapeHtml(winner.name)}</span>
-          <span class="win-sub">Last player standing</span>
         </div>
         <div class="perf"><div class="perf-line"></div><span class="perf-hole l"></span><span class="perf-hole r"></span></div>
         <div class="ticket-stub">
