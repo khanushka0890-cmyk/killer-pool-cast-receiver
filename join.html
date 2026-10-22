@@ -68,7 +68,6 @@
   /* Owner 2026-10-22: the game's name on the follow-along page */
   .game-head { display: flex; flex-direction: column; align-items: center; gap: 2px; text-align: center; max-width: 100%; margin-bottom: 2px; }
   .game-head .t { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-weight: 700; font-size: 22px; line-height: 1.2; color: #fff; overflow-wrap: anywhere; }
-  .game-head .v { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 15px; color: #E4DEF2; }
   .up-now-label { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 3px; padding-left: 3px; color: var(--gold-text); margin-top: 8px; }
   .player-name { font-family: 'Bebas Neue', sans-serif; font-size: clamp(52px, 16vw, 88px); line-height: 1; letter-spacing: 2px; padding-left: 2px; color: var(--gold); word-break: break-word; text-align: center; }
   .pips { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
@@ -114,7 +113,20 @@
   }
   .roster-row.current { background: rgba(242,184,75,.1); border: 1.5px solid var(--gold); }
   .av { width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 18px; color: #fff; overflow: hidden; }
-  .roster-row.current .av { box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--gold); }
+  /* Owner 2026-10-23: a gold ring on every avatar - thin on lists, a ring
+     with a dark gap on the shooter (.hero-av), thickest on the winner */
+  .av { border: 2px solid var(--gold); box-sizing: border-box; }
+  .roster-row.current .av { border-width: 3px; }
+  .hero-av { width: 96px; height: 96px; border-radius: 50%; padding: 3px; background: var(--gold); box-sizing: border-box; }
+  .hero-av__in { width: 100%; height: 100%; border-radius: 50%; border: 3px solid var(--felt); box-sizing: border-box; overflow: hidden; }
+  .hero-av__in .av, .crown-av__in .av { width: 100% !important; height: 100% !important; border: none; }
+  .hero-av__in .av { font-size: 40px !important; }
+  /* Owner 2026-10-23: above the ticket, the venue badge (map pin) left and the round chip right - same as the app */
+  .top-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .venue-badge { min-width: 0; height: 32px; display: inline-flex; align-items: center; gap: 6px; padding: 0 14px; border-radius: 16px; background: #352924; font-size: 15px; font-weight: 600; color: var(--gold-text); }
+  .venue-badge span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .venue-badge svg { flex-shrink: 0; }
+  .top-row .round-badge { height: 40px; flex-shrink: 0; }
   .av img { width: 100%; height: 100%; object-fit: cover; }
   .roster-info { flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
   .roster-name { font-size: 17px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -279,6 +291,10 @@
     return String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
   }
 
+  // Last out first: outPos (0 = last out) from app build 54, else the round.
+  function byOutOrder(a, b) {
+    return (a.outPos ?? 1e9) - (b.outPos ?? 1e9) || (b.eliminatedInRound ?? 0) - (a.eliminatedInRound ?? 0);
+  }
   function avatarHtml(p, size) {
     // No photo: the player's number (app build 52+, same on the TV and the
     // organiser's phone), else the initial for games from older apps.
@@ -308,7 +324,7 @@
   function renderPlayers(players, currentName, showTurnOrder = true) {
     if (!Array.isArray(players) || players.length === 0) return '';
     const stillIn = players.filter(p => !p.eliminated);
-    const out = players.filter(p => p.eliminated).sort((a, b) => (b.eliminatedInRound ?? 0) - (a.eliminatedInRound ?? 0));
+    const out = players.filter(p => p.eliminated).sort(byOutOrder);
     const ordered = showTurnOrder ? stillIn : [...stillIn].sort((a, b) => a.name.localeCompare(b.name));
 
     const rows = ordered.map(p => {
@@ -410,10 +426,14 @@
     `;
   }
 
+  const PIN_SVG = '<svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A31.5 31.5 0 0 1 8 14.58a31.5 31.5 0 0 1-2.207-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10"/><path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/></svg>';
   function gameHeadHtml(state) {
-    const title = (state.gameTitle || '').trim(), venue = (state.venueName || '').trim();
-    if (!title && !venue) return '';
-    return `<div class="game-head"><span class="t">${escapeHtml(title || venue)}</span>${title && venue ? `<span class="v">${escapeHtml(venue)}</span>` : ''}</div>`;
+    const title = (state.gameTitle || '').trim();
+    return title ? `<div class="game-head"><span class="t">${escapeHtml(title)}</span></div>` : '';
+  }
+  function topRowHtml(state, label, value) {
+    const venue = (state.venueName || '').trim();
+    return `<div class="top-row">${venue ? `<span class="venue-badge">${PIN_SVG}<span>${escapeHtml(venue)}</span></span>` : '<span></span>'}<div class="round-badge"><span class="lbl">${label}</span><span class="num">${value}</span></div></div>`;
   }
   function renderGame(state) {
     // Same shape the app sends to the Chromecast receiver (see
@@ -432,7 +452,7 @@
     // renderPlayers.
     const turnInfo = `
       <span class="up-now-label">UP NOW</span>
-      ${avatarHtml({ name: state.currentPlayerName, num: state.currentPlayerNum, avatarPhoto: state.currentPlayerAvatar, avatarColor: state.currentPlayerAvatarColor }, 72)}
+      <div class="hero-av"><div class="hero-av__in">${avatarHtml({ name: state.currentPlayerName, num: state.currentPlayerNum, avatarPhoto: state.currentPlayerAvatar, avatarColor: state.currentPlayerAvatarColor }, 84)}</div></div>
       <div class="player-name">${escapeHtml(state.currentPlayerName || '')}</div>
       <div class="pips">${pips}</div>
     `;
@@ -442,10 +462,10 @@
     ).join('');
 
     stage.innerHTML = `
+      ${topRowHtml(state, 'ROUND', state.round ?? 1)}
       <div class="ticket">
         <div class="ticket-top felt">
           ${gameHeadHtml(state)}
-          <div class="round-badge"><span class="lbl">ROUND</span><span class="num">${state.round ?? 1}</span></div>
           ${turnInfo}
         </div>
         <div class="perf"><div class="perf-line"></div><span class="perf-hole l"></span><span class="perf-hole r"></span></div>
@@ -477,7 +497,7 @@
     document.getElementById('appstoreText').textContent = 'Host your own game — get Killer Pool';
 
     const players = Array.isArray(state.players) ? state.players : [];
-    const out = players.filter(p => p.eliminated).sort((a, b) => (b.eliminatedInRound ?? 0) - (a.eliminatedInRound ?? 0));
+    const out = players.filter(p => p.eliminated).sort(byOutOrder);
     const winner = { name: state.winnerName || 'Winner', num: state.winnerNum, avatarPhoto: state.winnerAvatar, avatarColor: state.winnerAvatarColor };
     const runnerUp = state.runnerUpName
       ? { name: state.runnerUpName, num: state.runnerUpNum, avatarPhoto: state.runnerUpAvatar, avatarColor: state.runnerUpAvatarColor }
@@ -486,7 +506,6 @@
     const beaten = state.playersBeaten ?? Math.max(total - 1, 0);
     const rounds = state.rounds ?? state.round ?? 1;
     const pot = state.potTotal ?? ((state.potRollover || 0) + (state.entryFeeAmount || 0) * total);
-    const chip = `${rounds} ROUND${rounds === 1 ? '' : 'S'}`;
     const colors = ['var(--gold)', 'var(--text-2)', '#C6905E'];
     const places = [winner, ...out].slice(0, 3).map((p, i) => `
       <div class="place ${i === 0 ? 'first' : ''}">
@@ -497,10 +516,10 @@
       </div>`).join('');
 
     stage.innerHTML = `
+      ${topRowHtml(state, 'ROUNDS', rounds)}
       <div class="ticket">
         <div class="ticket-top felt" style="gap:8px;">
           ${gameHeadHtml(state)}
-          <div class="round-badge"><span class="lbl">${chip}</span></div>
           <div class="crown-av">${CROWN_SVG}<div class="crown-av__in">${avatarHtml(winner, 96)}</div></div>
           <span class="win-label">WINNER</span>
           <span class="win-name">${escapeHtml(winner.name)}</span>
