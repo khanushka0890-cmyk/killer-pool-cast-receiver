@@ -81,26 +81,17 @@
   .perf-hole.r { right: -13px; border-left: 1px solid var(--gold-line); }
 
   .ticket-stub { background: var(--stub); border: 1px solid var(--gold-line); border-top: none; border-radius: 0 0 22px 22px; padding: 14px 20px 20px; display: flex; flex-direction: column; gap: 14px; }
-  .progress-row { display: flex; flex-direction: column; gap: 8px; }
-  .progress-label { display: flex; justify-content: space-between; align-items: baseline; }
-  .progress-label .lbl { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 2.5px; color: var(--text-2); }
-  .progress-label .val { font-size: 14px; color: var(--text-2); font-variant-numeric: tabular-nums; }
-  .progress-label .val b { color: var(--text); }
-  .progress-track { height: 6px; border-radius: 3px; background: rgba(255,255,255,.12); }
-  .progress-fill { height: 100%; border-radius: 3px; background: var(--gold); }
-  .hairline { height: 1px; background: rgba(255,255,255,.08); }
-  .remaining-row { display: flex; flex-direction: column; gap: 8px; }
-  .remaining-row .txt { font-size: 15px; color: var(--text-2); }
-  .remaining-row .txt b { color: var(--text); }
-  .seg-track { display: flex; gap: 4px; }
-  .seg { flex: 1; height: 6px; border-radius: 3px; background: var(--gold); }
-  .seg.off { background: rgba(255,255,255,.14); }
   /* Prize pot - same "no currency" decision as the app's own Spectate
      screen (the app runs in different countries, so only the plain
      number matters for the math), rollover included. */
-  .prize-row { display: flex; align-items: center; justify-content: center; gap: 8px; }
-  .prize-row .lbl { font-size: 14px; color: var(--text-muted); }
-  .prize-row b { color: var(--gold); font-size: 16px; }
+  /* Owner 2026-10-25: the pot is all that sits under the perforation, same as the app's Spectate */
+  .prize-row { display: flex; align-items: baseline; justify-content: space-between; }
+  .prize-row .lbl { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 2.5px; color: var(--gold-text); }
+  .prize-row b { font-family: 'Bebas Neue', sans-serif; font-weight: 400; font-size: 30px; line-height: 1; color: var(--gold); }
+  .ticket-top.solo { border-bottom: 1px solid var(--gold-line); border-radius: 22px; }
+  .roster-nameline { display: flex; align-items: center; gap: 6px; min-width: 0; }
+  .roster-nameline .tick { flex-shrink: 0; color: #7DD3A0; }
+  .players-head .count b { color: var(--text); }
 
   /* Players section */
   .players-head { display: flex; align-items: baseline; justify-content: space-between; padding: 0 4px; }
@@ -321,6 +312,8 @@
   // divider, most recently eliminated first. Mirrors KillerPool.jsx's
   // own Spectate roster exactly (see its own comment for the same
   // showTurnOrder gating).
+  // Same tick as the TV (Bootstrap check-lg): has shot this round (app build 55+).
+  const TICK_SVG = '<svg class="tick" width="15" height="15" viewBox="0 0 16 16" fill="currentColor" role="img" aria-label="shot this round"><path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/></svg>';
   function renderPlayers(players, currentName, showTurnOrder = true) {
     if (!Array.isArray(players) || players.length === 0) return '';
     const stillIn = players.filter(p => !p.eliminated);
@@ -342,7 +335,7 @@
         <div class="roster-row ${isCurrent ? 'current' : ''}">
           ${avatarHtml(p, 40)}
           <div class="roster-info">
-            <span class="roster-name">${escapeHtml(p.name)}</span>
+            <span class="roster-nameline"><span class="roster-name">${escapeHtml(p.name)}</span>${p.shot ? TICK_SVG : ''}</span>
             ${isCurrent ? '<span class="roster-tag up">UP NOW</span>' : lastLife ? '<span class="roster-tag last">LAST LIFE</span>' : ''}
           </div>
           <div class="roster-pips">${pips}</div>
@@ -362,7 +355,7 @@
       <div>
         <div class="players-head">
           <h2>Players</h2>
-          <span class="count">${stillIn.length} in · ${out.length} out</span>
+          <span class="count" aria-label="${stillIn.length} of ${players.length} players still in"><b>${stillIn.length}</b>/${players.length}</span>
         </div>
         <div class="roster" style="margin-top:12px;">${rows}</div>
         ${out.length > 0 ? `<div class="out-divider"><span class="lbl">OUT</span><div class="line"></div></div><div class="roster" style="margin-top:8px;">${outRows}</div>` : ''}
@@ -382,23 +375,6 @@
       <div class="prize-row">
         <span class="lbl">PRIZE POT</span>
         <b>${Math.round(total).toLocaleString()}</b>
-      </div>
-    `;
-  }
-
-  // played/alive, not played/totalPlayers - identical in round 1 (no one
-  // eliminated yet), but alive is the actually-correct denominator once
-  // a later round has fewer players left to take a shot.
-  function progressHtml(played, alive) {
-    if (!alive) return '';
-    const pct = Math.min(100, Math.round((played / alive) * 100));
-    return `
-      <div class="progress-row">
-        <div class="progress-label">
-          <span class="lbl">ROUND PROGRESS</span>
-          <span class="val"><b>${played}</b> / ${alive} shots</span>
-        </div>
-        <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
       </div>
     `;
   }
@@ -456,28 +432,18 @@
       <div class="player-name">${escapeHtml(state.currentPlayerName || '')}</div>
       <div class="pips">${pips}</div>
     `;
-    const segTotal = Math.max(state.totalPlayers ?? 0, 1);
-    const segs = Array.from({ length: segTotal }, (_, i) =>
-      `<span class="seg ${i < (state.aliveCount ?? 0) ? '' : 'off'}"></span>`
-    ).join('');
-
+    // Owner 2026-10-25: no round progress or players-remaining rows (the
+    // ticks and the PLAYERS 5/7 count below say the same); just the pot.
+    const pot = prizeRowHtml(state);
     stage.innerHTML = `
       ${topRowHtml(state, 'ROUND', state.round ?? 1)}
       <div class="ticket">
-        <div class="ticket-top felt">
+        <div class="ticket-top felt${pot ? '' : ' solo'}">
           ${gameHeadHtml(state)}
           ${turnInfo}
         </div>
-        <div class="perf"><div class="perf-line"></div><span class="perf-hole l"></span><span class="perf-hole r"></span></div>
-        <div class="ticket-stub">
-          ${progressHtml(state.playedThisRoundCount ?? 0, state.aliveCount ?? 0)}
-          <div class="hairline"></div>
-          <div class="remaining-row">
-            <div class="txt"><b>${state.aliveCount ?? '–'}</b> of <b>${state.totalPlayers ?? '–'}</b> players remaining</div>
-            <div class="seg-track">${segs}</div>
-          </div>
-          ${prizeRowHtml(state)}
-        </div>
+        ${pot ? `<div class="perf"><div class="perf-line"></div><span class="perf-hole l"></span><span class="perf-hole r"></span></div>
+        <div class="ticket-stub">${pot}</div>` : ''}
       </div>
       ${sponsorBannerHtml(state)}
       ${renderPlayers(state.players, state.currentPlayerName, state.showTurnOrder)}
