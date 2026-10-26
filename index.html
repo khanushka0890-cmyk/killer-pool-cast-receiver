@@ -285,7 +285,10 @@
 .kb-row.is-now{background:var(--gold);}
 .kb-row.is-now .kb-num{background:rgba(26,16,48,.18);color:#1A1030;}
 .kb-row.is-now .kb-name{color:#1A1030;font-weight:700;}
-.kb-row.is-now .kb-hearts path{fill:#1A1030;}
+/* Owner 2026-10-26: on the gold "shooting now" row the remaining lives were dark and read as empty
+   ("how do they have no lives?"). Remaining lives are red, lost ones a dark outline. */
+.kb-row.is-now .kb-hearts path{fill:#C0281F;}
+.kb-row.is-now .kb-hearts path[fill="none"]{fill:none;stroke:#1A1030;stroke-opacity:.45;}
 .kb-row.is-next{box-shadow:inset 0 0 0 1.5px rgba(183,156,240,.75);background:rgba(183,156,240,.12);}
 .kb-row.is-out{background:transparent;box-shadow:inset 0 0 0 1px rgba(255,255,255,.06);}
 .kb-row.is-out .kb-num{color:#6A6388;background:transparent;}
