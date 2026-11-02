@@ -439,6 +439,40 @@
 .kb-nowname .tv-name{font-size:calc(72 * var(--u));}
 /* Owner 2026-10-23: QR and its caption centred on each other; a gold ring on the next-up avatar too */
 .kb-foot.kb-scanfoot{align-items:center;}
+/* Competitions (2026-11-02): the round's matches, live scores, pot and payouts */
+.cp-meta{display:flex;align-items:center;gap:calc(12 * var(--u));margin:calc(14 * var(--u)) 0 calc(14 * var(--u));font:700 calc(18 * var(--u))/1 'Barlow Condensed',sans-serif;letter-spacing:calc(2 * var(--u));color:var(--text-2);}
+.cp-meta b{color:var(--gold-text);font-weight:700;}
+.cp-list{flex:1 1 auto;min-height:0;display:grid;grid-auto-flow:column;gap:calc(8 * var(--u)) calc(16 * var(--u));align-content:start;}
+.cp-m{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;column-gap:calc(12 * var(--u));height:calc(48 * var(--u));padding:0 calc(14 * var(--u));border-radius:calc(11 * var(--u));background:#1A1033;border:calc(2 * var(--u)) solid transparent;box-sizing:border-box;}
+.cp-m.live{border-color:var(--gold);background:#3A2A12;}
+.cp-m.done{background:#140D27;}
+.cp-n{font:600 calc(22 * var(--u))/1 'Barlow',sans-serif;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cp-n.r{text-align:right;}
+.cp-n.win{color:var(--gold);font-weight:700;}
+.cp-n.lose{color:#8C86A3;text-decoration:line-through;text-decoration-color:#5E5778;}
+.cp-s{font:400 calc(32 * var(--u))/1 'Bebas Neue',sans-serif;color:#fff;padding-top:calc(3 * var(--u));min-width:calc(70 * var(--u));text-align:center;}
+.cp-s .w{color:var(--gold);}
+.cp-s .tbd{color:#8C86A3;}
+.cp-list.tight{gap:calc(6 * var(--u));}
+.cp-list.tight .cp-m{height:calc(42 * var(--u));}
+.cp-list.big{gap:calc(14 * var(--u));}
+.cp-list.big .cp-m{height:calc(78 * var(--u));padding:0 calc(22 * var(--u));border-radius:calc(14 * var(--u));}
+.cp-list.big .cp-n{font-size:calc(34 * var(--u));}
+.cp-list.big .cp-s{font-size:calc(52 * var(--u));min-width:calc(120 * var(--u));}
+.cp-list.two .cp-m{height:calc(40 * var(--u));}
+.cp-list.two .cp-n{font-size:calc(18 * var(--u));}
+.cp-list.two .cp-s{font-size:calc(26 * var(--u));min-width:calc(56 * var(--u));}
+.cp-byes{display:flex;flex-wrap:wrap;gap:calc(8 * var(--u));align-items:center;margin:calc(10 * var(--u)) 0 calc(14 * var(--u));font:600 calc(18 * var(--u))/1 'Barlow',sans-serif;color:#fff;}
+.cp-byes span.l{font:700 calc(16 * var(--u))/1 'Barlow Condensed',sans-serif;letter-spacing:calc(2 * var(--u));color:var(--text-2);}
+.cp-byes span.p{padding:calc(6 * var(--u)) calc(12 * var(--u));border-radius:calc(20 * var(--u));background:#1A1033;}
+.cp-stub{display:flex;flex-direction:column;align-items:center;text-align:center;gap:calc(10 * var(--u));height:100%;}
+.cp-stub .tag{font:700 calc(16 * var(--u))/1 'Barlow Condensed',sans-serif;letter-spacing:calc(3 * var(--u));color:var(--gold-text);}
+.cp-stub .rn{font:400 calc(64 * var(--u))/0.95 'Bebas Neue',sans-serif;letter-spacing:calc(2 * var(--u));color:#fff;}
+.cp-stub .race{font:600 calc(24 * var(--u))/1.2 'Barlow',sans-serif;color:var(--text-2);}
+.cp-stub .big{font:400 calc(84 * var(--u))/1 'Bebas Neue',sans-serif;color:var(--gold);}
+.cp-pay{margin-top:auto;width:100%;display:flex;flex-direction:column;gap:calc(8 * var(--u));border-top:1px solid #3A2F5C;padding-top:calc(16 * var(--u));}
+.cp-pay div{display:flex;justify-content:space-between;font:600 calc(20 * var(--u))/1 'Barlow',sans-serif;color:var(--text-2);}
+.cp-pay b{font:400 calc(30 * var(--u))/1 'Bebas Neue',sans-serif;color:var(--gold);font-weight:400;}
 .tv-next .tv-next__av{border:calc(2 * var(--u)) solid var(--gold);}
 .kb-grid.roomy{gap:calc(7 * var(--u)) calc(14 * var(--u));}
 .kb-grid.roomy .kb-row{padding:0 calc(12 * var(--u)) 0 calc(7 * var(--u));gap:calc(10 * var(--u));border-radius:calc(10 * var(--u));}
@@ -1003,6 +1037,42 @@
     stage.innerHTML = bigShell('Now shooting', main, stub);
   }
 
+  // Competitions (app build 60+): { title, venue, pot, state, round: { name,
+  // race, matches: [{ a, b, sa, sb, w }], byes }, winner, runnerUp, payouts, split }
+  function renderCompetition(c) {
+    stage.className = 'tv-stage';
+    const fmt = (n) => Math.round(n || 0).toLocaleString();
+    const places = ['WINNER', 'RUNNER-UP', '3RD'];
+    const pays = (c.payouts || []).map((v, i) => `<div><span>${places[i] || ''} · ${(c.split || [])[i] ?? ''}%</span><b>${fmt(v)}</b></div>`).join('');
+    const r = c.round || { name: '', race: 1, matches: [], byes: [] };
+    const done = r.matches.filter(m => m.w).length;
+    const live = r.matches.filter(m => !m.w), fin = r.matches.filter(m => m.w);
+    const row = (m) => {
+      const started = m.sa > 0 || m.sb > 0;
+      const cls = m.w ? ' done' : started ? ' live' : '';
+      const na = m.w ? (m.w === 'a' ? ' win' : ' lose') : '', nb = m.w ? (m.w === 'b' ? ' win' : ' lose') : '';
+      const score = started || m.w ? `<span class="${m.w === 'a' ? 'w' : ''}">${m.sa}</span> – <span class="${m.w === 'b' ? 'w' : ''}">${m.sb}</span>` : '<span class="tbd">– · –</span>';
+      return `<div class="cp-m${cls}"><span class="cp-n${na}">${escapeHtml(m.a)}</span><span class="cp-s">${score}</span><span class="cp-n r${nb}">${escapeHtml(m.b)}</span></div>`;
+    };
+    if (c.state === 'finished' && c.winner) {
+      const main = bigHeadHtml(c.title, 'PRIZE POT', fmt(c.pot))
+        + `<div class="cp-meta"><b>${escapeHtml(r.name.toUpperCase())}</b> · RESULT</div>`
+        + `<div class="cp-list big">${r.matches.map(row).join('')}</div>` + BRANDLINE + '</footer>';
+      const stub = `<div class="cp-stub"><span class="tag">WINNER</span>${TROPHY_SVG.replace('class="kb-trophy"', 'style="width:calc(56 * var(--u));height:calc(56 * var(--u));color:var(--gold)"')}<span class="rn" style="color:var(--gold)">${escapeHtml(c.winner)}</span>${c.runnerUp ? `<span class="race">Runner-up ${escapeHtml(c.runnerUp)}</span>` : ''}${c.pot > 0 ? `<div class="cp-pay">${pays}</div>` : ''}</div>`;
+      stage.innerHTML = bigShell('Winner', main, stub);
+      return;
+    }
+    const two = r.matches.length > 8, big = r.matches.length <= 4, tight = r.matches.length >= 7 && !two;
+    const per = two ? Math.ceil(r.matches.length / 2) : r.matches.length;
+    const list = `<div class="cp-list${two ? ' two' : big ? ' big' : tight ? ' tight' : ''}" style="grid-template-rows:repeat(${Math.max(per, 1)},auto)">${[...live, ...fin].map(row).join('')}</div>`;
+    const byes = r.byes && r.byes.length ? `<div class="cp-byes"><span class="l">BYE</span>${r.byes.map(n => `<span class="p">${escapeHtml(n)}</span>`).join('')}</div>` : '';
+    const main = bigHeadHtml(c.title, 'PRIZE POT', c.pot > 0 ? fmt(c.pot) : '')
+      + `<div class="cp-meta"><b>${escapeHtml(r.name.toUpperCase())}</b> · ${r.matches.length} ${r.matches.length === 1 ? 'MATCH' : 'MATCHES'}${c.venue ? ' · ' + escapeHtml(c.venue.toUpperCase()) : ''}</div>`
+      + list + byes + BRANDLINE + `<span class="kb-toshoot"><b>${done}</b>/${r.matches.length} done</span></footer>`;
+    const stub = `<div class="cp-stub"><span class="tag">${c.state === 'fill' ? 'ROUND DONE' : 'NOW PLAYING'}</span><span class="rn">${escapeHtml(r.name)}</span><span class="race">Race to ${r.race}</span><span class="big">${done}<span style="color:var(--text-2);font-size:calc(44 * var(--u))"> / ${r.matches.length}</span></span><span class="race">matches done</span>${c.pot > 0 ? `<div class="cp-pay">${pays}</div>` : ''}</div>`;
+    stage.innerHTML = bigShell(r.name, main, stub);
+  }
+
   function escapeHtml(s) {
     return String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
   }
@@ -1016,6 +1086,7 @@
     context.addCustomMessageListener(NAMESPACE, (event) => {
       const data = event.data;
       if (!data || data.type === 'idle') { renderIdle(); return; }
+      if (data.type === 'competition' && data.competition) { renderCompetition(data.competition); return; }
       if (Array.isArray(data.roster) && data.roster.length && ['game', 'winner', 'roundEnded'].includes(data.type)) { renderBig(data); return; }
       if (data.type === 'game') { renderGame(data); return; }
       if (data.type === 'winner') { renderWinner(data); return; }
@@ -1026,7 +1097,7 @@
     options.disableIdleTimeout = true; // keep the receiver alive between rounds
     context.start(options);
   } else {
-    window.__tv = { renderIdle, renderGame, renderWinner, renderRoundEnded, renderBig };
+    window.__tv = { renderIdle, renderGame, renderWinner, renderRoundEnded, renderBig, renderCompetition };
     console.warn('Cast SDK not available — showing idle state (expected in a plain browser preview).');
   }
 </script>
