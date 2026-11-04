@@ -79,150 +79,253 @@ h2.live-h { display: flex; align-items: center; gap: 10px; }
 .cta p { margin: 0; flex: 1; font-size: 15px; }
 @media (max-width: 480px) { .cta { flex-direction: column; align-items: flex-start; } }
 
-/* App homepage (owner 2026-11-04): how a game night goes, with screens */
+/* App homepage (owner 2026-11-04): how a game night goes, with real screens.
+   Layout: a purple felt band in the app's own colours holds the wordmark and
+   the TV + phone standing side by side; below it, the site's usual page:
+   sticky jump bar, a zig-zag of five real phone screens, the TV, features. */
+:root {
+  /* The band is the app's world in both themes (app icon purple, TV felt) */
+  --felt:#2E1B52; --felt-2:#3B2868; --felt-line:#5B4A8E; --ivory:#F7EEDC; --felt-text:#E4DCF3; --app-gold:#F2B84B;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--bg); }
+.page { max-width: 1040px; margin: 0 auto; padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); padding-bottom: 80px; }
+
+.band { background: var(--felt); color: var(--ivory); }
+.band__in { max-width: 1040px; margin: 0 auto; padding: 22px max(20px, env(safe-area-inset-right, 0px)) 0 max(20px, env(safe-area-inset-left, 0px)); }
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand__icon { width: 44px; height: 44px; border-radius: 10px; display: block; box-shadow: 0 0 0 1px var(--felt-line); }
+.brand__lockup { display: flex; flex-direction: column; gap: 3px; }
+.brand__name { font-family: 'Bebas Neue', var(--font); font-size: 28px; line-height: .9; letter-spacing: 2.5px; color: var(--app-gold); padding-top: 2px; }
+.brand__sub { font: 600 10.5px/1 var(--font); letter-spacing: .34em; color: var(--felt-text); }
+.band .theme { background: var(--felt-2); border-color: var(--felt-line); color: var(--ivory); }
+
+.hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 40px; align-items: end; padding: 44px 0 0; }
+.hero__text { padding-bottom: 56px; display: flex; flex-direction: column; gap: 18px; }
+.hero__text > * { margin: 0; }
+.hero h1 { font-size: 46px; line-height: 1.06; font-weight: 800; letter-spacing: -0.025em; color: #FFFFFF; text-wrap: balance; }
+.hero h1 em { font-style: normal; color: var(--app-gold); }
+.hero__sub { font-size: 18px; line-height: 1.55; color: var(--felt-text); max-width: 34em; }
+.hero__btns { display: flex; gap: 10px; flex-wrap: wrap; }
+.hero .btn { background: var(--app-gold); color: #1A1030; height: 48px; padding: 0 20px; font-size: 16px; }
+.hero .btn .bi { width: 18px; height: 18px; }
+.btn-felt { display: inline-flex; align-items: center; height: 48px; padding: 0 20px; border-radius: 12px; border: 1px solid var(--felt-line); background: var(--felt-2); color: var(--ivory); font: 700 16px/1 var(--font); text-decoration: none; }
+.facts { display: flex; flex-wrap: wrap; gap: 6px 16px; padding: 0; list-style: none; font-size: 14px; color: var(--felt-text); }
+.facts li { display: flex; align-items: center; gap: 6px; }
+.facts .bi { color: var(--app-gold); width: 15px; height: 15px; }
+
+/* TV and phone stand side by side on the bar, never overlapping */
+.set { display: flex; align-items: flex-end; gap: 4%; padding-bottom: 28px; }
+.set__tv { flex: 0 0 72%; min-width: 0; }
+.set__phone { flex: 0 0 24%; min-width: 0; }
+.set img { display: block; width: 100%; height: auto; }
+.set figcaption { margin-top: 8px; font-size: 13px; color: var(--felt-text); text-align: center; }
+.set__phone figcaption { white-space: nowrap; }
+.set figure { margin: 0; }
+
 .toc { position: sticky; top: 0; z-index: 20; display: flex; gap: 8px; overflow-x: auto; margin: 22px -20px 24px; padding: 10px 20px; background: var(--bg); border-bottom: 1px solid var(--border); scrollbar-width: none; }
 .toc a.on { background: var(--gold); border-color: var(--gold); color: #111; }
 .toc::-webkit-scrollbar { display: none; }
 .toc a { flex-shrink: 0; font-size: 14px; font-weight: 600; line-height: 20px; color: var(--text); text-decoration: none; background: var(--surface); border: 1px solid var(--border); border-radius: 999px; padding: 8px 14px; }
-.wrap { max-width: 880px; }
-.hero { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: center; margin: 28px 0 8px; }
-.hero h1 { font-size: 40px; }
-.hero .sub { margin: 14px 0 22px; font-size: 18px; color: var(--text-2); line-height: 1.5; }
-.hero__btns { display: flex; gap: 10px; flex-wrap: wrap; }
-.btn .bi { width: 18px; height: 18px; }
-.btn-line { display: inline-flex; align-items: center; height: 44px; padding: 0 18px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface); color: var(--text); font: 700 15px/1 var(--font); text-decoration: none; }
-.hero__art { position: relative; padding-bottom: 40px; }
-.tvframe { background: #05040a; border: 1px solid #3a3150; border-radius: 10px; padding: 6px; }
-.tvframe img { display: block; width: 100%; height: auto; border-radius: 5px; }
-.tvframe--big { margin-top: 18px; }
-.phone { background: #05040a; border: 1px solid #3a3150; border-radius: 26px; padding: 6px; aspect-ratio: 390 / 640; overflow: hidden; }
-.phone img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; border-radius: 20px; }
-.phone img.crop-bottom { object-position: bottom; }
-.phone--hero { position: absolute; right: -6px; bottom: 0; width: 34%; aspect-ratio: 390 / 760; }
-.toc { margin-top: 28px; }
-#night, #tv, #does, #live { scroll-margin-top: 70px; }
-.steps { display: grid; gap: 14px; }
-.step { display: grid; grid-template-columns: 160px 1fr; gap: 28px; align-items: center; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 18px; }
-.step__text { display: flex; flex-direction: column; gap: 8px; }
+.toc { margin: 0 calc(-1 * max(20px, env(safe-area-inset-right, 0px))) 0 calc(-1 * max(20px, env(safe-area-inset-left, 0px))); padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); top: env(safe-area-inset-top, 0px); }
+section { scroll-margin-top: 72px; }
+.sec-head { display: flex; flex-direction: column; gap: 8px; margin: 56px 0 28px; }
+.sec-head > * { margin: 0; }
+.sec-head p { max-width: 38em; font-size: 17px; }
+
+/* Five steps, phone and text alternating sides */
+.steps { display: flex; flex-direction: column; gap: 56px; list-style: none; margin: 0; padding: 0; counter-reset: step; }
+.step { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 56px; align-items: center; }
+.step:nth-child(even) { grid-template-columns: minmax(0, 1fr) 250px; }
+.step:nth-child(even) .step__shot { order: 2; }
+.step__shot img { display: block; width: 100%; height: auto; }
+.step__text { display: flex; flex-direction: column; gap: 12px; max-width: 30em; }
 .step__text > * { margin: 0; }
-.num { width: 32px; height: 32px; border-radius: 50%; background: var(--gold); color: #111; font-weight: 800; display: flex; align-items: center; justify-content: center; }
-h3 { font-size: 20px; line-height: 1.25; font-weight: 750; margin: 0; }
-.feats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.step__num { display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--text-3); }
+.step__num b { width: 34px; height: 34px; border-radius: 50%; background: var(--gold); color: #111; font-size: 16px; letter-spacing: 0; display: flex; align-items: center; justify-content: center; }
+.step h3 { font-size: 26px; line-height: 1.2; font-weight: 800; letter-spacing: -0.015em; margin: 0; text-wrap: balance; }
+.step p { font-size: 17px; line-height: 1.6; }
+.taps { display: flex; flex-wrap: wrap; gap: 8px; }
+.tap { font-size: 13px; font-weight: 800; letter-spacing: .04em; border-radius: 8px; padding: 5px 10px; color: #fff; }
+.tap--pot { background: #23894B; } .tap--miss { background: #C9312C; } .tap--eight { background: #1A1030; color: var(--app-gold); }
+.note { font-size: 15px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; color: var(--text-2); }
+.pill { display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: .04em; background: var(--gold); color: #111; border-radius: 999px; padding: 3px 9px; }
+
+.tv-big { margin: 0; }
+.tv-big img { display: block; width: 100%; height: auto; }
+
+.feats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
 .box { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 18px; }
-.feat, .soon { display: grid; grid-template-columns: 40px 1fr; gap: 14px; align-items: start; }
-.feat h3, .soon h3 { font-size: 17px; margin-bottom: 4px; }
-.feat p, .soon p { margin: 0; font-size: 15px; }
+.feat { display: flex; flex-direction: column; gap: 10px; }
+.feat > * { margin: 0; }
+.feat h3 { font-size: 17px; line-height: 1.3; margin: 0; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.feat p { font-size: 15px; }
 .ic { width: 40px; height: 40px; border-radius: 12px; background: var(--surface-2); color: var(--gold-ink); display: flex; align-items: center; justify-content: center; }
 .ic .bi { width: 20px; height: 20px; }
-.soon { margin-top: 10px; background: var(--surface-2); }
+.soon { margin-top: 12px; display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 14px; align-items: start; background: var(--surface-2); }
+.soon > div { display: flex; flex-direction: column; gap: 6px; }
+.soon > div > * { margin: 0; }
+.soon h3 { font-size: 17px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 0; }
+.soon p { font-size: 15px; }
 .soon .ic { background: var(--gold); color: #111; }
-.pill { display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: .04em; background: var(--gold); color: #111; border-radius: 999px; padding: 2px 9px; margin-bottom: 6px; }
-@media (max-width: 720px) {
-  .hero { grid-template-columns: 1fr; }
-  .hero h1 { font-size: 32px; }
-  .step { grid-template-columns: 112px 1fr; gap: 16px; padding: 14px; align-items: start; }
-  .phone { border-radius: 18px; padding: 4px; } .phone img { border-radius: 14px; }
-  .feats { grid-template-columns: 1fr; }
+.rules-card { margin: 56px 0 0; }
+#live { margin-top: 56px; }
+.cta { margin-top: 40px; }
+
+@media (max-width: 860px) {
+  .hero { grid-template-columns: minmax(0, 1fr); gap: 28px; padding-top: 32px; }
+  .hero__text { padding-bottom: 0; }
+  .hero h1 { font-size: 36px; }
+  .feats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
-.note { font-size: 15px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.note .pill { margin: 0; }
+@media (max-width: 600px) {
+  .hero h1 { font-size: 32px; }
+  .hero__sub { font-size: 17px; }
+  .step, .step:nth-child(even) { grid-template-columns: minmax(0, 1fr); gap: 22px; }
+  .step:nth-child(even) .step__shot { order: 0; }
+  .step__shot { width: 62%; max-width: 250px; justify-self: center; }
+  .step h3 { font-size: 23px; }
+  .steps { gap: 48px; }
+  .feats { grid-template-columns: minmax(0, 1fr); }
+  .sec-head { margin-top: 44px; }
+}
 </style>
 </head><body>
-<div class="wrap">
-
-  <header>
-    <div class="logo"><span>8</span></div>
-    <div class="wordmark">KILLER POOL</div>
-    <button class="theme" type="button" aria-label="Switch light or dark" onclick="(function(){var r=document.documentElement,d=r.dataset.theme||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'),n=d==='light'?'dark':'light';r.dataset.theme=n;try{localStorage.setItem('kp_theme',n)}catch(e){}})()"><span class="moon"><svg class="bi" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+<div class="band">
+  <div class="band__in">
+    <header class="brand">
+      <img class="brand__icon" src="/img/app-icon.webp" width="44" height="44" alt="">
+      <div class="brand__lockup"><span class="brand__name">KILLER POOL</span><span class="brand__sub">ELIMINATION</span></div>
+      <button class="theme" type="button" aria-label="Switch light or dark" onclick="(function(){var r=document.documentElement,d=r.dataset.theme||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'),n=d==='light'?'dark':'light';r.dataset.theme=n;try{localStorage.setItem('kp_theme',n)}catch(e){}})()"><span class="moon"><svg class="bi" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
   <path d="M6 .278a.77.77 0 0 1 .08.858 7.2 7.2 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277q.792-.001 1.533-.16a.79.79 0 0 1 .81.316.73.73 0 0 1-.031.893A8.35 8.35 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.75.75 0 0 1 6 .278M4.858 1.311A7.27 7.27 0 0 0 1.025 7.71c0 4.02 3.279 7.276 7.319 7.276a7.32 7.32 0 0 0 5.205-2.162q-.506.063-1.029.063c-4.61 0-8.343-3.714-8.343-8.29 0-1.167.242-2.278.681-3.286"/>
 </svg></span><span class="sun"><svg class="bi" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
   <path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6m0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8M8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0m0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13m8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5M3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8m10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0m-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0m9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707M4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708"/>
 </svg></span></button>
-  </header>
+    </header>
 
-  <section class="hero">
-    <div class="hero__text">
-      <h1>Run killer pool night from your phone</h1>
-      <p class="sub">The app keeps the lives, the turns, who's out and the pot, and puts the game on the pub TV. Free for any number of players, with no ads.</p>
-      <div class="hero__btns">
-        <a class="btn" href="https://apps.apple.com/app/apple-store/id6802345932?pt=128809266&amp;ct=killer-home&amp;mt=8"><svg class="bi" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+    <div class="hero">
+      <div class="hero__text">
+        <h1>Run killer pool night <em>from your phone</em></h1>
+        <p class="hero__sub">Killer Pool keeps the lives, the turns, who's out and the pot, and puts the game on the pub TV so the whole room can see who's up.</p>
+        <div class="hero__btns">
+          <a class="btn" href="https://apps.apple.com/app/apple-store/id6802345932?pt=128809266&amp;ct=killer-home&amp;mt=8"><svg class="bi" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
   <path d="M11.182.008C11.148-.03 9.923.023 8.857 1.18c-1.066 1.156-.902 2.482-.878 2.516s1.52.087 2.475-1.258.762-2.391.728-2.43m3.314 11.733c-.048-.096-2.325-1.234-2.113-3.422s1.675-2.789 1.698-2.854-.597-.79-1.254-1.157a3.7 3.7 0 0 0-1.563-.434c-.108-.003-.483-.095-1.254.116-.508.139-1.653.589-1.968.607-.316.018-1.256-.522-2.267-.665-.647-.125-1.333.131-1.824.328-.49.196-1.422.754-2.074 2.237-.652 1.482-.311 3.83-.067 4.56s.625 1.924 1.273 2.796c.576.984 1.34 1.667 1.659 1.899s1.219.386 1.843.067c.502-.308 1.408-.485 1.766-.472.357.013 1.061.154 1.782.539.571.197 1.111.115 1.652-.105.541-.221 1.324-1.059 2.238-2.758q.52-1.185.473-1.282"/>
   <path d="M11.182.008C11.148-.03 9.923.023 8.857 1.18c-1.066 1.156-.902 2.482-.878 2.516s1.52.087 2.475-1.258.762-2.391.728-2.43m3.314 11.733c-.048-.096-2.325-1.234-2.113-3.422s1.675-2.789 1.698-2.854-.597-.79-1.254-1.157a3.7 3.7 0 0 0-1.563-.434c-.108-.003-.483-.095-1.254.116-.508.139-1.653.589-1.968.607-.316.018-1.256-.522-2.267-.665-.647-.125-1.333.131-1.824.328-.49.196-1.422.754-2.074 2.237-.652 1.482-.311 3.83-.067 4.56s.625 1.924 1.273 2.796c.576.984 1.34 1.667 1.659 1.899s1.219.386 1.843.067c.502-.308 1.408-.485 1.766-.472.357.013 1.061.154 1.782.539.571.197 1.111.115 1.652-.105.541-.221 1.324-1.059 2.238-2.758q.52-1.185.473-1.282"/>
 </svg>Get it on the App Store</a>
-        <a class="btn-line" href="/rules">The rules</a>
+          <a class="btn-felt" href="/rules">The rules</a>
+        </div>
+        <ul class="facts">
+          <li><svg class="bi" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+  <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/>
+</svg>Free</li><li><svg class="bi" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+  <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/>
+</svg>No ads</li><li><svg class="bi" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+  <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/>
+</svg>Any number of players</li><li><svg class="bi" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+  <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/>
+</svg>iPhone and iPad</li>
+        </ul>
+      </div>
+      <div class="set">
+        <figure class="set__tv"><img src="/img/tv.webp" width="1800" height="1103" alt="The pub TV during a game: everyone's lives on the left, Aisha up now on the right"><figcaption>On the pub TV</figcaption></figure>
+        <figure class="set__phone"><img src="/img/phone-game.webp" width="543" height="1105" alt="The organiser's phone: Marco up now, with POT and MISS"><figcaption>On your phone</figcaption></figure>
       </div>
     </div>
-    <div class="hero__art">
-      <div class="tvframe"><img src="/img/app-tv.webp" width="1600" height="900" alt="The game on the pub TV: everyone's lives and who's up"></div>
-      <div class="phone phone--hero"><img src="/img/app-game.webp" width="520" height="1125" alt="The app during a game: up now, POT and MISS"></div>
-    </div>
-  </section>
+  </div>
+</div>
 
+<div class="page">
   <nav class="toc" aria-label="Jump to">
     <a href="#night">A game night</a><a href="#tv">On the TV</a><a href="#does">What it does</a><a href="#rules">Rules</a><a href="#live">Live games</a>
   </nav>
 
   <section id="night">
-    <h2>How a game night goes</h2>
-    <div class="steps">
-      <div class="step">
-        <div class="phone"><img src="/img/app-setup.webp" width="520" height="1125" alt="New game: venue, lives, 8-ball rule and turn order" loading="lazy"></div>
-        <div class="step__text"><span class="num">1</span><h3>Set your house rules</h3><p>Pick the venue, the number of lives and your 8-ball rule. Shuffle the order each round or keep it fixed. Add special cards, or play it straight.</p></div>
-      </div>
-      <div class="step">
-        <div class="phone"><img src="/img/app-players.webp" width="520" height="1125" alt="Adding players" loading="lazy"></div>
-        <div class="step__text"><span class="num">2</span><h3>Add the players</h3><p>Type each name, or show a QR code so players add themselves. Tap a circle to take their photo, so the room knows who's up at a glance.</p><p class="note"><span class="pill">Coming soon</span> Your regulars from this venue, one tap each.</p></div>
-      </div>
-      <div class="step">
-        <div class="phone"><img src="/img/app-game.webp" width="520" height="1125" alt="Up now, with POT and MISS buttons" loading="lazy"></div>
-        <div class="step__text"><span class="num">3</span><h3>One tap per shot</h3><p>The screen shows who's up and their lives. Potted? Tap <b>POT</b>. Missed? Tap <b>MISS</b>. The app asks you to confirm, then moves to the next player.</p></div>
-      </div>
-      <div class="step">
-        <div class="phone"><img src="/img/app-roster.webp" width="520" height="1125" alt="The players list: lives and a tick for who has shot" class="crop-bottom" loading="lazy"></div>
-        <div class="step__text"><span class="num">4</span><h3>The app keeps track</h3><p>Everyone's lives, a tick for who has shot this round, and who's out. Nobody shoots twice in a row. Mis-tapped? Fix any player's lives from the roster.</p></div>
-      </div>
-      <div class="step">
-        <div class="phone"><img src="/img/app-winner.webp" width="520" height="1125" alt="The winner screen with the top three" loading="lazy"></div>
-        <div class="step__text"><span class="num">5</span><h3>A winner</h3><p>The last one standing wins. See the top three, share the winner card, then <b>Play again</b> with the same people.</p></div>
-      </div>
+    <div class="sec-head">
+      <h2>How a game night goes</h2>
+      <p>You run the game from one phone, from setting it up to the winner. These are the real screens.</p>
     </div>
+    <ol class="steps">
+      <li class="step">
+        <div class="step__shot"><img src="/img/phone-setup.webp" width="543" height="1105" alt="New game: venue, game title, 8-ball rule and turn order" loading="lazy"></div>
+        <div class="step__text">
+          <span class="step__num"><b>1</b>Before the break</span>
+          <h3>Set your house rules</h3>
+          <p>Pick the venue, the number of lives and your 8-ball rule. Shuffle the order each round or keep it fixed. Add special cards, or play it straight.</p>
+        </div>
+      </li>
+      <li class="step">
+        <div class="step__shot"><img src="/img/phone-players.webp" width="543" height="1105" alt="Adding players, with their numbers and photos" loading="lazy"></div>
+        <div class="step__text">
+          <span class="step__num"><b>2</b>Who's playing</span>
+          <h3>Add the players</h3>
+          <p>Type each name, or show a QR code so players add themselves. Tap a circle to take their photo, so the room knows who's up at a glance.</p>
+          <p class="note"><span class="pill">Coming soon</span>Your regulars from this venue, one tap each.</p>
+        </div>
+      </li>
+      <li class="step">
+        <div class="step__shot"><img src="/img/phone-game.webp" width="543" height="1105" alt="Up now: Marco, with POT, MISS and 8-BALL POTTED" loading="lazy"></div>
+        <div class="step__text">
+          <span class="step__num"><b>3</b>Every shot</span>
+          <h3>One tap per shot</h3>
+          <p>The screen shows who's up and their lives. Tap what happened, confirm, and the next player is up.</p>
+          <div class="taps" aria-label="The three buttons"><span class="tap tap--pot">POT</span><span class="tap tap--miss">MISS</span><span class="tap tap--eight">8-BALL POTTED</span></div>
+        </div>
+      </li>
+      <li class="step">
+        <div class="step__shot"><img src="/img/phone-roster.webp" width="543" height="1105" alt="The players list: lives, and a tick for who has shot this round" loading="lazy"></div>
+        <div class="step__text">
+          <span class="step__num"><b>4</b>Round after round</span>
+          <h3>The app keeps track</h3>
+          <p>Everyone's lives, a tick for who has shot this round, and who's out. Nobody shoots twice in a row. Mis-tapped? Fix anyone's lives from the roster.</p>
+        </div>
+      </li>
+      <li class="step">
+        <div class="step__shot"><img src="/img/phone-winner.webp" width="543" height="1105" alt="The winner screen: Priya wins, with the runner-up and top three" loading="lazy"></div>
+        <div class="step__text">
+          <span class="step__num"><b>5</b>Last one standing</span>
+          <h3>A winner</h3>
+          <p>See the runner-up and the top three, share the winner card, then play again with the same people.</p>
+        </div>
+      </li>
+    </ol>
   </section>
 
   <section id="tv">
-    <h2>The game on the pub TV</h2>
-    <p>Cast to a Chromecast on the same Wi-Fi. The whole room sees who's up, who's next, everyone's lives and the pot. Players don't need the app.</p>
-    <div class="tvframe tvframe--big"><img src="/img/app-tv.webp" width="1600" height="900" alt="The TV during a game" loading="lazy"></div>
+    <div class="sec-head">
+      <h2>The game on the pub TV</h2>
+      <p>Cast to a Chromecast on the same Wi-Fi. The room sees who's up, who's next, everyone's lives and the pot. Players don't need the app.</p>
+    </div>
+    <figure class="tv-big"><img src="/img/tv.webp" width="1800" height="1103" alt="The TV during a game" loading="lazy"></figure>
   </section>
 
   <section id="does">
-    <h2>What it does</h2>
+    <div class="sec-head"><h2>What it does</h2></div>
     <div class="feats">
       <div class="box feat"><span class="ic"><svg class="bi" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-  <path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1zm-7.978-1L7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002-.014.002zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0M6.936 9.28a6 6 0 0 0-1.23-.247A7 7 0 0 0 5 9c-4 0-5 3-5 4q0 1 1 1h4.216A2.24 2.24 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816M4.92 10A5.5 5.5 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275ZM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0m3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4"/>
-</svg></span><div><span class="pill">Coming soon</span><h3>Your regulars</h3><p>Everyone you play with is saved with their photo, by venue. One tap adds them next week.</p></div></div>
-      <div class="box feat"><span class="ic"><svg class="bi" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
   <path d="M2.5 13.5A.5.5 0 0 1 3 13h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5M13.991 3l.024.001a1.5 1.5 0 0 1 .538.143.76.76 0 0 1 .302.254c.067.1.145.277.145.602v5.991l-.001.024a1.5 1.5 0 0 1-.143.538.76.76 0 0 1-.254.302c-.1.067-.277.145-.602.145H2.009l-.024-.001a1.5 1.5 0 0 1-.538-.143.76.76 0 0 1-.302-.254C1.078 10.502 1 10.325 1 10V4.009l.001-.024a1.5 1.5 0 0 1 .143-.538.76.76 0 0 1 .254-.302C1.498 3.078 1.675 3 2 3zM14 2H2C0 2 0 4 0 4v6c0 2 2 2 2 2h12c2 0 2-2 2-2V4c0-2-2-2-2-2"/>
-</svg></span><div><h3>Pub TV</h3><p>The live game on any TV with a Chromecast.</p></div></div>
+</svg></span><h3>Pub TV</h3><p>The live game on any TV with a Chromecast.</p></div>
       <div class="box feat"><span class="ic"><svg class="bi" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
   <path d="M1 3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1zm7 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
   <path d="M0 5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1zm3 0a2 2 0 0 1-2 2v4a2 2 0 0 1 2 2h10a2 2 0 0 1 2-2V7a2 2 0 0 1-2-2z"/>
-</svg></span><div><h3>Entry fee and pot</h3><p>Set the fee; the pot adds up as people join.</p></div></div>
+</svg></span><h3>Entry fee and pot</h3><p>Set the fee; the pot adds up as people join.</p></div>
       <div class="box feat"><span class="ic"><svg class="bi" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
   <path d="M2.5 3.5a.5.5 0 0 1 0-1h11a.5.5 0 0 1 0 1zm2-2a.5.5 0 0 1 0-1h7a.5.5 0 0 1 0 1zM0 13a1.5 1.5 0 0 0 1.5 1.5h13A1.5 1.5 0 0 0 16 13V6a1.5 1.5 0 0 0-1.5-1.5h-13A1.5 1.5 0 0 0 0 6zm1.5.5A.5.5 0 0 1 1 13V6a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5z"/>
-</svg></span><div><h3>Special cards</h3><p>Ball in hand, swap lives, steal a life, shield and more. Pick which are in play.</p></div></div>
+</svg></span><h3>Special cards</h3><p>Ball in hand, swap lives, steal a life, shield and more. You pick which are in play.</p></div>
       <div class="box feat"><span class="ic"><svg class="bi" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
   <path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2z"/>
   <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466"/>
-</svg></span><div><h3>Fix a mis-tap</h3><p>Correct anyone's lives or cards mid-game. No restart.</p></div></div>
+</svg></span><h3>Fix a mis-tap</h3><p>Correct anyone's lives or cards mid-game. No restart.</p></div>
       <div class="box feat"><span class="ic"><svg class="bi" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
   <path d="M8.515 1.019A7 7 0 0 0 8 1V0a8 8 0 0 1 .589.022zm2.004.45a7 7 0 0 0-.985-.299l.219-.976q.576.129 1.126.342zm1.37.71a7 7 0 0 0-.439-.27l.493-.87a8 8 0 0 1 .979.654l-.615.789a7 7 0 0 0-.418-.302zm1.834 1.79a7 7 0 0 0-.653-.796l.724-.69q.406.429.747.91zm.744 1.352a7 7 0 0 0-.214-.468l.893-.45a8 8 0 0 1 .45 1.088l-.95.313a7 7 0 0 0-.179-.483m.53 2.507a7 7 0 0 0-.1-1.025l.985-.17q.1.58.116 1.17zm-.131 1.538q.05-.254.081-.51l.993.123a8 8 0 0 1-.23 1.155l-.964-.267q.069-.247.12-.501m-.952 2.379q.276-.436.486-.908l.914.405q-.24.54-.555 1.038zm-.964 1.205q.183-.183.35-.378l.758.653a8 8 0 0 1-.401.432z"/>
   <path d="M8 1a7 7 0 1 0 4.95 11.95l.707.707A8.001 8.001 0 1 1 8 0z"/>
   <path d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5"/>
-</svg></span><div><h3>Your games</h3><p>Past games and winners, kept on your phone.</p></div></div>
+</svg></span><h3>Your games</h3><p>Past games and winners, kept on your phone.</p></div>
+      <div class="box feat"><span class="ic"><svg class="bi" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+  <path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1zm-7.978-1L7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002-.014.002zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0M6.936 9.28a6 6 0 0 0-1.23-.247A7 7 0 0 0 5 9c-4 0-5 3-5 4q0 1 1 1h4.216A2.24 2.24 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816M4.92 10A5.5 5.5 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275ZM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0m3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4"/>
+</svg></span><h3>Your regulars <span class="pill">Coming soon</span></h3><p>Everyone you play with, saved with their photo by venue. One tap adds them next week.</p></div>
     </div>
     <div class="box soon"><span class="ic"><svg class="bi" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
   <path d="M2.5.5A.5.5 0 0 1 3 0h10a.5.5 0 0 1 .5.5q0 .807-.034 1.536a3 3 0 1 1-1.133 5.89c-.79 1.865-1.878 2.777-2.833 3.011v2.173l1.425.356c.194.048.377.135.537.255L13.3 15.1a.5.5 0 0 1-.3.9H3a.5.5 0 0 1-.3-.9l1.838-1.379c.16-.12.343-.207.537-.255L6.5 13.11v-2.173c-.955-.234-2.043-1.146-2.833-3.012a3 3 0 1 1-1.132-5.89A33 33 0 0 1 2.5.5m.099 2.54a2 2 0 0 0 .72 3.935c-.333-1.05-.588-2.346-.72-3.935m10.083 3.935a2 2 0 0 0 .72-3.935c-.133 1.59-.388 2.885-.72 3.935M3.504 1q.01.775.056 1.469c.13 2.028.457 3.546.87 4.667C5.294 9.48 6.484 10 7 10a.5.5 0 0 1 .5.5v2.61a1 1 0 0 1-.757.97l-1.426.356a.5.5 0 0 0-.179.085L4.5 15h7l-.638-.479a.5.5 0 0 0-.18-.085l-1.425-.356a1 1 0 0 1-.757-.97V10.5A.5.5 0 0 1 9 10c.516 0 1.706-.52 2.57-2.864.413-1.12.74-2.64.87-4.667q.045-.694.056-1.469z"/>
-</svg></span><div><span class="pill">Coming soon</span><h3>Competitions</h3><p>Knockout nights: a fresh draw each round, buybacks and late arrivals, frame scores, and payouts from the pot, on the phone and the TV.</p></div></div>
+</svg></span><div><h3>Competitions <span class="pill">Coming soon</span></h3><p>Knockout nights: a fresh draw each round, buybacks and late arrivals, frame scores, and payouts from the pot, on the phone and the TV.</p></div></div>
   </section>
 
   <a class="rules-card" id="rules" href="/rules">
