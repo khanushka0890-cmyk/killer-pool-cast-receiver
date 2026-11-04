@@ -446,6 +446,21 @@
 .cp-m{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;column-gap:calc(12 * var(--u));height:calc(48 * var(--u));padding:0 calc(14 * var(--u));border-radius:calc(11 * var(--u));background:#1A1033;border:calc(2 * var(--u)) solid transparent;box-sizing:border-box;}
 .cp-m.live{border-color:var(--gold);background:#3A2A12;}
 .cp-m.done{background:#140D27;}
+.cp-m.started{border-color:#6B5530;}
+/* At the table (owner 2026-11-04): the matches being played right now, big in the stub */
+.cp-at{width:100%;display:flex;flex-direction:column;gap:calc(14 * var(--u));}
+.cp-at__m{display:flex;flex-direction:column;align-items:center;gap:calc(6 * var(--u));padding:calc(16 * var(--u)) calc(12 * var(--u));border-radius:calc(16 * var(--u));background:#3A2A12;border:calc(2 * var(--u)) solid var(--gold);}
+.cp-at__n{font:400 calc(44 * var(--u))/1 'Bebas Neue',sans-serif;letter-spacing:calc(1 * var(--u));color:#fff;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-top:calc(3 * var(--u));}
+.cp-at__s{font:400 calc(76 * var(--u))/1 'Bebas Neue',sans-serif;color:var(--gold);padding-top:calc(4 * var(--u));}
+.cp-at__s i{font-style:normal;color:var(--text-2);font-size:calc(48 * var(--u));padding:0 calc(10 * var(--u));}
+.cp-at.two .cp-at__m{flex-direction:row;justify-content:space-between;gap:calc(10 * var(--u));padding:calc(12 * var(--u)) calc(14 * var(--u));}
+.cp-at.two .cp-at__n{font-size:calc(30 * var(--u));flex:1;min-width:0;}
+.cp-at.two .cp-at__n.r{text-align:right;}
+.cp-at.two .cp-at__s{font-size:calc(44 * var(--u));}
+.cp-at.two .cp-at__s i{font-size:calc(30 * var(--u));padding:0 calc(6 * var(--u));}
+.cp-at__more{font:600 calc(18 * var(--u))/1.2 'Barlow',sans-serif;color:var(--text-2);}
+.cp-stub .small{font:600 calc(20 * var(--u))/1.2 'Barlow',sans-serif;color:var(--text-2);}
+.cp-stub .small b{color:var(--gold-text);font-weight:700;}
 .cp-n{font:600 calc(22 * var(--u))/1 'Barlow',sans-serif;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .cp-n.r{text-align:right;}
 .cp-n.win{color:var(--gold);font-weight:700;}
@@ -1046,10 +1061,11 @@
     const pays = (c.payouts || []).map((v, i) => `<div><span>${places[i] || ''} · ${(c.split || [])[i] ?? ''}%</span><b>${fmt(v)}</b></div>`).join('');
     const r = c.round || { name: '', race: 1, matches: [], byes: [] };
     const done = r.matches.filter(m => m.w).length;
-    const live = r.matches.filter(m => !m.w), fin = r.matches.filter(m => m.w);
+    const live = r.matches.filter(m => !m.w).sort((x, y) => (y.t ? 1 : 0) - (x.t ? 1 : 0)), fin = r.matches.filter(m => m.w);
+    const atTable = live.filter(m => m.t);
     const row = (m) => {
       const started = m.sa > 0 || m.sb > 0;
-      const cls = m.w ? ' done' : started ? ' live' : '';
+      const cls = m.w ? ' done' : m.t ? ' live' : started ? ' started' : '';
       const na = m.w ? (m.w === 'a' ? ' win' : ' lose') : '', nb = m.w ? (m.w === 'b' ? ' win' : ' lose') : '';
       const score = started || m.w ? `<span class="${m.w === 'a' ? 'w' : ''}">${m.sa}</span> – <span class="${m.w === 'b' ? 'w' : ''}">${m.sb}</span>` : '<span class="tbd">– · –</span>';
       return `<div class="cp-m${cls}"><span class="cp-n${na}">${escapeHtml(m.a)}</span><span class="cp-s">${score}</span><span class="cp-n r${nb}">${escapeHtml(m.b)}</span></div>`;
@@ -1069,6 +1085,16 @@
     const main = bigHeadHtml(c.title, 'PRIZE POT', c.pot > 0 ? fmt(c.pot) : '')
       + `<div class="cp-meta"><b>${escapeHtml(r.name.toUpperCase())}</b> · ${r.matches.length} ${r.matches.length === 1 ? 'MATCH' : 'MATCHES'}${c.venue ? ' · ' + escapeHtml(c.venue.toUpperCase()) : ''}</div>`
       + list + byes + BRANDLINE + `<span class="kb-toshoot"><b>${done}</b>/${r.matches.length} done</span></footer>`;
+    if (atTable.length && c.state === 'playing') {
+      const shown = atTable.slice(0, 2), two = shown.length > 1;
+      const card = (m) => two
+        ? `<div class="cp-at__m"><span class="cp-at__n">${escapeHtml(m.a)}</span><span class="cp-at__s">${m.sa}<i>–</i>${m.sb}</span><span class="cp-at__n r">${escapeHtml(m.b)}</span></div>`
+        : `<div class="cp-at__m"><span class="cp-at__n">${escapeHtml(m.a)}</span><span class="cp-at__s">${m.sa}<i>–</i>${m.sb}</span><span class="cp-at__n">${escapeHtml(m.b)}</span></div>`;
+      const more = atTable.length > 2 ? `<span class="cp-at__more">+${atTable.length - 2} more at the tables</span>` : '';
+      const stubT = `<div class="cp-stub"><span class="tag">AT THE TABLE</span><div class="cp-at${two ? ' two' : ''}">${shown.map(card).join('')}</div>${more}<span class="race">Race to ${r.race}</span><span class="small">${escapeHtml(r.name)} · <b>${done}</b>/${r.matches.length} done</span>${c.pot > 0 ? `<div class="cp-pay">${pays}</div>` : ''}</div>`;
+      stage.innerHTML = bigShell(r.name, main, stubT);
+      return;
+    }
     const stub = `<div class="cp-stub"><span class="tag">${c.state === 'fill' ? 'ROUND DONE' : 'NOW PLAYING'}</span><span class="rn">${escapeHtml(r.name)}</span><span class="race">Race to ${r.race}</span><span class="big">${done}<span style="color:var(--text-2);font-size:calc(44 * var(--u))"> / ${r.matches.length}</span></span><span class="race">matches done</span>${c.pot > 0 ? `<div class="cp-pay">${pays}</div>` : ''}</div>`;
     stage.innerHTML = bigShell(r.name, main, stub);
   }
