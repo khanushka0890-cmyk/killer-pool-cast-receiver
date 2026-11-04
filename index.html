@@ -78,6 +78,8 @@
   .tv-head { display: flex; align-items: center; justify-content: space-between; height: calc(52 * var(--u)); }
   .tv-brand { display: flex; align-items: center; gap: calc(14 * var(--u)); }
   .tv-brand__ball { width: calc(49 * var(--u)); height: calc(49 * var(--u)); flex-shrink: 0; }
+  .tv-brand__logo { height: calc(44 * var(--u)); width: auto; display: block; }
+  .tv-idle__logo { height: calc(84 * var(--u)); width: auto; display: block; }
   .tv-brand__lockup { display: flex; flex-direction: column; gap: 0; }
   .tv-brand__name { font: 400 calc(30 * var(--u))/1 'Bebas Neue', sans-serif; letter-spacing: calc(3 * var(--u)); color: var(--gold); }
   .tv-brand__sub { font: 600 calc(12 * var(--u))/1 'Barlow Condensed', sans-serif; letter-spacing: calc(6 * var(--u)); color: #CBC2E0; }
@@ -446,6 +448,21 @@
 .cp-m{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;column-gap:calc(12 * var(--u));height:calc(48 * var(--u));padding:0 calc(14 * var(--u));border-radius:calc(11 * var(--u));background:#1A1033;border:calc(2 * var(--u)) solid transparent;box-sizing:border-box;}
 .cp-m.live{border-color:var(--gold);background:#3A2A12;}
 .cp-m.done{background:#140D27;}
+.cp-m.started{border-color:#6B5530;}
+/* At the table (owner 2026-11-04): the matches being played right now, big in the stub */
+.cp-at{width:100%;display:flex;flex-direction:column;gap:calc(14 * var(--u));}
+.cp-at__m{display:flex;flex-direction:column;align-items:center;gap:calc(6 * var(--u));padding:calc(16 * var(--u)) calc(12 * var(--u));border-radius:calc(16 * var(--u));background:#3A2A12;border:calc(2 * var(--u)) solid var(--gold);}
+.cp-at__n{font:400 calc(44 * var(--u))/1 'Bebas Neue',sans-serif;letter-spacing:calc(1 * var(--u));color:#fff;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-top:calc(3 * var(--u));}
+.cp-at__s{font:400 calc(76 * var(--u))/1 'Bebas Neue',sans-serif;color:var(--gold);padding-top:calc(4 * var(--u));}
+.cp-at__s i{font-style:normal;color:var(--text-2);font-size:calc(48 * var(--u));padding:0 calc(10 * var(--u));}
+.cp-at.two .cp-at__m{flex-direction:row;justify-content:space-between;gap:calc(10 * var(--u));padding:calc(12 * var(--u)) calc(14 * var(--u));}
+.cp-at.two .cp-at__n{font-size:calc(30 * var(--u));flex:1;min-width:0;}
+.cp-at.two .cp-at__n.r{text-align:right;}
+.cp-at.two .cp-at__s{font-size:calc(44 * var(--u));}
+.cp-at.two .cp-at__s i{font-size:calc(30 * var(--u));padding:0 calc(6 * var(--u));}
+.cp-at__more{font:600 calc(18 * var(--u))/1.2 'Barlow',sans-serif;color:var(--text-2);}
+.cp-stub .small{font:600 calc(20 * var(--u))/1.2 'Barlow',sans-serif;color:var(--text-2);}
+.cp-stub .small b{color:var(--gold-text);font-weight:700;}
 .cp-n{font:600 calc(22 * var(--u))/1 'Barlow',sans-serif;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .cp-n.r{text-align:right;}
 .cp-n.win{color:var(--gold);font-weight:700;}
@@ -487,8 +504,7 @@
   <div class="tv-stage" id="stage">
     <div class="tv-idle">
       <svg class="tv-idle__ball" viewBox="0 0 26 26" aria-hidden="true"><circle cx="13" cy="13" r="12" fill="#0B0A12" stroke="#F2B84B" stroke-width="1"/><circle cx="13" cy="13" r="6" fill="#F4F1FA"/><text x="13" y="16.5" text-anchor="middle" font-family="Barlow, sans-serif" font-weight="700" font-size="9" fill="#0B0A12">8</text></svg>
-      <div class="tv-idle__title">KILLER POOL</div>
-      <div class="tv-idle__elim">ELIMINATION</div>
+      <svg class="tv-idle__logo" viewBox="0 0 166 44" role="img" aria-label="Killer Pool Elimination"><text x="0" y="28.4" font-family="Bebas Neue, sans-serif" font-size="40" textLength="166" lengthAdjust="spacing" fill="#F2B84B">KILLER POOL</text><text x="0.6" y="43.4" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Barlow, sans-serif" font-size="12" font-weight="600" textLength="165.4" lengthAdjust="spacing" fill="#E4DCF3">ELIMINATION</text></svg>
       <div class="tv-idle__sub">WAITING FOR ORGANISER TO START A GAME…</div>
     </div>
   </div>
@@ -543,8 +559,7 @@
     stage.innerHTML = `
       <div class="tv-idle">
         ${BRAND_BALL_SVG.replace('tv-brand__ball', 'tv-idle__ball')}
-        <div class="tv-idle__title">KILLER POOL</div>
-      <div class="tv-idle__elim">ELIMINATION</div>
+        <svg class="tv-idle__logo" viewBox="0 0 166 44" role="img" aria-label="Killer Pool Elimination"><text x="0" y="28.4" font-family="Bebas Neue, sans-serif" font-size="40" textLength="166" lengthAdjust="spacing" fill="#F2B84B">KILLER POOL</text><text x="0.6" y="43.4" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Barlow, sans-serif" font-size="12" font-weight="600" textLength="165.4" lengthAdjust="spacing" fill="#E4DCF3">ELIMINATION</text></svg>
         <div class="tv-idle__sub">WAITING FOR ORGANISER TO START A GAME…</div>
       </div>
     `;
@@ -709,10 +724,7 @@
           <header class="tv-head">
             <div class="tv-brand">
               ${BRAND_BALL_SVG}
-              <div class="tv-brand__lockup">
-                <span class="tv-brand__name">KILLER POOL</span>
-                <span class="tv-brand__sub">ELIMINATION</span>
-              </div>
+              <svg class="tv-brand__logo" viewBox="0 0 166 44" role="img" aria-label="Killer Pool Elimination"><text x="0" y="28.4" font-family="Bebas Neue, sans-serif" font-size="40" textLength="166" lengthAdjust="spacing" fill="#F2B84B">KILLER POOL</text><text x="0.6" y="43.4" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Barlow, sans-serif" font-size="12" font-weight="600" textLength="165.4" lengthAdjust="spacing" fill="#E4DCF3">ELIMINATION</text></svg>
               <span class="tv-live">LIVE</span>
             </div>
             <div class="tv-round"><span class="tv-round__lbl">ROUND</span><span class="tv-round__num">${state.round ?? 1}</span></div>
@@ -783,10 +795,7 @@
           <header class="tv-head">
             <div class="tv-brand">
               ${BRAND_BALL_SVG}
-              <div class="tv-brand__lockup">
-                <span class="tv-brand__name">KILLER POOL</span>
-                <span class="tv-brand__sub">ELIMINATION</span>
-              </div>
+              <svg class="tv-brand__logo" viewBox="0 0 166 44" role="img" aria-label="Killer Pool Elimination"><text x="0" y="28.4" font-family="Bebas Neue, sans-serif" font-size="40" textLength="166" lengthAdjust="spacing" fill="#F2B84B">KILLER POOL</text><text x="0.6" y="43.4" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Barlow, sans-serif" font-size="12" font-weight="600" textLength="165.4" lengthAdjust="spacing" fill="#E4DCF3">ELIMINATION</text></svg>
               <span class="tv-flag tv-flag--done">GAME OVER</span>
             </div>
             <div class="tv-round"><span class="tv-round__lbl">ROUNDS</span><span class="tv-round__num">${state.rounds ?? 1}</span></div>
@@ -857,10 +866,7 @@
           <header class="tv-head">
             <div class="tv-brand">
               ${BRAND_BALL_SVG}
-              <div class="tv-brand__lockup">
-                <span class="tv-brand__name">KILLER POOL</span>
-                <span class="tv-brand__sub">ELIMINATION</span>
-              </div>
+              <svg class="tv-brand__logo" viewBox="0 0 166 44" role="img" aria-label="Killer Pool Elimination"><text x="0" y="28.4" font-family="Bebas Neue, sans-serif" font-size="40" textLength="166" lengthAdjust="spacing" fill="#F2B84B">KILLER POOL</text><text x="0.6" y="43.4" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Barlow, sans-serif" font-size="12" font-weight="600" textLength="165.4" lengthAdjust="spacing" fill="#E4DCF3">ELIMINATION</text></svg>
               <span class="tv-flag tv-flag--void">ROUND ENDED</span>
             </div>
             <div class="tv-round"><span class="tv-round__lbl">ROUND</span><span class="tv-round__num">${state.round ?? 1}</span></div>
@@ -1046,10 +1052,11 @@
     const pays = (c.payouts || []).map((v, i) => `<div><span>${places[i] || ''} · ${(c.split || [])[i] ?? ''}%</span><b>${fmt(v)}</b></div>`).join('');
     const r = c.round || { name: '', race: 1, matches: [], byes: [] };
     const done = r.matches.filter(m => m.w).length;
-    const live = r.matches.filter(m => !m.w), fin = r.matches.filter(m => m.w);
+    const live = r.matches.filter(m => !m.w).sort((x, y) => (y.t ? 1 : 0) - (x.t ? 1 : 0)), fin = r.matches.filter(m => m.w);
+    const atTable = live.filter(m => m.t);
     const row = (m) => {
       const started = m.sa > 0 || m.sb > 0;
-      const cls = m.w ? ' done' : started ? ' live' : '';
+      const cls = m.w ? ' done' : m.t ? ' live' : started ? ' started' : '';
       const na = m.w ? (m.w === 'a' ? ' win' : ' lose') : '', nb = m.w ? (m.w === 'b' ? ' win' : ' lose') : '';
       const score = started || m.w ? `<span class="${m.w === 'a' ? 'w' : ''}">${m.sa}</span> – <span class="${m.w === 'b' ? 'w' : ''}">${m.sb}</span>` : '<span class="tbd">– · –</span>';
       return `<div class="cp-m${cls}"><span class="cp-n${na}">${escapeHtml(m.a)}</span><span class="cp-s">${score}</span><span class="cp-n r${nb}">${escapeHtml(m.b)}</span></div>`;
@@ -1069,6 +1076,16 @@
     const main = bigHeadHtml(c.title, 'PRIZE POT', c.pot > 0 ? fmt(c.pot) : '')
       + `<div class="cp-meta"><b>${escapeHtml(r.name.toUpperCase())}</b> · ${r.matches.length} ${r.matches.length === 1 ? 'MATCH' : 'MATCHES'}${c.venue ? ' · ' + escapeHtml(c.venue.toUpperCase()) : ''}</div>`
       + list + byes + BRANDLINE + `<span class="kb-toshoot"><b>${done}</b>/${r.matches.length} done</span></footer>`;
+    if (atTable.length && c.state === 'playing') {
+      const shown = atTable.slice(0, 2), two = shown.length > 1;
+      const card = (m) => two
+        ? `<div class="cp-at__m"><span class="cp-at__n">${escapeHtml(m.a)}</span><span class="cp-at__s">${m.sa}<i>–</i>${m.sb}</span><span class="cp-at__n r">${escapeHtml(m.b)}</span></div>`
+        : `<div class="cp-at__m"><span class="cp-at__n">${escapeHtml(m.a)}</span><span class="cp-at__s">${m.sa}<i>–</i>${m.sb}</span><span class="cp-at__n">${escapeHtml(m.b)}</span></div>`;
+      const more = atTable.length > 2 ? `<span class="cp-at__more">+${atTable.length - 2} more at the tables</span>` : '';
+      const stubT = `<div class="cp-stub"><span class="tag">AT THE TABLE</span><div class="cp-at${two ? ' two' : ''}">${shown.map(card).join('')}</div>${more}<span class="race">Race to ${r.race}</span><span class="small">${escapeHtml(r.name)} · <b>${done}</b>/${r.matches.length} done</span>${c.pot > 0 ? `<div class="cp-pay">${pays}</div>` : ''}</div>`;
+      stage.innerHTML = bigShell(r.name, main, stubT);
+      return;
+    }
     const stub = `<div class="cp-stub"><span class="tag">${c.state === 'fill' ? 'ROUND DONE' : 'NOW PLAYING'}</span><span class="rn">${escapeHtml(r.name)}</span><span class="race">Race to ${r.race}</span><span class="big">${done}<span style="color:var(--text-2);font-size:calc(44 * var(--u))"> / ${r.matches.length}</span></span><span class="race">matches done</span>${c.pot > 0 ? `<div class="cp-pay">${pays}</div>` : ''}</div>`;
     stage.innerHTML = bigShell(r.name, main, stub);
   }
