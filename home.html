@@ -93,6 +93,8 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .band { background: var(--felt); color: var(--ivory); }
 .band__in { max-width: 1040px; margin: 0 auto; padding: 22px max(20px, env(safe-area-inset-right, 0px)) 0 max(20px, env(safe-area-inset-left, 0px)); }
 .brand { display: flex; align-items: center; gap: 12px; }
+.brand__home { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.lockup { height: 34px; width: auto; display: block; }
 .brand__icon { width: 44px; height: 44px; border-radius: 10px; display: block; box-shadow: 0 0 0 1px var(--felt-line); }
 .brand__lockup { display: flex; flex-direction: column; gap: 3px; }
 .brand__name { font-family: 'Bebas Neue', var(--font); font-size: 28px; line-height: .9; letter-spacing: 2.5px; color: var(--app-gold); padding-top: 2px; }
@@ -219,8 +221,7 @@ section { scroll-margin-top: 72px; }
 <div class="band">
   <div class="band__in">
     <header class="brand">
-      <img class="brand__icon" src="/img/app-icon.webp" width="44" height="44" alt="">
-      <div class="brand__lockup"><span class="brand__name">KILLER POOL</span><span class="brand__sub">ELIMINATION</span></div>
+      <a class="brand__home" href="/home" aria-label="Killer Pool home"><img class="brand__icon" src="/img/app-icon.webp" width="44" height="44" alt=""><svg class="lockup" viewBox="0 0 166 44" aria-hidden="true"><text x="0" y="28.4" font-family="Bebas Neue, sans-serif" font-size="40" textLength="166" lengthAdjust="spacing" fill="#F2B84B">KILLER POOL</text><text x="0.6" y="43.4" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Barlow, sans-serif" font-size="12" font-weight="600" textLength="165.4" lengthAdjust="spacing" fill="#E4DCF3">ELIMINATION</text></svg></a>
       <button class="theme" type="button" aria-label="Switch light or dark" onclick="(function(){var r=document.documentElement,d=r.dataset.theme||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'),n=d==='light'?'dark':'light';r.dataset.theme=n;try{localStorage.setItem('kp_theme',n)}catch(e){}})()"><span class="moon"><svg class="bi" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
   <path d="M6 .278a.77.77 0 0 1 .08.858 7.2 7.2 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277q.792-.001 1.533-.16a.79.79 0 0 1 .81.316.73.73 0 0 1-.031.893A8.35 8.35 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.75.75 0 0 1 6 .278M4.858 1.311A7.27 7.27 0 0 0 1.025 7.71c0 4.02 3.279 7.276 7.319 7.276a7.32 7.32 0 0 0 5.205-2.162q-.506.063-1.029.063c-4.61 0-8.343-3.714-8.343-8.29 0-1.167.242-2.278.681-3.286"/>
 </svg></span><span class="sun"><svg class="bi" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
