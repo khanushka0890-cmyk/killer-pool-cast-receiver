@@ -463,6 +463,17 @@
 .cp-at__more{font:600 calc(18 * var(--u))/1.2 'Barlow',sans-serif;color:var(--text-2);}
 .cp-stub .small{font:600 calc(20 * var(--u))/1.2 'Barlow',sans-serif;color:var(--text-2);}
 .cp-stub .small b{color:var(--gold-text);font-weight:700;}
+/* The draw (owner's design, 2026-11-04): names turn over one by one */
+.cp-m.hid{background:transparent;border:calc(2 * var(--u)) dashed #3A2F5C;}
+.cp-m.hid .cp-n{color:#6E6890;}
+.cp-m.drawing{border-color:var(--gold);background:#3A2A12;}
+.cp-dr{width:100%;display:flex;flex-direction:column;align-items:center;gap:calc(10 * var(--u));}
+.cp-dr__slot{width:100%;box-sizing:border-box;height:calc(92 * var(--u));border-radius:calc(16 * var(--u));display:flex;align-items:center;justify-content:center;font:400 calc(52 * var(--u))/1 'Bebas Neue',sans-serif;letter-spacing:calc(1 * var(--u));padding:calc(4 * var(--u)) calc(10 * var(--u)) 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cp-dr__slot.on{background:#3A2A12;border:calc(2 * var(--u)) solid var(--gold);color:#fff;}
+.cp-dr__slot.new{color:var(--gold);animation:cpIn .45s ease-out;}
+.cp-dr__slot.off{border:calc(2 * var(--u)) dashed #5B4A8E;color:#6E6890;}
+.cp-dr__vs{font:400 calc(40 * var(--u))/1 'Bebas Neue',sans-serif;color:var(--gold-text);padding-top:calc(3 * var(--u));}
+@keyframes cpIn{from{transform:scale(.8);opacity:.2}to{transform:scale(1);opacity:1}}
 .cp-n{font:600 calc(22 * var(--u))/1 'Barlow',sans-serif;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .cp-n.r{text-align:right;}
 .cp-n.win{color:var(--gold);font-weight:700;}
@@ -1056,10 +1067,12 @@
     const atTable = live.filter(m => m.t);
     const row = (m) => {
       const started = m.sa > 0 || m.sb > 0;
-      const cls = m.w ? ' done' : m.t ? ' live' : started ? ' started' : '';
+      const hidden = !m.a && !m.b;
+      const cls = hidden ? ' hid' : m.drawing ? ' drawing' : m.w ? ' done' : m.t ? ' live' : started ? ' started' : '';
       const na = m.w ? (m.w === 'a' ? ' win' : ' lose') : '', nb = m.w ? (m.w === 'b' ? ' win' : ' lose') : '';
       const score = started || m.w ? `<span class="${m.w === 'a' ? 'w' : ''}">${m.sa}</span> – <span class="${m.w === 'b' ? 'w' : ''}">${m.sb}</span>` : '<span class="tbd">– · –</span>';
-      return `<div class="cp-m${cls}"><span class="cp-n${na}">${escapeHtml(m.a)}</span><span class="cp-s">${score}</span><span class="cp-n r${nb}">${escapeHtml(m.b)}</span></div>`;
+      const vsOnly = c.round && c.round.draw;
+      return `<div class="cp-m${cls}"><span class="cp-n${na}">${escapeHtml(m.a || '?')}</span><span class="cp-s">${vsOnly ? '<span class="tbd">VS</span>' : score}</span><span class="cp-n r${nb}">${escapeHtml(m.b || '?')}</span></div>`;
     };
     if (c.state === 'finished' && c.winner) {
       const main = bigHeadHtml(c.title, 'PRIZE POT', fmt(c.pot))
@@ -1076,6 +1089,33 @@
     const main = bigHeadHtml(c.title, 'PRIZE POT', c.pot > 0 ? fmt(c.pot) : '')
       + `<div class="cp-meta"><b>${escapeHtml(r.name.toUpperCase())}</b> · ${r.matches.length} ${r.matches.length === 1 ? 'MATCH' : 'MATCHES'}${c.venue ? ' · ' + escapeHtml(c.venue.toUpperCase()) : ''}</div>`
       + list + byes + BRANDLINE + `<span class="kb-toshoot"><b>${done}</b>/${r.matches.length} done</span></footer>`;
+    if (r.draw) {
+      const d = r.draw, M = d.matches, R = d.reveal;
+      const inByes = R > 2 * M || (R === 2 * M && d.byes > 0 && R < d.total);
+      const mi = Math.min(Math.floor(Math.max(R - 1, 0) / 2), M - 1);
+      const done = R >= d.total;
+      // left: the line-up so far, the match being drawn in gold
+      const rows = r.matches.map((m, i) => row({ ...m, drawing: !done && !inByes && i === mi && R > 0 }));
+      const per = r.matches.length > 8 ? Math.ceil(r.matches.length / 2) : r.matches.length;
+      const listD = `<div class="cp-list${r.matches.length > 8 ? ' two' : r.matches.length <= 4 ? ' big' : r.matches.length >= 7 ? ' tight' : ''}" style="grid-template-rows:repeat(${Math.max(per, 1)},auto)">${rows.join('')}</div>`;
+      const byesD = r.byes && r.byes.length ? `<div class="cp-byes"><span class="l">BYE</span>${r.byes.map(n => `<span class="p">${escapeHtml(n)}</span>`).join('')}</div>` : '';
+      const mainD = bigHeadHtml(c.title, 'PRIZE POT', c.pot > 0 ? fmt(c.pot) : '')
+        + `<div class="cp-meta"><b>${escapeHtml(r.name.toUpperCase())}</b> · THE DRAW${c.venue ? ' · ' + escapeHtml(c.venue.toUpperCase()) : ''}</div>`
+        + listD + byesD + BRANDLINE + `<span class="kb-toshoot"><b>${Math.min(Math.floor(R / 2), M)}</b>/${M} drawn</span></footer>`;
+      let stubD;
+      if (done) {
+        stubD = `<div class="cp-stub"><span class="tag">DRAW COMPLETE</span><span class="rn">${M} ${M === 1 ? 'MATCH' : 'MATCHES'}</span><span class="race">Race to ${r.race}</span>${d.byes ? `<span class="small">${d.byes} ${d.byes === 1 ? 'bye' : 'byes'}</span>` : ''}${c.pot > 0 ? `<div class="cp-pay">${pays}</div>` : ''}</div>`;
+      } else if (inByes) {
+        const last = R > 2 * M ? d.last : '';
+        stubD = `<div class="cp-stub"><span class="tag">THE DRAW</span><span class="rn">BYE</span><div class="cp-dr"><div class="cp-dr__slot ${last ? 'on new' : 'off'}">${escapeHtml(last || '?')}</div></div><span class="race">Straight through to the next round</span></div>`;
+      } else {
+        const m = r.matches[mi] || { a: '', b: '' };
+        const newA = R % 2 === 1, newB = R > 0 && R % 2 === 0;
+        stubD = `<div class="cp-stub"><span class="tag">THE DRAW</span><span class="rn">MATCH ${mi + 1}</span><div class="cp-dr"><div class="cp-dr__slot ${m.a ? 'on' : 'off'}${m.a && newA ? ' new' : ''}">${escapeHtml(m.a || '?')}</div><span class="cp-dr__vs">VS</span><div class="cp-dr__slot ${m.b ? 'on' : 'off'}${m.b && newB ? ' new' : ''}">${escapeHtml(m.b || '?')}</div></div><span class="small">Match <b>${mi + 1}</b> of ${M}</span></div>`;
+      }
+      stage.innerHTML = bigShell(r.name, mainD, stubD);
+      return;
+    }
     if (atTable.length && c.state === 'playing') {
       const shown = atTable.slice(0, 2), two = shown.length > 1;
       const card = (m) => two
