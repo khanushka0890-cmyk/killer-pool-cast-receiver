@@ -126,7 +126,7 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .toc a.on { background: var(--gold); border-color: var(--gold); color: #111; }
 .toc::-webkit-scrollbar { display: none; }
 .toc a { flex-shrink: 0; font-size: 14px; font-weight: 600; line-height: 20px; color: var(--text); text-decoration: none; background: var(--surface); border: 1px solid var(--border); border-radius: 999px; padding: 8px 14px; }
-.toc { margin: 0 calc(-1 * max(20px, env(safe-area-inset-right, 0px))) 0 calc(-1 * max(20px, env(safe-area-inset-left, 0px))); padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); top: env(safe-area-inset-top, 0px); }
+.toc { margin: 0 calc(-1 * max(20px, env(safe-area-inset-left, 0px))) 0; padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); top: env(safe-area-inset-top, 0px); }
 section { scroll-margin-top: 72px; }
 .sec-head { display: flex; flex-direction: column; gap: 8px; margin: 56px 0 28px; }
 .sec-head > * { margin: 0; }
@@ -171,7 +171,28 @@ section { scroll-margin-top: 72px; }
 #live { margin-top: 56px; }
 .cta { margin-top: 40px; }
 
+/* Step 1: the house rules as tiles, the full width of the page */
+.step--rules, .step--rules:nth-child(even) { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+.rules-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.rule { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 8px; }
+.rule > * { margin: 0; }
+.rule h4 { font-size: 16px; line-height: 1.3; font-weight: 750; }
+.rule p { font-size: 14px; line-height: 1.45; }
+/* Spotlights: late arrivals and follow along, phone and text side by side */
+.spot { display: grid; grid-template-columns: 250px minmax(0, 1fr); gap: 56px; align-items: center; margin-top: 72px; }
+.spot--flip { grid-template-columns: minmax(0, 1fr) 250px; }
+.spot--flip .spot__shot { order: 2; }
+.spot__shot img { display: block; width: 100%; height: auto; }
+.spot__text { display: flex; flex-direction: column; gap: 14px; max-width: 32em; }
+.spot__text > * { margin: 0; }
+.spot h2 { font-size: 32px; line-height: 1.15; font-weight: 800; letter-spacing: -0.02em; text-wrap: balance; }
+.spot p { font-size: 17px; line-height: 1.6; }
+.eyebrow-gold { font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--gold-ink); }
+.facts--page { color: var(--text-2); }
+.facts--page .bi { color: var(--gold-ink); }
+
 @media (max-width: 860px) {
+  .rules-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .hero { grid-template-columns: minmax(0, 1fr); gap: 28px; padding-top: 32px; }
   .hero__text { padding-bottom: 0; }
   .hero h1 { font-size: 36px; }
@@ -187,6 +208,11 @@ section { scroll-margin-top: 72px; }
   .steps { gap: 48px; }
   .feats { grid-template-columns: minmax(0, 1fr); }
   .sec-head { margin-top: 44px; }
+  .spot, .spot--flip { grid-template-columns: minmax(0, 1fr); gap: 22px; margin-top: 56px; }
+  .spot--flip .spot__shot { order: 0; }
+  .spot__shot { width: 62%; max-width: 250px; justify-self: center; }
+  .spot h2 { font-size: 26px; }
+  .rule { padding: 14px; }
 }
 </style>
 </head><body>
@@ -222,6 +248,8 @@ section { scroll-margin-top: 72px; }
   <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/>
 </svg>Any number of players</li><li><svg class="bi" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
   <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/>
+</svg>Late arrivals welcome</li><li><svg class="bi" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+  <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/>
 </svg>iPhone and iPad</li>
         </ul>
       </div>
@@ -235,7 +263,7 @@ section { scroll-margin-top: 72px; }
 
 <div class="page">
   <nav class="toc" aria-label="Jump to">
-    <a href="#night">A game night</a><a href="#tv">On the TV</a><a href="#does">What it does</a><a href="#rules">Rules</a><a href="#live">Live games</a>
+    <a href="#night">A game night</a><a href="#late">Late arrivals</a><a href="#follow">Follow along</a><a href="#tv">On the TV</a><a href="#does">What it does</a><a href="#rules">Rules</a><a href="#live">Live games</a>
   </nav>
 
   <section id="night">
@@ -244,13 +272,41 @@ section { scroll-margin-top: 72px; }
       <p>You run the game from one phone, from setting it up to the winner. These are the real screens.</p>
     </div>
     <ol class="steps">
-      <li class="step">
-        <div class="step__shot"><img src="/img/phone-setup.webp" width="543" height="1105" alt="New game: venue, game title, 8-ball rule and turn order" loading="lazy"></div>
+      <li class="step step--rules">
         <div class="step__text">
           <span class="step__num"><b>1</b>Before the break</span>
           <h3>Set your house rules</h3>
-          <p>Pick the venue, the number of lives and your 8-ball rule. Shuffle the order each round or keep it fixed. Add special cards, or play it straight.</p>
+          <p>Every pub plays killer a little differently. Pick yours once; the app plays by them all night.</p>
         </div>
+        <ul class="rules-grid">
+          <li class="rule"><span class="ic"><svg class="bi" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+  <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143q.09.083.176.171a3 3 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15"/>
+</svg></span><h4>Starting lives</h4><p>Everyone starts with the same number. Three is usual.</p></li>
+          <li class="rule"><span class="ic"><svg class="bi" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.2"/><circle cx="8" cy="8" r="3.6" fill="none" stroke="currentColor" stroke-width="1"/><text x="8" y="10.3" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="6" font-weight="800" fill="currentColor">8</text></svg></span><h4>8-ball rule</h4><p>Pot the 8 for an extra life, capped at your starting lives or no limit.</p></li>
+          <li class="rule"><span class="ic"><svg class="bi" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+  <path fill-rule="evenodd" d="M0 3.5A.5.5 0 0 1 .5 3H1c2.202 0 3.827 1.24 4.874 2.418.49.552.865 1.102 1.126 1.532.26-.43.636-.98 1.126-1.532C9.173 4.24 10.798 3 13 3v1c-1.798 0-3.173 1.01-4.126 2.082A9.6 9.6 0 0 0 7.556 8a9.6 9.6 0 0 0 1.317 1.918C9.828 10.99 11.204 12 13 12v1c-2.202 0-3.827-1.24-4.874-2.418A10.6 10.6 0 0 1 7 9.05c-.26.43-.636.98-1.126 1.532C4.827 11.76 3.202 13 1 13H.5a.5.5 0 0 1 0-1H1c1.798 0 3.173-1.01 4.126-2.082A9.6 9.6 0 0 0 6.444 8a9.6 9.6 0 0 0-1.317-1.918C4.172 5.01 2.796 4 1 4H.5a.5.5 0 0 1-.5-.5"/>
+  <path d="M13 5.466V1.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384l-2.36 1.966a.25.25 0 0 1-.41-.192m0 9v-3.932a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384l-2.36 1.966a.25.25 0 0 1-.41-.192"/>
+</svg></span><h4>Shuffle each round</h4><p>A new order every round, or keep it fixed.</p></li>
+          <li class="rule"><span class="ic"><svg class="bi" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+  <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41m-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9"/>
+  <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5 5 0 0 0 8 3M3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9z"/>
+</svg></span><h4>Nobody twice in a row</h4><p>When the order changes, nobody shoots two turns back to back.</p></li>
+          <li class="rule"><span class="ic"><svg class="bi" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+  <path d="M2.5 3.5a.5.5 0 0 1 0-1h11a.5.5 0 0 1 0 1zm2-2a.5.5 0 0 1 0-1h7a.5.5 0 0 1 0 1zM0 13a1.5 1.5 0 0 0 1.5 1.5h13A1.5 1.5 0 0 0 16 13V6a1.5 1.5 0 0 0-1.5-1.5h-13A1.5 1.5 0 0 0 0 6zm1.5.5A.5.5 0 0 1 1 13V6a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5z"/>
+</svg></span><h4>Special cards</h4><p>Ball in hand, swap lives, shield and more. Pick which are in play.</p></li>
+          <li class="rule"><span class="ic"><svg class="bi" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+  <path fill-rule="evenodd" d="M10.354 6.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7 8.793l2.646-2.647a.5.5 0 0 1 .708 0"/>
+  <path d="m10.273 2.513-.921-.944.715-.698.622.637.89-.011a2.89 2.89 0 0 1 2.924 2.924l-.01.89.636.622a2.89 2.89 0 0 1 0 4.134l-.637.622.011.89a2.89 2.89 0 0 1-2.924 2.924l-.89-.01-.622.636a2.89 2.89 0 0 1-4.134 0l-.622-.637-.89.011a2.89 2.89 0 0 1-2.924-2.924l.01-.89-.636-.622a2.89 2.89 0 0 1 0-4.134l.637-.622-.011-.89a2.89 2.89 0 0 1 2.924-2.924l.89.01.622-.636a2.89 2.89 0 0 1 4.134 0l-.715.698a1.89 1.89 0 0 0-2.704 0l-.92.944-1.32-.016a1.89 1.89 0 0 0-1.911 1.912l.016 1.318-.944.921a1.89 1.89 0 0 0 0 2.704l.944.92-.016 1.32a1.89 1.89 0 0 0 1.912 1.911l1.318-.016.921.944a1.89 1.89 0 0 0 2.704 0l.92-.944 1.32.016a1.89 1.89 0 0 0 1.911-1.912l-.016-1.318.944-.921a1.89 1.89 0 0 0 0-2.704l-.944-.92.016-1.32a1.89 1.89 0 0 0-1.912-1.911z"/>
+</svg></span><h4>Confirmation shot</h4><p>The last one standing must pot one more to win.</p></li>
+          <li class="rule"><span class="ic"><svg class="bi" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+  <path d="M1 3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1zm7 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
+  <path d="M0 5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1zm3 0a2 2 0 0 1-2 2v4a2 2 0 0 1 2 2h10a2 2 0 0 1 2-2V7a2 2 0 0 1-2-2z"/>
+</svg></span><h4>Entry fee</h4><p>Set what everyone pays in; the app keeps the pot.</p></li>
+          <li class="rule"><span class="ic"><svg class="bi" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+  <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10"/>
+  <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+</svg></span><h4>Venue and title</h4><p>Shown on the TV and the follow-along page.</p></li>
+        </ul>
       </li>
       <li class="step">
         <div class="step__shot"><img src="/img/phone-players.webp" width="543" height="1105" alt="Adding players, with their numbers and photos" loading="lazy"></div>
@@ -287,6 +343,36 @@ section { scroll-margin-top: 72px; }
         </div>
       </li>
     </ol>
+  </section>
+
+  <section id="late" class="spot spot--flip">
+    <div class="spot__shot"><img src="/img/phone-late.webp" width="543" height="1105" alt="Manage roster during a game: add a late arrival" loading="lazy"></div>
+    <div class="spot__text">
+      <span class="eyebrow-gold">Late arrivals</span>
+      <h2>Turned up late? They're still in.</h2>
+      <p>Add players after the game has started, even halfway through a round. Open the players list, tap <b>Manage roster</b> and type their name. They join the turn order with full lives, and the TV and the follow-along page update straight away.</p>
+      <p>No restarting the game, no one waiting for the next one.</p>
+    </div>
+  </section>
+
+  <section id="follow" class="spot">
+    <div class="spot__shot"><img src="/img/phone-follow.webp" width="543" height="1105" alt="The follow-along page: Priya up now, the pot, and everyone's lives" loading="lazy"></div>
+    <div class="spot__text">
+      <span class="eyebrow-gold">Follow along</span>
+      <h2>Watch the game from anywhere in the pub</h2>
+      <p>Outside, at the bar, or knocked out early? Scan the QR code on the pub TV or the organiser's phone with your camera. A live page shows who's up, everyone's lives, who's out, and the winner.</p>
+      <ul class="facts facts--page"><li><svg class="bi" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+  <path d="M0 .5A.5.5 0 0 1 .5 0h3a.5.5 0 0 1 0 1H1v2.5a.5.5 0 0 1-1 0zm12 0a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0V1h-2.5a.5.5 0 0 1-.5-.5M.5 12a.5.5 0 0 1 .5.5V15h2.5a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5v-3a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1 0-1H15v-2.5a.5.5 0 0 1 .5-.5M4 4h1v1H4z"/>
+  <path d="M7 2H2v5h5zM3 3h3v3H3zm2 8H4v1h1z"/>
+  <path d="M7 9H2v5h5zm-4 1h3v3H3zm8-6h1v1h-1z"/>
+  <path d="M9 2h5v5H9zm1 1v3h3V3zM8 8v2h1v1H8v1h2v-2h1v2h1v-1h2v-1h-3V8zm2 2H9V9h1zm4 2h-1v1h-2v1h3zm-4 2v-1H8v1z"/>
+  <path d="M12 9h2V8h-2z"/>
+</svg>Scan with the camera</li><li><svg class="bi" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+  <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/>
+</svg>No app, no sign-up</li><li><svg class="bi" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+  <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/>
+</svg>Updates live</li></ul>
+    </div>
   </section>
 
   <section id="tv">
