@@ -1,6 +1,8 @@
 <!doctype html>
-<html lang="en-GB"><head><meta charset="utf-8"><script>try{var t=localStorage.getItem('kp_theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+<html lang="en-GB"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preload" href="/fonts/big-shoulders-display-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
 <title>Killer Pool Rules: How to Play Killer (the Pub Game)</title>
 <meta name="description" content="Killer pool rules in plain English: setting the order with playing cards, lives, fouls, re-racking, extra lives, the confirmation shot and who wins the pot. Free printable score sheet.">
 <link rel="canonical" href="https://killer.pocketpoolapp.com/rules">
@@ -42,10 +44,6 @@ header { display: flex; align-items: center; gap: 12px; }
 .logo { width: 32px; height: 32px; border-radius: 50%; background: #0a0a0a; border: 1px solid #333; display: flex; align-items: center; justify-content: center; }
 .logo span { width: 18px; height: 18px; border-radius: 50%; background: #fff; color: #0a0a0a; font: 700 10px/18px var(--font); text-align: center; }
 .wordmark { font-family: 'Bebas Neue', var(--font); font-size: 26px; letter-spacing: 2.5px; color: var(--gold-ink); line-height: 1; padding-top: 3px; }
-.theme { margin-left: auto; width: 40px; height: 40px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface); color: var(--text); font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; }
-.theme .sun { display: none; }
-:root[data-theme="light"] .theme .sun { display: block; } :root[data-theme="light"] .theme .moon { display: none; }
-@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) .theme .sun { display: block; } :root:not([data-theme="dark"]) .theme .moon { display: none; } }
 
 .eyebrow { margin: 32px 0 8px; font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--text-3); }
 h1 { margin: 0; font-size: 34px; line-height: 1.15; font-weight: 800; letter-spacing: -0.02em; text-wrap: balance; }
@@ -185,7 +183,6 @@ footer a { color: var(--text-2); }
 .brand__home { display: flex; align-items: center; gap: 12px; text-decoration: none; }
 .brand__icon { width: 44px; height: 44px; border-radius: 10px; display: block; box-shadow: 0 0 0 1px var(--felt-line); }
 .lockup { height: 34px; width: auto; display: block; }
-.band .theme { background: var(--felt-2); border-color: var(--felt-line); color: var(--ivory); }
 .band__title { display: flex; flex-direction: column; gap: 10px; margin-top: 30px; }
 .band__title > * { margin: 0; }
 .band__eyebrow { font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--app-gold); }
@@ -200,27 +197,132 @@ footer a { color: var(--text-2); }
 .band__back { align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; height: 38px; padding: 0 16px 0 12px; border-radius: 999px; background: var(--felt-2); border: 1px solid var(--felt-line); color: var(--ivory); font: 600 15px/1 var(--font); text-decoration: none; margin-bottom: 6px; }
 .band__back .bi { width: 16px; height: 16px; }
 .band__back:focus-visible { outline: 2px solid var(--app-gold); outline-offset: 2px; }
+/* Homepage style (owner 2026-11-05): black top bar and hero, uppercase Big
+   Shoulders Display headings, Inter text, sections that alternate black and
+   near black, Killer Pool gold. The text and drawings are unchanged. */
+@font-face { font-family: 'Big Shoulders Display'; src: url(/fonts/big-shoulders-display-latin.woff2) format('woff2'); font-weight: 100 900; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Inter'; src: url(/fonts/inter-latin.woff2) format('woff2'); font-weight: 100 900; font-style: normal; font-display: swap; }
+:root {
+  --night: #000000; --night-line: #1A1D24; --night-text: #F4F5F7; --night-muted: #A3AAB5; --gold-hi: #FFD27A;
+  --bg: #000000; --bg-alt: #07080C; --surface: #10131A; --surface-2: #181C25; --border: #1E232D;
+  --text: #F4F5F7; --text-2: #C7CDD6; --text-3: #A3AAB5; --gold: #F2B84B; --gold-ink: #F2B84B;
+  --display: 'Big Shoulders Display', 'Arial Narrow', Impact, sans-serif;
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+@media (prefers-color-scheme: light) { :root { --bg: #F6F5F1; --bg-alt: #FFFFFF; --surface: #FFFFFF; --surface-2: #F0EEE8; --border: #E2DED4; --text: #15181D; --text-2: #3C444F; --text-3: #5F6874; --gold-ink: #8A6500; color-scheme: light; } }
+html { scroll-padding-top: 140px; }
+body { font: 400 16px/1.6 var(--font); }
+.bi { width: 1em; height: 1em; }
+
+/* Top bar: same as the homepage, the jump links always on a second row */
+.top { display: block; position: sticky; top: env(safe-area-inset-top, 0px); z-index: 30; background: var(--night); border-bottom: 1px solid var(--night-line); }
+.in { max-width: 1240px; margin: 0 auto; padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); }
+.top .in { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding-top: 12px; }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
+.brand__icon { width: 48px; height: 48px; border-radius: 12px; display: block; box-shadow: 0 0 0 1px #2C2440; }
+.lockup { height: 34px; width: auto; display: block; }
+.top__right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; margin-left: auto; }
+.toplink { display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 15px; border-radius: 999px; border: 1px solid var(--night-line); background: #0C0E13; color: var(--night-text); font: 600 14px/1 var(--font); text-decoration: none; white-space: nowrap; }
+.toplink:hover { border-color: var(--gold); }
+.toplink .bi { width: 16px; height: 16px; color: var(--gold); }
+.toplink.on { background: var(--gold); border-color: var(--gold); color: #120C1E; }
+.toplink.on .bi { color: #120C1E; }
+.toplink .short { display: none; }
+.toplink .dot { width: 9px; height: 9px; border-radius: 50%; background: #E5484D; }
+.store { display: inline-block; line-height: 0; border-radius: 9px; }
+.store img { display: block; height: 50px; width: auto; }
+.store--top img { height: 40px; }
+.top .toc { position: static; order: 3; width: 100%; margin: 0; padding: 0 0 12px; background: none; border: 0; }
+.top .toc a { background: #0C0E13; border: 1px solid var(--night-line); color: var(--night-muted); font: 600 13.5px/1 var(--font); padding: 9px 12px; }
+.top .toc a:hover { color: var(--night-text); }
+.top .toc a.on { background: var(--gold); border-color: var(--gold); color: #120C1E; }
+.toplink:focus-visible, .store:focus-visible, .brand:focus-visible, .toc a:focus-visible, .back:focus-visible { outline: 2px solid var(--gold-hi); outline-offset: 2px; }
+
+/* Hero */
+.hero { background: var(--night); color: var(--night-text); }
+.hero__in { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; padding-top: 56px; padding-bottom: 64px; }
+.hero .eyebrow { margin: 0; font: 600 13px/1.2 var(--font); letter-spacing: .18em; text-transform: uppercase; color: var(--night-muted); }
+.hero h1 { font-family: var(--display); font-weight: 900; text-transform: uppercase; font-size: clamp(48px, 7vw, 80px); line-height: .9; letter-spacing: -0.005em; color: #FFFFFF; max-width: 14em; }
+.hero .sub { margin: 0; font-size: 18px; color: var(--night-muted); max-width: 32em; }
+.back { display: inline-flex; align-items: center; gap: 8px; height: 38px; padding: 0 16px 0 12px; border-radius: 999px; background: #0C0E13; border: 1px solid var(--night-line); color: var(--night-text); font: 600 15px/1 var(--font); text-decoration: none; }
+.back .bi { width: 16px; height: 16px; }
+
+/* Sections: full-width bands alternating black and near black */
+.wrap { max-width: 1240px; padding: 0 20px; }
+.tiles { padding-top: 48px; margin-bottom: 0; padding-bottom: 56px; }
+section { margin: 0; padding: 64px 0; scroll-margin-top: 140px; background: var(--bg); box-shadow: 0 0 0 100vmax var(--bg); clip-path: inset(0 -100vmax); }
+section:nth-of-type(odd) { background: var(--bg-alt); box-shadow: 0 0 0 100vmax var(--bg-alt); }
+h2 { margin: 0 0 22px; font-family: var(--display); font-weight: 900; text-transform: uppercase; font-size: clamp(36px, 5vw, 52px); line-height: .95; letter-spacing: 0; gap: 14px; }
+h2 .pill { font-family: var(--font); text-transform: none; }
+.wrap section > ul.checks { max-width: none; }
+.pill, .num { background: var(--gold); color: #120C1E; }
+.tile.win, .opt.hi { background: var(--gold); border-color: var(--gold); color: #120C1E; }
+.intro { margin: -8px 0 20px; font-size: 17px; }
+.box { border-radius: 18px; }
+.cta { margin: 0; border-radius: 0; border: 0; padding: 8px 0 56px; background: var(--bg); box-shadow: 0 0 0 100vmax var(--bg); clip-path: inset(0 -100vmax); }
+.cta p { font-size: 17px; max-width: 40em; }
+footer { margin: 0; padding: 24px 0 calc(28px + env(safe-area-inset-bottom, 0px)); background: var(--night); color: var(--night-muted); box-shadow: 0 0 0 100vmax var(--night); clip-path: inset(0 -100vmax); border-top: 1px solid var(--night-line); }
+footer a { color: var(--night-text); }
+
+@media (max-width: 600px) {
+  .top .in { gap: 8px; padding-top: 10px; }
+  .brand { gap: 8px; }
+  .lockup { height: 25px; }
+  .brand__icon { width: 40px; height: 40px; border-radius: 10px; }
+  .top__right { gap: 6px; }
+  .store--top { display: none; }
+  .toplink { height: 36px; padding: 0 10px; font-size: 13.5px; gap: 6px; }
+  .toplink .long { display: none; } .toplink .short { display: inline; }
+  .top .toc { padding-bottom: 10px; }
+  .hero__in { padding-top: 40px; padding-bottom: 48px; }
+  section { padding: 52px 0; }
+  .cta { padding: 32px 0; }
+  .store img { height: 46px; }
+}
+@media (max-width: 380px) { .toplink .bi { display: none; } .lockup { height: 22px; } .brand__icon { width: 36px; height: 36px; } }
+@media print {
+  .top, .hero, footer, .cta { display: none !important; }
+  section { box-shadow: none; clip-path: none; background: #fff; padding: 0; border: 0; }
+  h2 { font-family: var(--font); text-transform: none; font-size: 22px; }
+}
+/* Owner 2026-11-05: more contrast. "Rules" white, "How to play killer"
+   gold; the drawings sit in lighter boxes with a border; What you need
+   side by side on wide screens. */
+.vh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.hero h1 .em { display: block; color: var(--gold); }
+:root { --surface: #131721; --surface-2: #1C2130; --border: #2A3142; --art: #EFEAE0; --art-line: #EFEAE0; }
+@media (prefers-color-scheme: light) { :root { --surface: #FFFFFF; --surface-2: #F0EEE8; --border: #DDD8CC; --art: #F3F0E8; --art-line: #D3CDBE; } }
+.art { background: var(--art); border: 1px solid var(--art-line); }
+.art.sm { background: var(--art); }
+.tile.win .art { background: #120C1E; border-color: #120C1E; }
+@media (min-width: 900px) {
+  #need .stack { grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: stretch; }
+}
 </style>
 </head><body>
-<div class="band"><div class="band__in">
-  <header class="brand">
-    <a class="brand__home" href="/home" aria-label="Killer Pool home"><img class="brand__icon" src="/img/app-icon.webp" width="44" height="44" alt=""><svg class="lockup" viewBox="0 0 166 44" aria-hidden="true"><text x="0" y="28.4" font-family="Bebas Neue, sans-serif" font-size="40" textLength="166" lengthAdjust="spacing" fill="#F2B84B">KILLER POOL</text><text x="0.6" y="43.4" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Barlow, sans-serif" font-size="12" font-weight="600" textLength="165.4" lengthAdjust="spacing" fill="#E4DCF3">ELIMINATION</text></svg></a>
-    <button class="theme" type="button" aria-label="Switch light or dark" onclick="(function(){var r=document.documentElement,d=r.dataset.theme||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'),n=d==='light'?'dark':'light';r.dataset.theme=n;try{localStorage.setItem('kp_theme',n)}catch(e){}})()"><span class="moon"><svg class="bi" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M6 .278a.77.77 0 0 1 .08.858 7.2 7.2 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277q.792-.001 1.533-.16a.79.79 0 0 1 .81.316.73.73 0 0 1-.031.893A8.35 8.35 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.75.75 0 0 1 6 .278M4.858 1.311A7.27 7.27 0 0 0 1.025 7.71c0 4.02 3.279 7.276 7.319 7.276a7.32 7.32 0 0 0 5.205-2.162q-.506.063-1.029.063c-4.61 0-8.343-3.714-8.343-8.29 0-1.167.242-2.278.681-3.286"/></svg></span><span class="sun"><svg class="bi" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6m0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8M8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0m0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13m8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5M3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8m10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0m-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0m9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707M4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708"/></svg></span></button>
-  </header>
-  <div class="band__title">
-    <a class="band__back" href="/home"><svg class="bi" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/></svg>Home</a>
-    <span class="band__eyebrow">Rules</span>
-    <h1>Killer pool rules: how to play killer</h1>
-    <p class="sub">The pub game for any number of players. Free printable score sheet below.</p>
+<header class="top">
+  <div class="in">
+    <a class="brand" href="/home" aria-label="Killer Pool home"><img class="brand__icon" src="/img/logo-ball.webp" width="48" height="48" alt=""><svg class="lockup" viewBox="0 0 166 44" aria-hidden="true"><text x="0" y="28.4" font-family="Bebas Neue, sans-serif" font-size="40" textLength="166" lengthAdjust="spacing" fill="#F2B84B">KILLER POOL</text><text x="0.6" y="43.4" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Barlow, sans-serif" font-size="12" font-weight="600" textLength="165.4" lengthAdjust="spacing" fill="#E4DCF3">ELIMINATION</text></svg></a>
+    <nav class="toc" aria-label="Jump to">
+      <a href="#play">How to play</a><a href="#order">Order</a><a href="#rerack">Re-racking &amp; fouls</a><a href="#extra">Extra lives</a><a href="#lasttwo">Last two</a><a href="#confirm">Confirmation shot</a><a href="#faq">Questions</a><a href="#sheet">Score sheet</a>
+    </nav>
+    <div class="top__right">
+      <a class="toplink on" href="/rules" aria-current="page"><svg class="bi" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.811zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783"/></svg><span>Rules</span></a>
+      <a class="toplink" href="/home#live"><span class="dot" aria-hidden="true"></span><span class="long">Follow a live game</span><span class="short">Live games</span></a>
+      <a class="store store--top" href="https://apps.apple.com/app/apple-store/id6802345932?pt=128809266&amp;ct=killer-rules&amp;mt=8"><img src="/img/app-store-badge.svg" width="120" height="40" alt="Download on the App Store"></a>
+    </div>
   </div>
-</div></div>
+</header>
+<div class="hero"><div class="in hero__in">
+    <a class="back" href="/home"><svg class="bi" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/></svg>Home</a>
+    <span class="eyebrow">Killer pool</span>
+    <h1><span class="vh">Killer pool </span>Rules<span class="vh">:</span> <span class="em">How to play killer</span></h1>
+    <p class="sub">The pub game for any number of players. Free printable score sheet below.</p>
+  </div></div>
 <div class="wrap">
 
 
 
-  <nav class="toc" aria-label="Jump to">
-    <a href="#play">How to play</a><a href="#order">Order</a><a href="#rerack">Re-racking &amp; fouls</a><a href="#extra">Extra lives</a><a href="#lasttwo">Last two</a><a href="#confirm">Confirmation shot</a><a href="#faq">Questions</a><a href="#sheet">Score sheet</a>
-  </nav>
 
   <p style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">In short: everyone starts with the same number of lives, usually three. Players take one shot each in a fixed order. Pot a ball and you keep your lives; miss and you lose one. Lose all your lives and you're out. The last player left wins the pot.</p>
   <div class="tiles">
@@ -231,7 +333,7 @@ footer a { color: var(--text-2); }
     <div class="box tile win"><span class="art"><svg class="ill" viewBox="11.1 2.5 41.9 35.0" role="img" aria-label="Last one wins"><path d="M20 4h24v8a12 12 0 0 1-24 0z" fill="#FFD700"/><path d="M20 7h-7a7 7 0 0 0 9 9M44 7h7a7 7 0 0 1-9 9" stroke="#FFD700" stroke-width="3" fill="none"/><rect x="29" y="24" width="6" height="7" fill="#FFD700"/><rect x="22" y="31" width="20" height="5" rx="1.5" fill="#FFD700"/></svg></span><span class="t">Last one wins</span><span class="d">They take the pot</span></div>
   </div>
 
-  <section>
+  <section id="need">
     <h2>What you need</h2>
     <div class="stack">
       <div class="box row"><span class="art"><svg class="ill" viewBox="0.5 4.5 55.0 33.0" role="img" aria-label="Pool table"><rect x="2" y="6" width="52" height="30" rx="5" fill="#5d3a1a"/><rect x="7" y="11" width="42" height="20" rx="2" fill="#1f6f4a"/><circle cx="7" cy="11" r="2.6" fill="#0a0a0a"/><circle cx="28" cy="10" r="2.6" fill="#0a0a0a"/><circle cx="49" cy="11" r="2.6" fill="#0a0a0a"/><circle cx="7" cy="31" r="2.6" fill="#0a0a0a"/><circle cx="28" cy="32" r="2.6" fill="#0a0a0a"/><circle cx="49" cy="31" r="2.6" fill="#0a0a0a"/><circle cx="20" cy="21" r="3.5" fill="#f4f4f4" stroke="#9aa3ad" stroke-width="1"/><circle cx="36" cy="19" r="3.5" fill="#e53935"/><circle cx="39" cy="24" r="3.5" fill="#fdd835"/></svg></span><p>Any pool table (English 8-ball or American, it doesn't matter) and a full rack of balls.</p></div>
@@ -264,7 +366,7 @@ footer a { color: var(--text-2); }
 
   <div class="box cta">
     <p>Keep score on your phone instead of the chalkboard: lives, turns and who's out, plus the game on the pub TV.</p>
-    <a class="btn" href="https://apps.apple.com/app/apple-store/id6802345932?pt=128809266&amp;ct=killer-rules&amp;mt=8">Get Killer Pool</a>
+    <a class="store" href="https://apps.apple.com/app/apple-store/id6802345932?pt=128809266&amp;ct=killer-rules&amp;mt=8"><img src="/img/app-store-badge.svg" width="150" height="50" alt="Download on the App Store"></a>
   </div>
 
   <section id="order">
@@ -369,7 +471,7 @@ footer a { color: var(--text-2); }
 
   <div class="box cta">
     <p>Prefer your phone? Killer Pool tracks lives, turns and eliminations, lets friends follow live by QR code, and shows the game on a Chromecast TV. Free.</p>
-    <a class="btn" href="https://apps.apple.com/app/apple-store/id6802345932?pt=128809266&amp;ct=killer-rules&amp;mt=8">Get Killer Pool</a>
+    <a class="store" href="https://apps.apple.com/app/apple-store/id6802345932?pt=128809266&amp;ct=killer-rules&amp;mt=8"><img src="/img/app-store-badge.svg" width="150" height="50" alt="Download on the App Store"></a>
   </div>
 
   <footer>
@@ -391,7 +493,7 @@ footer a { color: var(--text-2); }
   }
   var cur = -1;
   function pick() {
-    var y = 90, best = -1;
+    var y = (document.querySelector('.top') || { offsetHeight: 90 }).offsetHeight + 24, best = -1;
     secs.forEach(function (s, i) { if (s && s.getBoundingClientRect().top <= y) best = i; });
     if (best !== cur) { cur = best; mark(best); }
   }
