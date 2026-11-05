@@ -320,6 +320,10 @@ footer a { color: var(--night-text); }
 .sitefoot a:focus-visible { outline: 2px solid #FFD27A; outline-offset: 2px; border-radius: 4px; }
 @media (max-width: 760px) { .sitefoot__in { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 20px; } .sitefoot__brand { grid-column: 1 / -1; } }
 @media print { .sitefoot { display: none; } }
+/* Owner 2026-11-05 (evening): Rules goes back to the narrower width, to match
+   Not Shot Clock's Fast pool rules and the Support and Privacy pages (content
+   1000px wide). The footer stays full width like every other page. */
+.in, .wrap { max-width: 1040px; }
 </style>
 </head><body>
 <header class="top">
