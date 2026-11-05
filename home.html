@@ -219,6 +219,41 @@ footer a { color: var(--night-text); }
 }
 @media (max-width: 380px) { .toplink .bi { display: none; } .lockup { height: 22px; } .brand__icon { width: 36px; height: 36px; } }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+/* Not Shot Clock banner (owner 2026-11-05): a black card in both themes,
+   in that app's cyan, linking to its site. */
+.nsc-card { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 36px; align-items: center; background: #000; border: 1px solid #22D3EE; border-radius: 24px; padding: 28px 40px 28px 28px; text-decoration: none; color: var(--night-text); }
+.nsc-card__shot img { display: block; width: 100%; height: auto; }
+.nsc-card__text { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; }
+.nsc-card__e { font: 600 13px/1.2 var(--font); letter-spacing: .18em; text-transform: uppercase; color: var(--night-muted); }
+.nsc-card__h { font: 900 clamp(34px, 4.6vw, 50px)/.95 var(--display); text-transform: uppercase; color: #FFFFFF; }
+.nsc-card__h span { color: #22D3EE; }
+.nsc-card__s { font-size: 17px; line-height: 1.6; color: var(--night-muted); max-width: 30em; }
+.nsc-card__go { display: inline-flex; align-items: center; gap: 10px; height: 52px; padding: 0 24px; border-radius: 999px; background: #22D3EE; color: #04161B; font: 800 20px/1 var(--display); letter-spacing: .02em; text-transform: uppercase; margin-top: 4px; }
+.nsc-card__go .bi { width: 16px; height: 16px; }
+.nsc-card:hover .nsc-card__go { background: #67E8F9; }
+.nsc-card:focus-visible { outline: 2px solid #67E8F9; outline-offset: 3px; }
+@media (max-width: 700px) {
+  .nsc-card { grid-template-columns: minmax(0, 1fr); gap: 8px; padding: 12px 22px 26px; justify-items: center; }
+  .nsc-card__shot { width: 64%; max-width: 230px; }
+}
+/* Site map footer, the same on every page (owner 2026-11-05): black in both
+   themes, one column per app. Self-contained colours so it drops into any page. */
+.sitefoot { display: block; margin: 0; padding: 0; box-shadow: none; clip-path: none; font-size: 15px; background: #000; color: #A3AAB5; border-top: 1px solid #1A1D24; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+.sitefoot__in { max-width: 1240px; margin: 0 auto; padding: 48px max(20px, env(safe-area-inset-right, 0px)) calc(48px + env(safe-area-inset-bottom, 0px)) max(20px, env(safe-area-inset-left, 0px)); display: grid; grid-template-columns: minmax(0, 1.4fr) repeat(2, minmax(0, 1fr)); gap: 32px; }
+.sitefoot__brand { display: flex; flex-direction: column; gap: 10px; }
+.sitefoot__home { font: 900 30px/1 'Big Shoulders Display', 'Arial Narrow', sans-serif; text-transform: uppercase; color: #FFFFFF; text-decoration: none; }
+.sitefoot__brand p { margin: 0; font-size: 15px; line-height: 1.5; color: #A3AAB5; }
+.sitefoot__col { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+.sitefoot__col h2 { margin: 0 0 4px; font: 700 13px/1.2 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; letter-spacing: .14em; text-transform: uppercase; color: #F2B84B; display: block; }
+.sitefoot__col:nth-of-type(2) h2 { color: #22D3EE; }
+.sitefoot__links { display: flex; gap: 18px; margin-top: 4px; }
+.sitefoot__links a, .sitefoot__col a { font-size: 15px; line-height: 1.4; color: #E4E7EC; text-decoration: none; }
+.sitefoot__links a:hover { color: #FFFFFF; text-decoration: underline; text-underline-offset: 3px; }
+.sitefoot__col a { font-size: 15px; line-height: 1.4; color: #E4E7EC; text-decoration: none; }
+.sitefoot__col a:hover { color: #FFFFFF; text-decoration: underline; text-underline-offset: 3px; }
+.sitefoot a:focus-visible { outline: 2px solid #FFD27A; outline-offset: 2px; border-radius: 4px; }
+@media (max-width: 760px) { .sitefoot__in { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 20px; } .sitefoot__brand { grid-column: 1 / -1; } }
+@media print { .sitefoot { display: none; } }
 </style>
 </head><body>
 <header class="top">
@@ -437,6 +472,20 @@ footer a { color: var(--night-text); }
   </div>
 </section>
 
+<section class="sec" id="nsc">
+  <div class="in">
+    <a class="nsc-card" href="https://shotclock.pocketpoolapp.com/">
+      <span class="nsc-card__shot"><img src="/img/nsc-dial.webp" width="460" height="660" alt="Not Shot Clock running: 8 seconds left on the green dial" loading="lazy"></span>
+      <span class="nsc-card__text">
+        <span class="nsc-card__e">Also from Pocket Pool</span>
+        <span class="nsc-card__h">Not Shot Clock: <span>the best timer for fast pool.</span></span>
+        <span class="nsc-card__s">Tap to start, glance at the ring, hear the buzzer. On your phone, or big on the pub TV.</span>
+        <span class="nsc-card__go">Explore Not Shot Clock <svg class="bi" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/></svg></span>
+      </span>
+    </a>
+  </div>
+</section>
+
 <section class="final">
   <div class="in">
     <h2>Run your next killer night <span class="em">on it.</span></h2>
@@ -444,13 +493,6 @@ footer a { color: var(--night-text); }
     <a class="badge" href="https://apps.apple.com/app/apple-store/id6802345932?pt=128809266&amp;ct=killer-home&amp;mt=8"><img src="/img/app-store-badge.svg" width="162" height="54" alt="Download on the App Store"></a>
   </div>
 </section>
-
-<footer>
-  <div class="in">
-    <span>Killer Pool &middot; Pool Elimination Game</span>
-    <span><a href="/rules">Rules</a> &middot; <a href="/support">Support</a> &middot; <a href="/privacy">Privacy</a></span>
-  </div>
-</footer>
 
 <script>
 // Sticky jump bar: light up the chip for the section on screen and keep it in view.
@@ -540,5 +582,29 @@ footer a { color: var(--night-text); }
     list.innerHTML = "<div class=\"empty\">Couldn't load live games. Check your connection and refresh.</div>";
   });
 </script>
+<footer class="sitefoot">
+  <div class="sitefoot__in">
+    <div class="sitefoot__brand">
+      <a class="sitefoot__home" href="https://pocketpoolapp.com/">Pocket Pool</a>
+      <p>Small iPhone apps for pool nights.</p>
+      <span class="sitefoot__links"><a href="https://pocketpoolapp.com/">All apps</a><a href="mailto:killerpoolapp@gmail.com">Contact</a></span>
+    </div>
+    <nav class="sitefoot__col" aria-label="Killer Pool">
+      <h2>Killer Pool</h2>
+      <a href="/home">Home</a>
+      <a href="/rules">Rules</a>
+      <a href="/home#live">Follow a live game</a>
+      <a href="/rules#sheet">Score sheet</a>
+      <a href="/support">Support</a>
+      <a href="/privacy">Privacy</a>
+      <a href="https://apps.apple.com/app/apple-store/id6802345932?pt=128809266&amp;ct=killer-footer&amp;mt=8">App Store</a>
+    </nav>
+    <nav class="sitefoot__col" aria-label="Not Shot Clock">
+      <h2>Not Shot Clock</h2>
+      <a href="https://shotclock.pocketpoolapp.com/">Home</a>
+      <a href="https://apps.apple.com/app/apple-store/id6815306099?pt=128809266&amp;ct=killer-footer&amp;mt=8">App Store</a>
+    </nav>
+  </div>
+</footer>
 <!-- Cloudflare Web Analytics: no cookies, no personal data (see privacy.html). Not on index.html: TV screens aren't visitors. --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "66d4319e4a10494c87d75a92358eb5a8"}'></script><!-- End Cloudflare Web Analytics -->
 </body></html>
