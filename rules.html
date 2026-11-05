@@ -35,7 +35,7 @@ html { -webkit-text-size-adjust: 100%; }
 body { margin: 0; background: var(--bg); color: var(--text); font: 400 16px/1.55 var(--font); -webkit-font-smoothing: antialiased; }
 a { color: var(--gold-ink); text-underline-offset: 2px; }
 p { margin: 0; }
-.wrap { max-width: 760px; margin: 0 auto; padding: 8px 20px 80px; }
+.wrap { max-width: 1040px; margin: 0 auto; padding: 8px 20px 80px; }
 .bi { width: 1em; height: 1em; flex-shrink: 0; display: inline-block; vertical-align: -0.125em; }
 
 header { display: flex; align-items: center; gap: 12px; }
@@ -180,7 +180,7 @@ footer a { color: var(--text-2); }
    app icon and the KILLER POOL / ELIMINATION logo, both lines one width. */
 :root { --felt:#2E1B52; --felt-2:#3B2868; --felt-line:#5B4A8E; --ivory:#F7EEDC; --felt-text:#E4DCF3; --app-gold:#F2B84B; }
 .band { background: var(--felt); color: var(--ivory); }
-.band__in { max-width: 760px; margin: 0 auto; padding: 22px max(20px, env(safe-area-inset-right, 0px)) 34px max(20px, env(safe-area-inset-left, 0px)); }
+.band__in { max-width: 1040px; margin: 0 auto; padding: 22px max(20px, env(safe-area-inset-right, 0px)) 34px max(20px, env(safe-area-inset-left, 0px)); }
 .brand { display: flex; align-items: center; gap: 12px; }
 .brand__home { display: flex; align-items: center; gap: 12px; text-decoration: none; }
 .brand__icon { width: 44px; height: 44px; border-radius: 10px; display: block; box-shadow: 0 0 0 1px var(--felt-line); }
@@ -193,6 +193,13 @@ footer a { color: var(--text-2); }
 .band .sub, .band .updated { color: var(--felt-text); }
 .band .updated b { color: #FFFFFF; }
 .band .field { background: var(--felt-2); color: #FFFFFF; }
+
+/* Same width as the homepage (owner 2026-11-05: the rules page looked
+   narrower), with text kept to a readable line length, and a way home. */
+.wrap section > p, .wrap section > ul, .wrap section > ol, .wrap > p, .band__title .sub, .band__title .updated { max-width: 46em; }
+.band__back { align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; height: 38px; padding: 0 16px 0 12px; border-radius: 999px; background: var(--felt-2); border: 1px solid var(--felt-line); color: var(--ivory); font: 600 15px/1 var(--font); text-decoration: none; margin-bottom: 6px; }
+.band__back .bi { width: 16px; height: 16px; }
+.band__back:focus-visible { outline: 2px solid var(--app-gold); outline-offset: 2px; }
 </style>
 </head><body>
 <div class="band"><div class="band__in">
@@ -201,6 +208,7 @@ footer a { color: var(--text-2); }
     <button class="theme" type="button" aria-label="Switch light or dark" onclick="(function(){var r=document.documentElement,d=r.dataset.theme||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'),n=d==='light'?'dark':'light';r.dataset.theme=n;try{localStorage.setItem('kp_theme',n)}catch(e){}})()"><span class="moon"><svg class="bi" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M6 .278a.77.77 0 0 1 .08.858 7.2 7.2 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277q.792-.001 1.533-.16a.79.79 0 0 1 .81.316.73.73 0 0 1-.031.893A8.35 8.35 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.75.75 0 0 1 6 .278M4.858 1.311A7.27 7.27 0 0 0 1.025 7.71c0 4.02 3.279 7.276 7.319 7.276a7.32 7.32 0 0 0 5.205-2.162q-.506.063-1.029.063c-4.61 0-8.343-3.714-8.343-8.29 0-1.167.242-2.278.681-3.286"/></svg></span><span class="sun"><svg class="bi" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6m0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8M8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0m0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13m8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5M3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8m10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0m-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0m9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707M4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708"/></svg></span></button>
   </header>
   <div class="band__title">
+    <a class="band__back" href="/home"><svg class="bi" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/></svg>Home</a>
     <span class="band__eyebrow">Rules</span>
     <h1>Killer pool rules: how to play killer</h1>
     <p class="sub">The pub game for any number of players. Free printable score sheet below.</p>
