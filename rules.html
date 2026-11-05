@@ -302,6 +302,24 @@ footer a { color: var(--night-text); }
 @media (min-width: 900px) {
   #need .stack { grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: stretch; }
 }
+/* Site map footer, the same on every page (owner 2026-11-05): black in both
+   themes, one column per app. Self-contained colours so it drops into any page. */
+.sitefoot { display: block; margin: 0; padding: 0; box-shadow: none; clip-path: none; font-size: 15px; background: #000; color: #A3AAB5; border-top: 1px solid #1A1D24; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+.sitefoot__in { max-width: 1240px; margin: 0 auto; padding: 48px max(20px, env(safe-area-inset-right, 0px)) calc(48px + env(safe-area-inset-bottom, 0px)) max(20px, env(safe-area-inset-left, 0px)); display: grid; grid-template-columns: minmax(0, 1.4fr) repeat(2, minmax(0, 1fr)); gap: 32px; }
+.sitefoot__brand { display: flex; flex-direction: column; gap: 10px; }
+.sitefoot__home { font: 900 30px/1 'Big Shoulders Display', 'Arial Narrow', sans-serif; text-transform: uppercase; color: #FFFFFF; text-decoration: none; }
+.sitefoot__brand p { margin: 0; font-size: 15px; line-height: 1.5; color: #A3AAB5; }
+.sitefoot__col { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+.sitefoot__col h2 { margin: 0 0 4px; font: 700 13px/1.2 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; letter-spacing: .14em; text-transform: uppercase; color: #F2B84B; display: block; }
+.sitefoot__col:nth-of-type(2) h2 { color: #22D3EE; }
+.sitefoot__links { display: flex; gap: 18px; margin-top: 4px; }
+.sitefoot__links a, .sitefoot__col a { font-size: 15px; line-height: 1.4; color: #E4E7EC; text-decoration: none; }
+.sitefoot__links a:hover { color: #FFFFFF; text-decoration: underline; text-underline-offset: 3px; }
+.sitefoot__col a { font-size: 15px; line-height: 1.4; color: #E4E7EC; text-decoration: none; }
+.sitefoot__col a:hover { color: #FFFFFF; text-decoration: underline; text-underline-offset: 3px; }
+.sitefoot a:focus-visible { outline: 2px solid #FFD27A; outline-offset: 2px; border-radius: 4px; }
+@media (max-width: 760px) { .sitefoot__in { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 20px; } .sitefoot__brand { grid-column: 1 / -1; } }
+@media print { .sitefoot { display: none; } }
 </style>
 </head><body>
 <header class="top">
@@ -478,11 +496,6 @@ footer a { color: var(--night-text); }
     <a class="store" href="https://apps.apple.com/app/apple-store/id6802345932?pt=128809266&amp;ct=killer-rules&amp;mt=8"><img src="/img/app-store-badge.svg" width="150" height="50" alt="Download on the App Store"></a>
   </div>
 
-  <footer>
-    <span>Killer Pool &middot; Pool Elimination Game</span>
-    <span><a href="https://shotclock.pocketpoolapp.com/">Not Shot Clock</a> &middot; <a href="/support">Support</a> &middot; <a href="/privacy">Privacy</a></span>
-  </footer>
-
 </div>
 
 <script>
@@ -504,5 +517,29 @@ footer a { color: var(--night-text); }
   window.addEventListener('scroll', pick, { passive: true }); pick();
 })();
 </script>
+<footer class="sitefoot">
+  <div class="sitefoot__in">
+    <div class="sitefoot__brand">
+      <a class="sitefoot__home" href="https://pocketpoolapp.com/">Pocket Pool</a>
+      <p>Small iPhone apps for pool nights.</p>
+      <span class="sitefoot__links"><a href="https://pocketpoolapp.com/">All apps</a><a href="mailto:killerpoolapp@gmail.com">Contact</a></span>
+    </div>
+    <nav class="sitefoot__col" aria-label="Killer Pool">
+      <h2>Killer Pool</h2>
+      <a href="/home">Home</a>
+      <a href="/rules">Rules</a>
+      <a href="/home#live">Follow a live game</a>
+      <a href="/rules#sheet">Score sheet</a>
+      <a href="/support">Support</a>
+      <a href="/privacy">Privacy</a>
+      <a href="https://apps.apple.com/app/apple-store/id6802345932?pt=128809266&amp;ct=killer-footer&amp;mt=8">App Store</a>
+    </nav>
+    <nav class="sitefoot__col" aria-label="Not Shot Clock">
+      <h2>Not Shot Clock</h2>
+      <a href="https://shotclock.pocketpoolapp.com/">Home</a>
+      <a href="https://apps.apple.com/app/apple-store/id6815306099?pt=128809266&amp;ct=killer-footer&amp;mt=8">App Store</a>
+    </nav>
+  </div>
+</footer>
 <!-- Cloudflare Web Analytics: no cookies, no personal data (see privacy.html). Not on index.html: TV screens aren't visitors. --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "66d4319e4a10494c87d75a92358eb5a8"}'></script><!-- End Cloudflare Web Analytics -->
 </body></html>
