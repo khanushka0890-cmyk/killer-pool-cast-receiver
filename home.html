@@ -219,6 +219,23 @@ footer a { color: var(--night-text); }
 }
 @media (max-width: 380px) { .toplink .bi { display: none; } .lockup { height: 22px; } .brand__icon { width: 36px; height: 36px; } }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+/* Not Shot Clock banner (owner 2026-11-05): a black card in both themes,
+   in that app's cyan, linking to its site. */
+.nsc-card { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 36px; align-items: center; background: #000; border: 1px solid #22D3EE; border-radius: 24px; padding: 28px 40px 28px 28px; text-decoration: none; color: var(--night-text); }
+.nsc-card__shot img { display: block; width: 100%; height: auto; }
+.nsc-card__text { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; }
+.nsc-card__e { font: 600 13px/1.2 var(--font); letter-spacing: .18em; text-transform: uppercase; color: var(--night-muted); }
+.nsc-card__h { font: 900 clamp(34px, 4.6vw, 50px)/.95 var(--display); text-transform: uppercase; color: #FFFFFF; }
+.nsc-card__h span { color: #22D3EE; }
+.nsc-card__s { font-size: 17px; line-height: 1.6; color: var(--night-muted); max-width: 30em; }
+.nsc-card__go { display: inline-flex; align-items: center; gap: 10px; height: 52px; padding: 0 24px; border-radius: 999px; background: #22D3EE; color: #04161B; font: 800 20px/1 var(--display); letter-spacing: .02em; text-transform: uppercase; margin-top: 4px; }
+.nsc-card__go .bi { width: 16px; height: 16px; }
+.nsc-card:hover .nsc-card__go { background: #67E8F9; }
+.nsc-card:focus-visible { outline: 2px solid #67E8F9; outline-offset: 3px; }
+@media (max-width: 700px) {
+  .nsc-card { grid-template-columns: minmax(0, 1fr); gap: 8px; padding: 12px 22px 26px; justify-items: center; }
+  .nsc-card__shot { width: 64%; max-width: 230px; }
+}
 </style>
 </head><body>
 <header class="top">
@@ -437,6 +454,20 @@ footer a { color: var(--night-text); }
   </div>
 </section>
 
+<section class="sec" id="nsc">
+  <div class="in">
+    <a class="nsc-card" href="https://shotclock.pocketpoolapp.com/">
+      <span class="nsc-card__shot"><img src="/img/nsc-dial.webp" width="460" height="660" alt="Not Shot Clock running: 8 seconds left on the green dial" loading="lazy"></span>
+      <span class="nsc-card__text">
+        <span class="nsc-card__e">Also from Pocket Pool</span>
+        <span class="nsc-card__h">Not Shot Clock: <span>the best timer for fast pool.</span></span>
+        <span class="nsc-card__s">Tap to start, glance at the ring, hear the buzzer. On your phone, or big on the pub TV.</span>
+        <span class="nsc-card__go">Explore Not Shot Clock <svg class="bi" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/></svg></span>
+      </span>
+    </a>
+  </div>
+</section>
+
 <section class="final">
   <div class="in">
     <h2>Run your next killer night <span class="em">on it.</span></h2>
@@ -448,7 +479,7 @@ footer a { color: var(--night-text); }
 <footer>
   <div class="in">
     <span>Killer Pool &middot; Pool Elimination Game</span>
-    <span><a href="/rules">Rules</a> &middot; <a href="/support">Support</a> &middot; <a href="/privacy">Privacy</a></span>
+    <span><a href="/rules">Rules</a> &middot; <a href="https://shotclock.pocketpoolapp.com/">Not Shot Clock</a> &middot; <a href="/support">Support</a> &middot; <a href="/privacy">Privacy</a></span>
   </div>
 </footer>
 
