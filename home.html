@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en-GB"><head><meta charset="utf-8"><script>try{var t=localStorage.getItem('kp_theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+<html lang="en-GB"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Killer Pool app: score killer pool on your phone and the pub TV</title>
 <meta name="description" content="Killer Pool keeps score for the pub pool elimination game: lives, turns, who's out and the pot, on your phone and the pub TV. Free, no ads. Rules and live games too.">
@@ -38,7 +38,7 @@
 :root[data-theme="light"] { --bg: #F6F5F1; --bg-alt: #FFFFFF; --surface: #FFFFFF; --surface-2: #F0EEE8; --border: #E2DED4; --text: #15181D; --text-2: #3C444F; --muted: #5F6874; --gold-ink: #8A6500; --icon-bg: #F1EAF9; color-scheme: light; }
 
 * { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; scroll-padding-top: 76px; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: 84px; }
 body { margin: 0; background: var(--bg); color: var(--text); font: 400 16px/1.65 var(--font); -webkit-font-smoothing: antialiased; }
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 40; background: var(--night); }
 a { color: var(--gold-ink); text-underline-offset: 2px; }
@@ -48,20 +48,25 @@ img { max-width: 100%; }
 
 /* Top bar: logo, jump links, App Store */
 .top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 30; background: var(--night); border-bottom: 1px solid var(--night-line); }
-.top .in { display: flex; align-items: center; gap: 16px; height: 68px; }
+.top .in { display: flex; align-items: center; gap: 16px; height: 76px; max-width: 1240px; }
 .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
-.brand__icon { width: 36px; height: 36px; border-radius: 9px; display: block; box-shadow: 0 0 0 1px #2C2440; }
-.lockup { height: 28px; width: auto; display: block; }
+.brand__icon { width: 48px; height: 48px; border-radius: 12px; display: block; box-shadow: 0 0 0 1px #2C2440; }
+.lockup { height: 34px; width: auto; display: block; }
 .toc { display: flex; gap: 4px; margin-left: auto; overflow-x: auto; scrollbar-width: none; }
 .toc::-webkit-scrollbar { display: none; }
 .toc a { flex-shrink: 0; font: 600 13.5px/1 var(--font); color: var(--night-muted); text-decoration: none; padding: 9px 11px; border-radius: 999px; }
 .toc a:hover { color: var(--night-text); }
 .toc a.on { background: var(--gold); color: #120C1E; }
 .top__right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
-.theme { width: 38px; height: 38px; border-radius: 999px; border: 1px solid var(--night-line); background: #0C0E13; color: var(--night-text); cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; font-size: 16px; }
-.theme .sun { display: none; }
-:root[data-theme="light"] .theme .sun { display: block; } :root[data-theme="light"] .theme .moon { display: none; }
-@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) .theme .sun { display: block; } :root:not([data-theme="dark"]) .theme .moon { display: none; } }
+.toplink { display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 15px; border-radius: 999px; border: 1px solid var(--night-line); background: #0C0E13; color: var(--night-text); font: 600 14px/1 var(--font); text-decoration: none; white-space: nowrap; }
+.toplink:hover { border-color: var(--gold); }
+.toplink .bi { width: 16px; height: 16px; color: var(--gold); }
+.toplink .short { display: none; }
+.toplink .dot { width: 9px; height: 9px; }
+.badge { display: inline-block; line-height: 0; border-radius: 9px; }
+.badge img { display: block; height: 54px; width: auto; }
+.badge--top img { height: 40px; }
+.badge:focus-visible, .toplink:focus-visible { outline: 2px solid var(--gold-hi); outline-offset: 2px; }
 .pill { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 999px; background: var(--gold); color: #120C1E; text-decoration: none; font: 800 18px/1 var(--display); letter-spacing: .02em; text-transform: uppercase; white-space: nowrap; }
 .pill:hover { background: var(--gold-hi); }
 .pill:focus-visible, .toc a:focus-visible, .theme:focus-visible, .brand:focus-visible { outline: 2px solid var(--gold-hi); outline-offset: 2px; }
@@ -80,17 +85,20 @@ p { margin: 0; }
 
 /* Hero */
 .hero { background: var(--night); color: var(--night-text); overflow: hidden; }
-.hero .in { display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(0, .88fr); gap: 40px; align-items: center; padding-top: 72px; padding-bottom: 80px; }
+.hero .in { max-width: 1240px; display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 48px; align-items: center; padding-top: 72px; padding-bottom: 80px; }
 .hero__text { display: flex; flex-direction: column; gap: 22px; }
 .hero .eyebrow { color: var(--night-muted); }
 .hero__sub { font-size: 18px; line-height: 1.6; color: var(--night-muted); max-width: 30em; }
 .hero__cta { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
 .hero__note { font-size: 14px; color: var(--night-muted); }
-.set { position: relative; display: flex; align-items: flex-end; gap: 5%; }
+.hero__links { display: flex; flex-wrap: wrap; gap: 10px 22px; font-size: 16px; font-weight: 600; }
+.hero__links a { color: var(--gold); }
+.set { position: relative; display: flex; align-items: flex-end; gap: 4%; }
 .set::before { content: ""; position: absolute; inset: 8% 4% 4% 4%; border-radius: 40%; background: var(--purple-glow); filter: blur(70px); opacity: .55; z-index: 0; }
 .set figure { margin: 0; position: relative; z-index: 1; }
-.set__tv { flex: 0 0 70%; min-width: 0; }
-.set__phone { flex: 0 0 25%; min-width: 0; }
+.set__tv { flex: 0 0 68%; min-width: 0; }
+.set__phone { flex: 0 0 28%; min-width: 0; }
+.set .set__phone { margin-bottom: -4%; }
 .set img { display: block; width: 100%; height: auto; }
 
 /* Sections */
@@ -178,9 +186,14 @@ footer a { color: var(--night-text); }
   .row--flip .row__shots { order: 0; }
 }
 @media (max-width: 600px) {
-  .top .in { gap: 10px; padding-top: 10px; }
-  .lockup { height: 24px; }
-  .brand__icon { width: 32px; height: 32px; }
+  .top .in { gap: 8px; padding-top: 10px; }
+  .brand { gap: 8px; }
+  .lockup { height: 25px; }
+  .brand__icon { width: 40px; height: 40px; border-radius: 10px; }
+  .top__right { gap: 6px; }
+  .badge--top { display: none; }
+  .toplink { height: 36px; padding: 0 10px; font-size: 13.5px; gap: 6px; }
+  .toplink .long { display: none; } .toplink .short { display: inline; }
   .pill--sm { height: 36px; padding: 0 13px 0 12px; font-size: 16px; }
   .sec { padding: 64px 0; }
   .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
@@ -195,27 +208,25 @@ footer a { color: var(--night-text); }
   .rules-card { padding: 22px 20px; }
   .rules-card__h { font-size: 40px; }
   .final { padding: 72px 0; }
+  .hero .in { gap: 36px; }
+  .set { gap: 0; margin-right: -8px; }
+  .set__tv { flex: 0 0 76%; }
+  .set .set__phone { flex: 0 0 37%; margin: 0 0 -6% -13%; }
 }
-@media (max-width: 380px) { .top .pill--sm span { display: none; } }
+@media (max-width: 380px) { .toplink .bi { display: none; } .lockup { height: 22px; } .brand__icon { width: 36px; height: 36px; } }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 </style>
 </head><body>
 <header class="top">
   <div class="in">
-    <a class="brand" href="/home" aria-label="Killer Pool home"><img class="brand__icon" src="/img/app-icon.webp" width="36" height="36" alt=""><svg class="lockup" viewBox="0 0 166 44" aria-hidden="true"><text x="0" y="28.4" font-family="Bebas Neue, sans-serif" font-size="40" textLength="166" lengthAdjust="spacing" fill="#F2B84B">KILLER POOL</text><text x="0.6" y="43.4" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Barlow, sans-serif" font-size="12" font-weight="600" textLength="165.4" lengthAdjust="spacing" fill="#E4DCF3">ELIMINATION</text></svg></a>
+    <a class="brand" href="/home" aria-label="Killer Pool home"><img class="brand__icon" src="/img/logo-ball.webp" width="48" height="48" alt=""><svg class="lockup" viewBox="0 0 166 44" aria-hidden="true"><text x="0" y="28.4" font-family="Bebas Neue, sans-serif" font-size="40" textLength="166" lengthAdjust="spacing" fill="#F2B84B">KILLER POOL</text><text x="0.6" y="43.4" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Barlow, sans-serif" font-size="12" font-weight="600" textLength="165.4" lengthAdjust="spacing" fill="#E4DCF3">ELIMINATION</text></svg></a>
     <nav class="toc" aria-label="Jump to">
-      <a href="#rules-set">House rules</a><a href="#shots">Every shot</a><a href="#late">Late arrivals</a><a href="#tv">Pub TV</a><a href="#live">Live games</a>
+      <a href="#rules-set">House rules</a><a href="#shots">Every shot</a><a href="#late">Late arrivals</a><a href="#tv">Pub TV</a>
     </nav>
     <div class="top__right">
-      <button class="theme" type="button" aria-label="Switch light or dark" onclick="(function(){var r=document.documentElement,d=r.dataset.theme||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark'),n=d==='light'?'dark':'light';r.dataset.theme=n;try{localStorage.setItem('kp_theme',n)}catch(e){}})()"><span class="moon"><svg class="bi" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-  <path d="M6 .278a.77.77 0 0 1 .08.858 7.2 7.2 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277q.792-.001 1.533-.16a.79.79 0 0 1 .81.316.73.73 0 0 1-.031.893A8.35 8.35 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.75.75 0 0 1 6 .278M4.858 1.311A7.27 7.27 0 0 0 1.025 7.71c0 4.02 3.279 7.276 7.319 7.276a7.32 7.32 0 0 0 5.205-2.162q-.506.063-1.029.063c-4.61 0-8.343-3.714-8.343-8.29 0-1.167.242-2.278.681-3.286"/>
-</svg></span><span class="sun"><svg class="bi" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-  <path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6m0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8M8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0m0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13m8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5M3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8m10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0m-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0m9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707M4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708"/>
-</svg></span></button>
-      <a class="pill pill--sm" href="https://apps.apple.com/app/apple-store/id6802345932?pt=128809266&amp;ct=killer-home&amp;mt=8"><svg class="bi" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-  <path d="M11.182.008C11.148-.03 9.923.023 8.857 1.18c-1.066 1.156-.902 2.482-.878 2.516s1.52.087 2.475-1.258.762-2.391.728-2.43m3.314 11.733c-.048-.096-2.325-1.234-2.113-3.422s1.675-2.789 1.698-2.854-.597-.79-1.254-1.157a3.7 3.7 0 0 0-1.563-.434c-.108-.003-.483-.095-1.254.116-.508.139-1.653.589-1.968.607-.316.018-1.256-.522-2.267-.665-.647-.125-1.333.131-1.824.328-.49.196-1.422.754-2.074 2.237-.652 1.482-.311 3.83-.067 4.56s.625 1.924 1.273 2.796c.576.984 1.34 1.667 1.659 1.899s1.219.386 1.843.067c.502-.308 1.408-.485 1.766-.472.357.013 1.061.154 1.782.539.571.197 1.111.115 1.652-.105.541-.221 1.324-1.059 2.238-2.758q.52-1.185.473-1.282"/>
-  <path d="M11.182.008C11.148-.03 9.923.023 8.857 1.18c-1.066 1.156-.902 2.482-.878 2.516s1.52.087 2.475-1.258.762-2.391.728-2.43m3.314 11.733c-.048-.096-2.325-1.234-2.113-3.422s1.675-2.789 1.698-2.854-.597-.79-1.254-1.157a3.7 3.7 0 0 0-1.563-.434c-.108-.003-.483-.095-1.254.116-.508.139-1.653.589-1.968.607-.316.018-1.256-.522-2.267-.665-.647-.125-1.333.131-1.824.328-.49.196-1.422.754-2.074 2.237-.652 1.482-.311 3.83-.067 4.56s.625 1.924 1.273 2.796c.576.984 1.34 1.667 1.659 1.899s1.219.386 1.843.067c.502-.308 1.408-.485 1.766-.472.357.013 1.061.154 1.782.539.571.197 1.111.115 1.652-.105.541-.221 1.324-1.059 2.238-2.758q.52-1.185.473-1.282"/>
-</svg><span>App Store</span></a>
+      <a class="toplink" href="/rules"><svg class="bi" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.811zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783"/></svg><span>Rules</span></a>
+      <a class="toplink" href="#live"><span class="dot" aria-hidden="true"></span><span class="long">Follow a live game</span><span class="short">Live games</span></a>
+      <a class="badge badge--top" href="https://apps.apple.com/app/apple-store/id6802345932?pt=128809266&amp;ct=killer-home&amp;mt=8"><img src="/img/app-store-badge.svg" width="120" height="40" alt="Download on the App Store"></a>
     </div>
   </div>
 </header>
@@ -227,16 +238,14 @@ footer a { color: var(--night-text); }
       <h1>Run killer pool night <span class="em">from your phone.</span></h1>
       <p class="hero__sub">Lives, turns, who's out and the pot, kept for you. On your phone, or big on the pub TV so the whole room can see who's up.</p>
       <div class="hero__cta">
-        <a class="pill pill--lg" href="https://apps.apple.com/app/apple-store/id6802345932?pt=128809266&amp;ct=killer-home&amp;mt=8"><svg class="bi" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-  <path d="M11.182.008C11.148-.03 9.923.023 8.857 1.18c-1.066 1.156-.902 2.482-.878 2.516s1.52.087 2.475-1.258.762-2.391.728-2.43m3.314 11.733c-.048-.096-2.325-1.234-2.113-3.422s1.675-2.789 1.698-2.854-.597-.79-1.254-1.157a3.7 3.7 0 0 0-1.563-.434c-.108-.003-.483-.095-1.254.116-.508.139-1.653.589-1.968.607-.316.018-1.256-.522-2.267-.665-.647-.125-1.333.131-1.824.328-.49.196-1.422.754-2.074 2.237-.652 1.482-.311 3.83-.067 4.56s.625 1.924 1.273 2.796c.576.984 1.34 1.667 1.659 1.899s1.219.386 1.843.067c.502-.308 1.408-.485 1.766-.472.357.013 1.061.154 1.782.539.571.197 1.111.115 1.652-.105.541-.221 1.324-1.059 2.238-2.758q.52-1.185.473-1.282"/>
-  <path d="M11.182.008C11.148-.03 9.923.023 8.857 1.18c-1.066 1.156-.902 2.482-.878 2.516s1.52.087 2.475-1.258.762-2.391.728-2.43m3.314 11.733c-.048-.096-2.325-1.234-2.113-3.422s1.675-2.789 1.698-2.854-.597-.79-1.254-1.157a3.7 3.7 0 0 0-1.563-.434c-.108-.003-.483-.095-1.254.116-.508.139-1.653.589-1.968.607-.316.018-1.256-.522-2.267-.665-.647-.125-1.333.131-1.824.328-.49.196-1.422.754-2.074 2.237-.652 1.482-.311 3.83-.067 4.56s.625 1.924 1.273 2.796c.576.984 1.34 1.667 1.659 1.899s1.219.386 1.843.067c.502-.308 1.408-.485 1.766-.472.357.013 1.061.154 1.782.539.571.197 1.111.115 1.652-.105.541-.221 1.324-1.059 2.238-2.758q.52-1.185.473-1.282"/>
-</svg>Get it on the App Store</a>
+        <a class="badge" href="https://apps.apple.com/app/apple-store/id6802345932?pt=128809266&amp;ct=killer-home&amp;mt=8"><img src="/img/app-store-badge.svg" width="162" height="54" alt="Download on the App Store"></a>
         <span class="hero__note">Free &middot; iPhone and iPad &middot; casts to Chromecast</span>
       </div>
+      <p class="hero__links"><a href="/rules">New to killer? Read the rules</a><a href="#live">Follow a live game</a></p>
     </div>
     <div class="set">
       <figure class="set__tv"><img src="/img/tv.webp" width="1800" height="1103" alt="The pub TV during a game: everyone's lives on the left, Aisha up now on the right"></figure>
-      <figure class="set__phone"><img src="/img/phone-game.webp" width="543" height="1105" alt="The organiser's phone: Marco up now, with POT and MISS"></figure>
+      <figure class="set__phone"><img src="/img/phone-card.webp" width="1086" height="2210" alt="The organiser's phone: Marco up now, with his Ball in Hand card turned over"></figure>
     </div>
   </div>
 </section>
@@ -428,10 +437,7 @@ footer a { color: var(--night-text); }
   <div class="in">
     <h2>Run your next killer night <span class="em">on it.</span></h2>
     <p>Free on iPhone and iPad. No ads, any number of players.</p>
-    <a class="pill pill--lg" href="https://apps.apple.com/app/apple-store/id6802345932?pt=128809266&amp;ct=killer-home&amp;mt=8"><svg class="bi" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-  <path d="M11.182.008C11.148-.03 9.923.023 8.857 1.18c-1.066 1.156-.902 2.482-.878 2.516s1.52.087 2.475-1.258.762-2.391.728-2.43m3.314 11.733c-.048-.096-2.325-1.234-2.113-3.422s1.675-2.789 1.698-2.854-.597-.79-1.254-1.157a3.7 3.7 0 0 0-1.563-.434c-.108-.003-.483-.095-1.254.116-.508.139-1.653.589-1.968.607-.316.018-1.256-.522-2.267-.665-.647-.125-1.333.131-1.824.328-.49.196-1.422.754-2.074 2.237-.652 1.482-.311 3.83-.067 4.56s.625 1.924 1.273 2.796c.576.984 1.34 1.667 1.659 1.899s1.219.386 1.843.067c.502-.308 1.408-.485 1.766-.472.357.013 1.061.154 1.782.539.571.197 1.111.115 1.652-.105.541-.221 1.324-1.059 2.238-2.758q.52-1.185.473-1.282"/>
-  <path d="M11.182.008C11.148-.03 9.923.023 8.857 1.18c-1.066 1.156-.902 2.482-.878 2.516s1.52.087 2.475-1.258.762-2.391.728-2.43m3.314 11.733c-.048-.096-2.325-1.234-2.113-3.422s1.675-2.789 1.698-2.854-.597-.79-1.254-1.157a3.7 3.7 0 0 0-1.563-.434c-.108-.003-.483-.095-1.254.116-.508.139-1.653.589-1.968.607-.316.018-1.256-.522-2.267-.665-.647-.125-1.333.131-1.824.328-.49.196-1.422.754-2.074 2.237-.652 1.482-.311 3.83-.067 4.56s.625 1.924 1.273 2.796c.576.984 1.34 1.667 1.659 1.899s1.219.386 1.843.067c.502-.308 1.408-.485 1.766-.472.357.013 1.061.154 1.782.539.571.197 1.111.115 1.652-.105.541-.221 1.324-1.059 2.238-2.758q.52-1.185.473-1.282"/>
-</svg>Get it on the App Store</a>
+    <a class="badge" href="https://apps.apple.com/app/apple-store/id6802345932?pt=128809266&amp;ct=killer-home&amp;mt=8"><img src="/img/app-store-badge.svg" width="162" height="54" alt="Download on the App Store"></a>
   </div>
 </section>
 
