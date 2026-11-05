@@ -35,7 +35,7 @@
   --text: #F4F5F7; --text-2: #C7CDD6; --muted: #A3AAB5; --gold-ink: #F2B84B; --icon-bg: #241B38;
   --display: 'Big Shoulders Display', 'Arial Narrow', Impact, sans-serif;
   --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --wrap: 1240px;
+  --wrap: 1040px;
   color-scheme: dark;
 }
 @media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) { --bg: #F6F5F1; --bg-alt: #FFFFFF; --surface: #FFFFFF; --surface-2: #F0EEE8; --border: #E2DED4; --text: #15181D; --text-2: #3C444F; --muted: #5F6874; --gold-ink: #8A6500; --icon-bg: #F1EAF9; color-scheme: light; } }
@@ -124,8 +124,8 @@ p { margin: 0; }
 .row--flip { grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); }
 .row--flip .row__shots { order: 2; }
 .row__shots { display: flex; justify-content: center; align-items: flex-end; gap: 16px; }
-.row__shots img { display: block; width: 100%; max-width: 300px; height: auto; }
-.row__shots.two img { max-width: 260px; }
+.row__shots img { display: block; width: 100%; max-width: 250px; height: auto; }
+.row__shots.two img { max-width: 210px; }
 .row__shots.two img + img { margin-bottom: -18px; }
 .row__text { display: flex; flex-direction: column; gap: 18px; }
 .row__text p:not(.eyebrow) { color: var(--text-2); font-size: 17px; line-height: 1.65; max-width: 32em; }
