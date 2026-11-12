@@ -174,6 +174,7 @@
   .fact .v { display: flex; align-items: center; gap: 8px; font-size: 16px; font-weight: 700; color: #fff; line-height: 24px; min-width: 0; }
   .fact .v span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .pot-line { grid-column: 1 / -1; display: flex; align-items: baseline; justify-content: space-between; padding-top: 14px; border-top: 1px solid rgba(255,255,255,.08); }
+  .pot-line.second { padding-top: 10px; border-top: none; }
   .pot-line .k { font: 700 12px/1 'Barlow Condensed', sans-serif; letter-spacing: 2.5px; color: var(--gold-text); }
   .pot-line .v { font-family: 'Bebas Neue', sans-serif; font-size: 30px; line-height: 1; color: var(--gold); }
   .place { height: 56px; box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 0 16px 0 12px; border-radius: 16px; background: var(--surface); border: 1px solid var(--border); }
@@ -476,6 +477,9 @@
     const beaten = state.playersBeaten ?? Math.max(total - 1, 0);
     const rounds = state.rounds ?? state.round ?? 1;
     const pot = state.potTotal ?? ((state.potRollover || 0) + (state.entryFeeAmount || 0) * total);
+    // Prize split (app build 64+): the winner's percent; the runner-up gets the rest.
+    const share = Math.min(100, Math.max(50, Number(state.winnerShare) || 100));
+    const winAmt = Math.round(Math.round(pot) * share / 100);
     const colors = ['var(--gold)', 'var(--text-2)', '#C6905E'];
     const places = [winner, ...out].slice(0, 3).map((p, i) => `
       <div class="place ${i === 0 ? 'first' : ''}">
@@ -499,7 +503,9 @@
           <div class="facts">
             <div class="fact"><span class="k">RUNNER-UP</span><span class="v">${runnerUp ? `${avatarHtml(runnerUp, 24)}<span>${escapeHtml(runnerUp.name)}</span>` : '—'}</span></div>
             <div class="fact r"><span class="k">PLAYERS BEATEN</span><span class="v">${beaten}</span></div>
-            ${pot > 0 ? `<div class="pot-line"><span class="k">WINS THE POT</span><span class="v">${Math.round(pot).toLocaleString()}</span></div>` : ''}
+            ${pot > 0 ? (share < 100
+              ? `<div class="pot-line"><span class="k">WINNER · ${share}%</span><span class="v">${winAmt.toLocaleString()}</span></div><div class="pot-line second"><span class="k">RUNNER-UP · ${100 - share}%</span><span class="v">${(Math.round(pot) - winAmt).toLocaleString()}</span></div>`
+              : `<div class="pot-line"><span class="k">WINS THE POT</span><span class="v">${Math.round(pot).toLocaleString()}</span></div>`) : ''}
           </div>
         </div>
       </div>
