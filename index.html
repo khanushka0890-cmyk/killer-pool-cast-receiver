@@ -460,16 +460,11 @@
 .cp-at__s{font:400 calc(76 * var(--u))/1 'Bebas Neue',sans-serif;color:var(--gold);padding-top:calc(4 * var(--u));}
 .cp-at__s i{font-style:normal;color:var(--text-2);font-size:calc(48 * var(--u));padding:0 calc(10 * var(--u));}
 .cp-at__row{width:100%;display:flex;flex-direction:column;align-items:center;gap:calc(6 * var(--u));}
-.cp-at__p{display:flex;align-items:center;justify-content:center;gap:calc(12 * var(--u));min-width:0;max-width:100%;}
 .cp-at.two .cp-at__m{gap:calc(10 * var(--u));padding:calc(14 * var(--u)) calc(14 * var(--u)) calc(16 * var(--u));}
 .cp-at.two .cp-at__row{flex-direction:row;justify-content:space-between;gap:calc(10 * var(--u));}
-.cp-at.two .cp-at__p{flex:1;justify-content:flex-start;gap:calc(8 * var(--u));}
-.cp-at.two .cp-at__p.r{justify-content:flex-end;}
-.cp-at__m .cp-av{width:calc(48 * var(--u));height:calc(48 * var(--u));font-size:calc(26 * var(--u));}
-.cp-at.two .cp-at__m .cp-av{display:none;}
 .cp-at__m .cp-at__tn{margin-bottom:calc(6 * var(--u));}
 .cp-at.two .cp-at__m .cp-at__tn{margin-bottom:calc(2 * var(--u));}
-.cp-at.two .cp-at__n{font-size:calc(30 * var(--u));min-width:0;}
+.cp-at.two .cp-at__n{font-size:calc(30 * var(--u));flex:1;min-width:0;}
 .cp-at.two .cp-at__n.r{text-align:right;}
 .cp-at.two .cp-at__s{font-size:calc(44 * var(--u));}
 .cp-at.two .cp-at__s i{font-size:calc(30 * var(--u));padding:0 calc(6 * var(--u));}
@@ -1207,9 +1202,10 @@
     if (atTable.length && c.state === 'playing') {
       const shown = atTable.slice(0, 2), two = shown.length > 1;
       // tn: the table number (app build 68+, when the venue has 2+ tables).
-      // The table number sits inside the card, above the names (owner 2026-11-14).
+      // The table number sits inside the card, above the names; no pictures here,
+      // they stay in the list on the left (owner 2026-11-14).
       const tn = (m) => m.tn ? `<span class="cp-at__tn">TABLE ${m.tn}</span>` : '';
-      const card = (m) => `<div class="cp-at__m">${tn(m)}<div class="cp-at__row"><span class="cp-at__p">${cpAv(m.a, m.ca, m.pa)}<span class="cp-at__n">${escapeHtml(m.a)}</span></span><span class="cp-at__s">${m.sa}<i>–</i>${m.sb}</span><span class="cp-at__p r"><span class="cp-at__n r">${escapeHtml(m.b)}</span>${cpAv(m.b, m.cb, m.pb)}</span></div></div>`;
+      const card = (m) => `<div class="cp-at__m">${tn(m)}<div class="cp-at__row"><span class="cp-at__n">${escapeHtml(m.a)}</span><span class="cp-at__s">${m.sa}<i>–</i>${m.sb}</span><span class="cp-at__n r">${escapeHtml(m.b)}</span></div></div>`;
       const more = atTable.length > 2 ? `<span class="cp-at__more">+${atTable.length - 2} more at the tables</span>` : '';
       const stubT = `<div class="cp-stub"><span class="tag">AT THE TABLE</span><div class="cp-mid"><div class="cp-at${two ? ' two' : ''}">${shown.map(card).join('')}</div>${more}<div class="cp-below"><span class="race">Race to ${r.race}</span><span class="small">${escapeHtml(r.name)} · <b>${done}</b>/${r.matches.length} done</span></div></div>${c.pot > 0 ? `<div class="cp-pay">${pays}</div>` : ''}</div>`;
       stage.innerHTML = bigShell(r.name, main, stubT);
