@@ -1299,7 +1299,9 @@
       winner: { name: pod[0]?.name || c.winner || '', photo: pod[0]?.photo || null, color: pod[0]?.color || null },
       prize: pays[0] || 0, fact,
       // Only places that win money (owner 2026-11-14: winner takes all = no runner-up).
-      places: [1, 2].map(i => ({ label: labels[i], name: pod[i]?.name || '', photo: pod[i]?.photo || null, color: pod[i]?.color || null, prize: pays[i] || 0 })).filter(p => p.prize > 0),
+      places: [1, 2].map(i => ({ label: labels[i], name: pod[i]?.name || '', photo: pod[i]?.photo || null, color: pod[i]?.color || null, prize: pays[i] || 0 })).filter(p => p.prize > 0)
+        // Joint third (app build 69+): both semi-final losers, each prize.
+        .map(p => p.label === '3RD PLACE' && Array.isArray(c.thirds) && c.thirds.length ? { ...p, label: c.thirds.length > 1 ? 'JOINT 3RD · EACH' : '3RD PLACE', name: c.thirds.map(t => t.name).join(' & '), prize: c.thirds[0].amount, num: 3, color: '#8C6B2E', photo: null } : p),
       gameId: null,
     };
   }
