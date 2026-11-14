@@ -464,6 +464,8 @@
 .cp-at.two .cp-at__n.r{text-align:right;}
 .cp-at.two .cp-at__s{font-size:calc(44 * var(--u));}
 .cp-at.two .cp-at__s i{font-size:calc(30 * var(--u));padding:0 calc(6 * var(--u));}
+.cp-at__n.lose{color:var(--text-2);text-decoration:line-through;text-decoration-thickness:calc(3 * var(--u));}
+.cp-won{color:var(--gold)!important;}
 .cp-at__more{font:600 calc(18 * var(--u))/1.2 'Barlow',sans-serif;color:var(--text-2);}
 .cp-stub .small{font:600 calc(20 * var(--u))/1.2 'Barlow',sans-serif;color:var(--text-2);}
 .cp-stub .small b{color:var(--gold-text);font-weight:700;}
@@ -1163,6 +1165,15 @@
       stage.innerHTML = bigShell(r.name, mainD, stubD);
       return;
     }
+    // A match just finished on the phone (FINISH MATCH, app build 67+): the
+    // panel that showed it at the table names the winner for a few seconds.
+    if (r.won && c.state !== 'finished') {
+      const wn = r.won.w === 'a' ? r.won.a : r.won.b;
+      const card = `<div class="cp-at__m"><span class="cp-at__n${r.won.w === 'a' ? '' : ' lose'}">${escapeHtml(r.won.a)}</span><span class="cp-at__s">${r.won.sa}<i>–</i>${r.won.sb}</span><span class="cp-at__n${r.won.w === 'b' ? '' : ' lose'}">${escapeHtml(r.won.b)}</span></div>`;
+      const stubW = `<div class="cp-stub"><span class="tag">RESULT</span><div class="cp-at">${card}</div><span class="rn cp-won">${escapeHtml(wn)}</span><span class="race">WINS THE MATCH</span><span class="small">${escapeHtml(r.name)} · <b>${done}</b>/${r.matches.length} done</span></div>`;
+      stage.innerHTML = bigShell(r.name, main, stubW);
+      return;
+    }
     if (atTable.length && c.state === 'playing') {
       const shown = atTable.slice(0, 2), two = shown.length > 1;
       const card = (m) => two
@@ -1267,7 +1278,8 @@
       // winnerPrize / runnerUpPrize: a prize split (app build 64+). Older apps: the winner takes the pot.
       prize: s.winnerPrize ?? (s.potTotal || 0),
       fact: `BEAT <b>${beaten}</b> PLAYER${beaten === 1 ? '' : 'S'} · <b>${rounds}</b> ROUND${rounds === 1 ? '' : 'S'}`,
-      places: s.runnerUpName ? [{ label: 'RUNNER-UP', name: s.runnerUpName, photo: s.runnerUpAvatar || null, color: s.runnerUpAvatarColor || null, num: s.runnerUpNum ?? null, prize: s.runnerUpPrize || 0 }] : [],
+      // Winner takes all (owner 2026-11-14): no runner-up card on the TV.
+      places: s.runnerUpName && s.runnerUpPrize > 0 ? [{ label: 'RUNNER-UP', name: s.runnerUpName, photo: s.runnerUpAvatar || null, color: s.runnerUpAvatarColor || null, num: s.runnerUpNum ?? null, prize: s.runnerUpPrize || 0 }] : [],
       gameId: s.gameId || null,
     };
   }
@@ -1282,7 +1294,8 @@
       title: c.title || '', venue: c.venue || '',
       winner: { name: pod[0]?.name || c.winner || '', photo: pod[0]?.photo || null, color: pod[0]?.color || null },
       prize: pays[0] || 0, fact,
-      places: [1, 2].map(i => ({ label: labels[i], name: pod[i]?.name || '', photo: pod[i]?.photo || null, color: pod[i]?.color || null, prize: pays[i] || 0 })),
+      // Only places that win money (owner 2026-11-14: winner takes all = no runner-up).
+      places: [1, 2].map(i => ({ label: labels[i], name: pod[i]?.name || '', photo: pod[i]?.photo || null, color: pod[i]?.color || null, prize: pays[i] || 0 })).filter(p => p.prize > 0),
       gameId: null,
     };
   }
