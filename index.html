@@ -459,8 +459,12 @@
 .cp-at__n{font:400 calc(44 * var(--u))/1 'Bebas Neue',sans-serif;letter-spacing:calc(1 * var(--u));color:#fff;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-top:calc(3 * var(--u));}
 .cp-at__s{font:400 calc(76 * var(--u))/1 'Bebas Neue',sans-serif;color:var(--gold);padding-top:calc(4 * var(--u));}
 .cp-at__s i{font-style:normal;color:var(--text-2);font-size:calc(48 * var(--u));padding:0 calc(10 * var(--u));}
-.cp-at.two .cp-at__m{flex-direction:row;justify-content:space-between;gap:calc(10 * var(--u));padding:calc(12 * var(--u)) calc(14 * var(--u));}
-.cp-at.two .cp-at__n{font-size:calc(30 * var(--u));flex:1;min-width:0;}
+.cp-at__row{width:100%;display:flex;flex-direction:column;align-items:center;gap:calc(6 * var(--u));}
+.cp-at.two .cp-at__m{gap:calc(10 * var(--u));padding:calc(14 * var(--u)) calc(14 * var(--u)) calc(16 * var(--u));}
+.cp-at.two .cp-at__row{flex-direction:row;justify-content:space-between;gap:calc(10 * var(--u));}
+.cp-at__m .cp-at__tn{margin-bottom:calc(6 * var(--u));}
+.cp-at.two .cp-at__m .cp-at__tn{margin-bottom:calc(2 * var(--u));}
+.cp-at.two .cp-at__n{font-size:calc(30 * var(--u));flex:1;min-width:0;text-align:left;}
 .cp-at.two .cp-at__n.r{text-align:right;}
 .cp-at.two .cp-at__s{font-size:calc(44 * var(--u));}
 .cp-at.two .cp-at__s i{font-size:calc(30 * var(--u));padding:0 calc(6 * var(--u));}
@@ -482,12 +486,26 @@
 .cp-dr__slot.off{border:calc(2 * var(--u)) dashed #5B4A8E;color:#6E6890;}
 .cp-dr__vs{font:400 calc(40 * var(--u))/1 'Bebas Neue',sans-serif;color:var(--gold-text);padding-top:calc(3 * var(--u));}
 @keyframes cpIn{from{transform:scale(.8);opacity:.2}to{transform:scale(1);opacity:1}}
+.cp-p{display:flex;align-items:center;gap:calc(10 * var(--u));min-width:0;}
+.cp-p.r{justify-content:flex-end;}
+.cp-p .cp-n{min-width:0;}
+.cp-av{flex-shrink:0;box-sizing:border-box;width:calc(32 * var(--u));height:calc(32 * var(--u));border-radius:50%;border:calc(2 * var(--u)) solid var(--gold);overflow:hidden;display:flex;align-items:center;justify-content:center;font:400 calc(17 * var(--u))/1 'Bebas Neue',sans-serif;color:#fff;padding-top:calc(1 * var(--u));}
+.cp-av img{width:100%;height:100%;object-fit:cover;display:block;}
+.cp-av:has(img){padding-top:0;}
+.cp-list.big .cp-av{width:calc(50 * var(--u));height:calc(50 * var(--u));font-size:calc(26 * var(--u));}
+.cp-list.tight .cp-av{width:calc(28 * var(--u));height:calc(28 * var(--u));font-size:calc(15 * var(--u));}
+.cp-list.two .cp-av{width:calc(26 * var(--u));height:calc(26 * var(--u));font-size:calc(14 * var(--u));}
 .cp-n{font:600 calc(22 * var(--u))/1.3 'Barlow',sans-serif;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .cp-n.r{text-align:right;}
 .cp-n.win{color:var(--gold);font-weight:700;}
 .cp-n.lose{color:#8C86A3;text-decoration:line-through;text-decoration-color:#5E5778;}
 .cp-s{font:400 calc(32 * var(--u))/1 'Bebas Neue',sans-serif;color:#fff;padding-top:calc(3 * var(--u));min-width:calc(70 * var(--u));text-align:center;}
 .cp-s .w{color:var(--gold);}
+/* Many matches (short rows): the table number sits beside the score. */
+.cp-mid{flex:1;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:calc(10 * var(--u));min-height:0;}
+.cp-below{display:flex;flex-direction:column;align-items:center;gap:calc(8 * var(--u));margin-top:calc(16 * var(--u));}
+.cp-drhd{width:100%;display:flex;justify-content:space-between;align-items:baseline;font:700 calc(18 * var(--u))/1 'Barlow Condensed',sans-serif;letter-spacing:calc(3 * var(--u));color:var(--gold-text);}
+.cp-drhd span:last-child{color:#fff;}
 .cp-s .tbd{color:#8C86A3;}
 .cp-list.tight{gap:calc(6 * var(--u));}
 .cp-list.tight .cp-m{height:calc(42 * var(--u));}
@@ -1121,6 +1139,10 @@
     const done = r.matches.filter(m => m.w).length;
     const live = r.matches.filter(m => !m.w).sort((x, y) => (y.t ? 1 : 0) - (x.t ? 1 : 0)), fin = r.matches.filter(m => m.w);
     const atTable = live.filter(m => m.t).sort((x, y) => (x.tn || 99) - (y.tn || 99));
+    // A player's picture, or their initial on their colour. Only apps that
+    // send a colour (build 70 on) get these; older ones keep plain names.
+    const cpAv = (name, col, photo) => !name || (!col && !photo) ? ''
+      : `<span class="cp-av"${photo ? '' : ` style="background:${/^#[0-9a-f]{3,8}$/i.test(col || '') ? col : '#546e7a'}"`}>${photo && /^data:image\//.test(photo) ? `<img src="${escapeHtml(photo)}" alt="">` : escapeHtml(name.trim().charAt(0).toUpperCase() || '?')}</span>`;
     const row = (m) => {
       const started = m.sa > 0 || m.sb > 0;
       const hidden = !m.a && !m.b;
@@ -1128,7 +1150,8 @@
       const na = m.w ? (m.w === 'a' ? ' win' : ' lose') : '', nb = m.w ? (m.w === 'b' ? ' win' : ' lose') : '';
       const score = started || m.w ? `<span class="${m.w === 'a' ? 'w' : ''}">${m.sa}</span> – <span class="${m.w === 'b' ? 'w' : ''}">${m.sb}</span>` : '<span class="tbd">– · –</span>';
       const vsOnly = c.round && c.round.draw;
-      return `<div class="cp-m${cls}"><span class="cp-n${na}">${escapeHtml(m.a || '?')}</span><span class="cp-s">${vsOnly ? '<span class="tbd">VS</span>' : score}</span><span class="cp-n r${nb}">${escapeHtml(m.b || '?')}</span></div>`;
+      // Table numbers show in the AT THE TABLE cards on the right (owner 2026-11-14).
+      return `<div class="cp-m${cls}"><span class="cp-p">${cpAv(m.a, m.ca, m.pa)}<span class="cp-n${na}">${escapeHtml(m.a || '?')}</span></span><span class="cp-s">${vsOnly ? '<span class="tbd">VS</span>' : score}</span><span class="cp-p r"><span class="cp-n r${nb}">${escapeHtml(m.b || '?')}</span>${cpAv(m.b, m.cb, m.pb)}</span></div>`;
     };
     if (c.state === 'finished' && c.winner) { renderChampion(competitionChampion(c)); return; }
     const two = r.matches.length > 8, big = r.matches.length <= 4, tight = r.matches.length >= 7 && !two;
@@ -1158,11 +1181,11 @@
         stubD = `<div class="cp-stub"><span class="tag">DRAW COMPLETE</span><span class="rn">${M} ${M === 1 ? 'MATCH' : 'MATCHES'}</span><span class="race">Race to ${r.race}</span>${d.byes ? `<span class="small">${d.byes} ${d.byes === 1 ? 'bye' : 'byes'}</span>` : ''}${c.pot > 0 ? `<div class="cp-pay">${pays}</div>` : ''}</div>`;
       } else if (inByes) {
         const last = R > 2 * M ? d.last : '';
-        stubD = `<div class="cp-stub"><span class="tag">THE DRAW</span><span class="rn">BYE</span><div class="cp-dr"><div class="cp-dr__slot ${last ? 'on new' : 'off'}">${escapeHtml(last || '?')}</div></div><span class="race">Straight through to the next round</span></div>`;
+        stubD = `<div class="cp-stub"><div class="cp-drhd"><span>THE DRAW</span><span>BYE</span></div><div class="cp-mid"><div class="cp-dr"><div class="cp-dr__slot ${last ? 'on new' : 'off'}">${escapeHtml(last || '?')}</div></div><span class="race">Straight through to the next round</span></div></div>`;
       } else {
         const m = r.matches[mi] || { a: '', b: '' };
         const newA = R % 2 === 1, newB = R > 0 && R % 2 === 0;
-        stubD = `<div class="cp-stub"><span class="tag">THE DRAW</span><span class="rn">MATCH ${mi + 1}</span><div class="cp-dr"><div class="cp-dr__slot ${m.a ? 'on' : 'off'}${m.a && newA ? ' new' : ''}">${escapeHtml(m.a || '?')}</div><span class="cp-dr__vs">VS</span><div class="cp-dr__slot ${m.b ? 'on' : 'off'}${m.b && newB ? ' new' : ''}">${escapeHtml(m.b || '?')}</div></div><span class="small">Match <b>${mi + 1}</b> of ${M}</span></div>`;
+        stubD = `<div class="cp-stub"><div class="cp-drhd"><span>THE DRAW</span><span>MATCH ${mi + 1}</span></div><div class="cp-mid"><div class="cp-dr"><div class="cp-dr__slot ${m.a ? 'on' : 'off'}${m.a && newA ? ' new' : ''}">${escapeHtml(m.a || '?')}</div><span class="cp-dr__vs">VS</span><div class="cp-dr__slot ${m.b ? 'on' : 'off'}${m.b && newB ? ' new' : ''}">${escapeHtml(m.b || '?')}</div></div><span class="small">Match <b>${mi + 1}</b> of ${M}</span></div></div>`;
       }
       stage.innerHTML = bigShell(r.name, mainD, stubD);
       return;
@@ -1179,12 +1202,12 @@
     if (atTable.length && c.state === 'playing') {
       const shown = atTable.slice(0, 2), two = shown.length > 1;
       // tn: the table number (app build 68+, when the venue has 2+ tables).
+      // The table number sits inside the card, above the names; no pictures here,
+      // they stay in the list on the left (owner 2026-11-14).
       const tn = (m) => m.tn ? `<span class="cp-at__tn">TABLE ${m.tn}</span>` : '';
-      const card = (m) => two
-        ? `<div class="cp-at__wrap">${tn(m)}<div class="cp-at__m"><span class="cp-at__n">${escapeHtml(m.a)}</span><span class="cp-at__s">${m.sa}<i>–</i>${m.sb}</span><span class="cp-at__n r">${escapeHtml(m.b)}</span></div></div>`
-        : `<div class="cp-at__wrap">${tn(m)}<div class="cp-at__m"><span class="cp-at__n">${escapeHtml(m.a)}</span><span class="cp-at__s">${m.sa}<i>–</i>${m.sb}</span><span class="cp-at__n">${escapeHtml(m.b)}</span></div></div>`;
+      const card = (m) => `<div class="cp-at__m">${tn(m)}<div class="cp-at__row"><span class="cp-at__n">${escapeHtml(m.a)}</span><span class="cp-at__s">${m.sa}<i>–</i>${m.sb}</span><span class="cp-at__n r">${escapeHtml(m.b)}</span></div></div>`;
       const more = atTable.length > 2 ? `<span class="cp-at__more">+${atTable.length - 2} more at the tables</span>` : '';
-      const stubT = `<div class="cp-stub"><span class="tag">AT THE TABLE</span><div class="cp-at${two ? ' two' : ''}">${shown.map(card).join('')}</div>${more}<span class="race">Race to ${r.race}</span><span class="small">${escapeHtml(r.name)} · <b>${done}</b>/${r.matches.length} done</span>${c.pot > 0 ? `<div class="cp-pay">${pays}</div>` : ''}</div>`;
+      const stubT = `<div class="cp-stub"><span class="tag">AT THE TABLE</span><div class="cp-mid"><div class="cp-at${two ? ' two' : ''}">${shown.map(card).join('')}</div>${more}<div class="cp-below"><span class="race">Race to ${r.race}</span><span class="small">${escapeHtml(r.name)} · <b>${done}</b>/${r.matches.length} done</span></div></div>${c.pot > 0 ? `<div class="cp-pay">${pays}</div>` : ''}</div>`;
       stage.innerHTML = bigShell(r.name, main, stubT);
       return;
     }
