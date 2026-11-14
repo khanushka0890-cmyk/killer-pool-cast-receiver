@@ -488,6 +488,14 @@
 .cp-n.lose{color:#8C86A3;text-decoration:line-through;text-decoration-color:#5E5778;}
 .cp-s{font:400 calc(32 * var(--u))/1 'Bebas Neue',sans-serif;color:#fff;padding-top:calc(3 * var(--u));min-width:calc(70 * var(--u));text-align:center;}
 .cp-s .w{color:var(--gold);}
+.cp-s.has-tn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:calc(2 * var(--u));padding-top:calc(4 * var(--u));}
+.cp-s.has-tn .cp-sc{line-height:.8;}
+.cp-tn{font:700 calc(13 * var(--u))/1 'Barlow Condensed',sans-serif;letter-spacing:calc(2.5 * var(--u));color:var(--gold-text);white-space:nowrap;}
+.cp-list.big .cp-tn{font-size:calc(16 * var(--u));}
+/* Many matches (short rows): the table number sits beside the score. */
+.cp-list.two .cp-s.has-tn,.cp-list.tight .cp-s.has-tn{flex-direction:row;gap:calc(6 * var(--u));padding-top:calc(3 * var(--u));}
+.cp-list.two .cp-s.has-tn .cp-sc,.cp-list.tight .cp-s.has-tn .cp-sc{line-height:1;}
+.cp-stub.mid{justify-content:center;}
 .cp-s .tbd{color:#8C86A3;}
 .cp-list.tight{gap:calc(6 * var(--u));}
 .cp-list.tight .cp-m{height:calc(42 * var(--u));}
@@ -1128,7 +1136,9 @@
       const na = m.w ? (m.w === 'a' ? ' win' : ' lose') : '', nb = m.w ? (m.w === 'b' ? ' win' : ' lose') : '';
       const score = started || m.w ? `<span class="${m.w === 'a' ? 'w' : ''}">${m.sa}</span> – <span class="${m.w === 'b' ? 'w' : ''}">${m.sb}</span>` : '<span class="tbd">– · –</span>';
       const vsOnly = c.round && c.round.draw;
-      return `<div class="cp-m${cls}"><span class="cp-n${na}">${escapeHtml(m.a || '?')}</span><span class="cp-s">${vsOnly ? '<span class="tbd">VS</span>' : score}</span><span class="cp-n r${nb}">${escapeHtml(m.b || '?')}</span></div>`;
+      // The table number sits under the score, as on the phone (owner 2026-11-14).
+      const tn = !vsOnly && !m.w && m.tn ? `<span class="cp-tn">TABLE ${m.tn}</span>` : '';
+      return `<div class="cp-m${cls}"><span class="cp-n${na}">${escapeHtml(m.a || '?')}</span><span class="cp-s${tn ? ' has-tn' : ''}"><span class="cp-sc">${vsOnly ? '<span class="tbd">VS</span>' : score}</span>${tn}</span><span class="cp-n r${nb}">${escapeHtml(m.b || '?')}</span></div>`;
     };
     if (c.state === 'finished' && c.winner) { renderChampion(competitionChampion(c)); return; }
     const two = r.matches.length > 8, big = r.matches.length <= 4, tight = r.matches.length >= 7 && !two;
@@ -1158,11 +1168,11 @@
         stubD = `<div class="cp-stub"><span class="tag">DRAW COMPLETE</span><span class="rn">${M} ${M === 1 ? 'MATCH' : 'MATCHES'}</span><span class="race">Race to ${r.race}</span>${d.byes ? `<span class="small">${d.byes} ${d.byes === 1 ? 'bye' : 'byes'}</span>` : ''}${c.pot > 0 ? `<div class="cp-pay">${pays}</div>` : ''}</div>`;
       } else if (inByes) {
         const last = R > 2 * M ? d.last : '';
-        stubD = `<div class="cp-stub"><span class="tag">THE DRAW</span><span class="rn">BYE</span><div class="cp-dr"><div class="cp-dr__slot ${last ? 'on new' : 'off'}">${escapeHtml(last || '?')}</div></div><span class="race">Straight through to the next round</span></div>`;
+        stubD = `<div class="cp-stub mid"><span class="tag">THE DRAW</span><span class="rn">BYE</span><div class="cp-dr"><div class="cp-dr__slot ${last ? 'on new' : 'off'}">${escapeHtml(last || '?')}</div></div><span class="race">Straight through to the next round</span></div>`;
       } else {
         const m = r.matches[mi] || { a: '', b: '' };
         const newA = R % 2 === 1, newB = R > 0 && R % 2 === 0;
-        stubD = `<div class="cp-stub"><span class="tag">THE DRAW</span><span class="rn">MATCH ${mi + 1}</span><div class="cp-dr"><div class="cp-dr__slot ${m.a ? 'on' : 'off'}${m.a && newA ? ' new' : ''}">${escapeHtml(m.a || '?')}</div><span class="cp-dr__vs">VS</span><div class="cp-dr__slot ${m.b ? 'on' : 'off'}${m.b && newB ? ' new' : ''}">${escapeHtml(m.b || '?')}</div></div><span class="small">Match <b>${mi + 1}</b> of ${M}</span></div>`;
+        stubD = `<div class="cp-stub mid"><span class="tag">THE DRAW</span><span class="rn">MATCH ${mi + 1}</span><div class="cp-dr"><div class="cp-dr__slot ${m.a ? 'on' : 'off'}${m.a && newA ? ' new' : ''}">${escapeHtml(m.a || '?')}</div><span class="cp-dr__vs">VS</span><div class="cp-dr__slot ${m.b ? 'on' : 'off'}${m.b && newB ? ' new' : ''}">${escapeHtml(m.b || '?')}</div></div><span class="small">Match <b>${mi + 1}</b> of ${M}</span></div>`;
       }
       stage.innerHTML = bigShell(r.name, mainD, stubD);
       return;
@@ -1179,7 +1189,7 @@
     if (atTable.length && c.state === 'playing') {
       const shown = atTable.slice(0, 2), two = shown.length > 1;
       // tn: the table number (app build 68+, when the venue has 2+ tables).
-      const tn = (m) => m.tn ? `<span class="cp-at__tn">TABLE ${m.tn}</span>` : '';
+      const tn = () => ''; // table numbers show in the list on the left (owner 2026-11-14)
       const card = (m) => two
         ? `<div class="cp-at__wrap">${tn(m)}<div class="cp-at__m"><span class="cp-at__n">${escapeHtml(m.a)}</span><span class="cp-at__s">${m.sa}<i>–</i>${m.sb}</span><span class="cp-at__n r">${escapeHtml(m.b)}</span></div></div>`
         : `<div class="cp-at__wrap">${tn(m)}<div class="cp-at__m"><span class="cp-at__n">${escapeHtml(m.a)}</span><span class="cp-at__s">${m.sa}<i>–</i>${m.sb}</span><span class="cp-at__n">${escapeHtml(m.b)}</span></div></div>`;
