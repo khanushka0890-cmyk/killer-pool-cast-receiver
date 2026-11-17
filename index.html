@@ -24,7 +24,7 @@
   })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&family=Doto:wght@700&family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root {
     /* 1 design px. Stage is designed at 1280x720 and scales to fit any
@@ -583,6 +583,102 @@
 .ch-scan .tv-qr svg{width:100%;height:100%;display:block;}
 .ch-scan span{font:700 calc(15 * var(--u))/1.3 'Barlow Condensed',sans-serif;letter-spacing:calc(2.5 * var(--u));color:var(--text-2);}
 @media (prefers-reduced-motion: reduce){.ch-burst,.ch-confetti i,.ch-lbl,.ch-av,.ch-name,.ch-prize,.ch-fact,.ch-places{animation:none}}
+  /* ── Poolco TV, Nothing design (owner 2026-11-17, Figma "TV · Nothing").
+     Only for competitions sent by Poolco (style: 'nothing'); Killer Pool's
+     screens above are unchanged. Designed at 1280x720 like the rest. */
+  .tv-stage.nt { background-color: #000; background-image: radial-gradient(circle, #232323 calc(1 * var(--u)), transparent calc(1.4 * var(--u))); background-size: calc(16 * var(--u)) calc(16 * var(--u));
+    color: #F2F2F2; font-family: 'Space Grotesk', sans-serif; padding: calc(40 * var(--u)) calc(54 * var(--u)); display: flex; flex-direction: column; overflow: hidden; }
+  .nt * { box-sizing: border-box; }
+  .nt-top { display: flex; justify-content: space-between; align-items: center; gap: calc(24 * var(--u)); font: 400 calc(18 * var(--u))/1 'Space Mono', monospace; letter-spacing: .08em; color: #B3B3B3; white-space: nowrap; }
+  .nt-top span { overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; gap: calc(10 * var(--u)); }
+  .nt-top b { color: #fff; font-weight: 400; }
+  .nt-top em { font-style: normal; color: #FF383C; }
+  .nt-dot { display: inline-block; flex-shrink: 0; width: calc(8 * var(--u)); height: calc(8 * var(--u)); border-radius: 50%; background: #FF383C; }
+  .nt-lbl { font: 400 calc(18 * var(--u))/1.3 'Space Mono', monospace; letter-spacing: .08em; text-transform: uppercase; color: #B3B3B3; }
+  .nt-lbl.red { color: #FF383C; } .nt-lbl.gold { color: #FFC940; } .nt-lbl.dis { color: #8C8C8C; }
+  .nt-hero { font: 700 calc(84 * var(--u))/1 'Doto', monospace; letter-spacing: -0.01em; text-transform: uppercase; color: #fff; overflow-wrap: anywhere; }
+  .nt-gold { color: #FFC940; } .nt-grey { color: #8C8C8C; }
+  .nt-big { font: 700 calc(72 * var(--u))/1 'Doto', monospace; color: #FFC940; }
+  .nt-bar { display: inline-flex; gap: calc(2 * var(--u)); width: calc(240 * var(--u)); }
+  .nt-bar i { flex: 1; height: calc(6 * var(--u)); background: #333; }
+  .nt-bar i.on { background: #fff; }
+  .nt-body { flex: 1; min-height: 0; display: flex; flex-direction: column; padding-top: calc(48 * var(--u)); }
+  .nt-cols { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) calc(372 * var(--u)); gap: calc(80 * var(--u)); padding-top: calc(48 * var(--u)); }
+  .nt-left { display: flex; flex-direction: column; min-width: 0; }
+  .nt-right { display: flex; flex-direction: column; min-width: 0; gap: calc(8 * var(--u)); }
+  .nt-row { display: flex; align-items: baseline; gap: calc(14 * var(--u)); padding: calc(10 * var(--u)) 0; border-bottom: 1px solid #333; min-width: 0; }
+  .nt-row:last-child { border-bottom: none; }
+  .nt-idx { font: 400 calc(18 * var(--u))/1 'Space Mono', monospace; color: #8C8C8C; flex-shrink: 0; }
+  .nt-nm { font: 400 calc(30 * var(--u))/1.15 'Space Grotesk', sans-serif; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+  .nt-vs { font: 400 calc(18 * var(--u))/1 'Space Mono', monospace; color: #8C8C8C; flex-shrink: 0; }
+  .nt-foot { margin-top: auto; display: flex; flex-direction: column; gap: calc(16 * var(--u)); }
+  /* Round */
+  .nt-head { display: flex; justify-content: space-between; align-items: flex-end; gap: calc(32 * var(--u)); padding-top: calc(40 * var(--u)); }
+  .nt-head > div { display: flex; flex-direction: column; gap: calc(14 * var(--u)); min-width: 0; }
+  .nt-head > div.r { align-items: flex-end; flex-shrink: 0; }
+  .nt-list { flex: 1; min-height: 0; display: grid; grid-auto-flow: column; gap: calc(16 * var(--u)) calc(16 * var(--u)); align-content: start; padding-top: calc(44 * var(--u)); }
+  .nt-m { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; column-gap: calc(16 * var(--u)); padding: 0 calc(26 * var(--u)); border-radius: calc(10 * var(--u)); border: 1px solid #333; background: #111; min-width: 0; }
+  .nt-m.t { border-color: #8A6A1F; }
+  .nt-m.up { border: 1px dashed #333; background: #050505; }
+  .nt-m.done { border-color: transparent; background: #14110A; }
+  .nt-m .n { font: 500 calc(40 * var(--u))/1.1 'Space Grotesk', sans-serif; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+  .nt-m .n.r { text-align: right; }
+  .nt-m .n.lose { color: #8C8C8C; }
+  .nt-m .mid { display: flex; align-items: center; gap: calc(26 * var(--u)); }
+  .nt-m .sc { font: 700 calc(56 * var(--u))/1 'Doto', monospace; color: #FFC940; min-width: calc(40 * var(--u)); text-align: center; }
+  .nt-m .sc.lose { color: #9C98AC; }
+  .nt-m .st { display: flex; flex-direction: column; align-items: center; gap: calc(8 * var(--u)); min-width: calc(110 * var(--u)); }
+  .nt-m .st i { display: block; width: calc(20 * var(--u)); height: calc(3 * var(--u)); background: #555; }
+  .nt-m .st span { font: 400 calc(15 * var(--u))/1 'Space Mono', monospace; letter-spacing: .08em; text-transform: uppercase; color: #8C8C8C; white-space: nowrap; }
+  .nt-m .st span.red { color: #FF383C; } .nt-m .st span.gold { color: #FFC940; }
+  .nt-list.two .nt-m { padding: 0 calc(26 * var(--u)); }
+  .nt-list.two .nt-m .n { font-size: calc(28 * var(--u)); }
+  .nt-list.two .nt-m .sc { font-size: calc(36 * var(--u)); min-width: calc(26 * var(--u)); }
+  .nt-list.two .nt-m .mid { gap: calc(14 * var(--u)); }
+  .nt-list.two .nt-m .st { min-width: calc(80 * var(--u)); gap: calc(5 * var(--u)); }
+  .nt-list.two .nt-m .st span { font-size: calc(13 * var(--u)); }
+  .nt-byes { display: flex; flex-wrap: wrap; align-items: baseline; gap: calc(10 * var(--u)) calc(24 * var(--u)); padding-top: calc(18 * var(--u)); }
+  .nt-byes .nt-nm { font-size: calc(24 * var(--u)); }
+  /* The draw */
+  .nt-cards { display: flex; align-items: center; gap: calc(28 * var(--u)); margin-top: auto; }
+  .nt-card { width: calc(307 * var(--u)); height: calc(213 * var(--u)); border-radius: calc(12 * var(--u)); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: calc(20 * var(--u)); padding: calc(12 * var(--u)); flex-shrink: 0; }
+  .nt-card.on { background: #fff; }
+  .nt-card.off { border: 1px dashed #4D4D4D; background: #111; }
+  .nt-card.new { animation: ntIn .55s ease-out; }
+  .nt-card .nm { font: 700 calc(44 * var(--u))/1 'Doto', monospace; text-transform: uppercase; color: #000; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .nt-av { flex-shrink: 0; width: calc(80 * var(--u)); height: calc(80 * var(--u)); border-radius: 50%; background: #FFC940; color: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; font: 400 calc(30 * var(--u))/1 'Space Mono', monospace; }
+  .nt-av img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  @keyframes ntIn { from { transform: rotateY(90deg); } to { transform: rotateY(0); } }
+  /* Waiting */
+  .nt-stats { display: flex; align-items: baseline; gap: calc(28 * var(--u)); padding-top: calc(36 * var(--u)); }
+  .nt-stats span { display: inline-flex; align-items: baseline; gap: calc(10 * var(--u)); }
+  .nt-stats b { font: 400 calc(40 * var(--u))/1 'Space Mono', monospace; color: #fff; }
+  .nt-stats b.gold { color: #FFC940; }
+  .nt-names { display: grid; grid-auto-flow: column; column-gap: calc(22 * var(--u)); }
+  .nt-names .nt-row { padding: calc(8 * var(--u)) 0; border-bottom: 1px solid #333; }
+  .nt-names .nt-nm { font-size: calc(28 * var(--u)); }
+  .nt-names.small .nt-nm { font-size: calc(20 * var(--u)); }
+  .nt-names.small .nt-row { padding: calc(5 * var(--u)) 0; }
+  /* Match won */
+  .nt-won { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; column-gap: calc(40 * var(--u)); margin-top: auto; }
+  .nt-won .n { font: 700 calc(80 * var(--u))/1 'Space Mono', monospace; text-transform: uppercase; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+  .nt-won .n.r { text-align: right; }
+  .nt-won .n.lose { color: #8C8C8C; }
+  .nt-won .sc { display: flex; align-items: center; gap: calc(30 * var(--u)); font: 700 calc(120 * var(--u))/1 'Doto', monospace; color: #FFC940; }
+  .nt-won .sc .lose { color: #9C98AC; }
+  .nt-won .sc i { display: block; width: calc(64 * var(--u)); height: calc(10 * var(--u)); background: #555; }
+  .nt-wonl { display: grid; grid-template-columns: 1fr 1fr; padding: calc(36 * var(--u)) 0 calc(18 * var(--u)); border-bottom: 1px solid #4D4D4D; margin-bottom: auto; }
+  /* Winner */
+  .nt-win { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) calc(360 * var(--u)); gap: calc(28 * var(--u)); padding-top: calc(36 * var(--u)); }
+  .nt-win__l { display: grid; grid-template-columns: calc(232 * var(--u)) minmax(0, 1fr); column-gap: calc(40 * var(--u)); align-content: center; padding-right: calc(28 * var(--u)); border-right: 1px solid #4D4D4D; }
+  .nt-win__av { width: calc(232 * var(--u)); height: calc(232 * var(--u)); border-radius: 50%; border: calc(1.5 * var(--u)) solid #FFC940; padding: calc(9 * var(--u)); }
+  .nt-win__av > span { width: 100%; height: 100%; border-radius: 50%; background: #FFC940; color: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; font: 700 calc(110 * var(--u))/1 'Space Grotesk', sans-serif; }
+  .nt-win__av img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .nt-win__n { font: 700 calc(112 * var(--u))/0.95 'Space Grotesk', sans-serif; text-transform: uppercase; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .nt-win__fact { grid-column: 1 / -1; padding-top: calc(48 * var(--u)); padding-left: calc(272 * var(--u)); font: 400 calc(30 * var(--u))/1.2 'Space Grotesk', sans-serif; color: #B3B3B3; }
+  .nt-amt { font: 400 calc(30 * var(--u))/1 'Space Mono', monospace; color: #FFC940; margin-left: auto; flex-shrink: 0; }
+  .nt-right .nt-row .nt-lbl { margin-left: auto; flex-shrink: 0; }
+  @media (prefers-reduced-motion: reduce) { .nt-card.new { animation: none; } }
 </style>
 </head>
 <body>
@@ -1128,9 +1224,151 @@
     stage.innerHTML = bigShell('Now shooting', main, stub);
   }
 
+  // ── Poolco TV, Nothing design (owner 2026-11-17) ───────────────────────
+  // Poolco sends style: 'nothing'. Extra fields: players (names still in,
+  // for the waiting screen), standings (when finished), idle (no
+  // competition yet). Everything else is the competition payload above.
+  function renderNothing(c) {
+    stage.className = 'tv-stage nt';
+    const fmt = (n) => Math.round(n || 0).toLocaleString();
+    const pad2 = (n) => String(n).padStart(2, '0');
+    const up = (s) => escapeHtml(String(s || '').toUpperCase());
+    const bar = (n, on) => `<span class="nt-bar">${Array.from({ length: Math.max(1, n) }, (_, i) => `<i${i < on ? ' class="on"' : ''}></i>`).join('')}</span>`;
+    const av = (name, photo, cls = 'nt-av') => `<span class="${cls}">${photo && /^data:image\//.test(photo) ? `<img src="${escapeHtml(photo)}" alt="">` : escapeHtml((name || '?').trim().charAt(0).toUpperCase())}</span>`;
+    const top = `<header class="nt-top"><span><b>POOLCO</b>${c.venue ? up(c.venue) : ''}</span><span>${up(c.title)}<i class="nt-dot"></i><em>LIVE</em></span></header>`;
+    // Long words shrink so the hero never runs off the screen.
+    const heroSize = (text, max, width) => { const longest = Math.max(4, ...String(text).split(/\s+/).map(w => w.length)); return Math.max(40, Math.min(max, Math.floor(width / (longest * 0.62)))); };
+    if (c.idle) {
+      stage.innerHTML = top + `<div class="nt-body"><span class="nt-lbl red">Tonight</span><h1 class="nt-hero" style="padding-top:calc(20 * var(--u))">Waiting for<br>the organiser</h1><div class="nt-foot">${bar(8, 0)}<span class="nt-lbl">Start a competition on the phone</span></div></div>`;
+      return;
+    }
+    const r = c.round || { name: '', race: 1, matches: [], byes: [] };
+    const M = r.matches.length, done = r.matches.filter(m => m.w).length;
+    const split = (c.split || []).length > 1 ? ' · ' + c.split.join(' / ') : '';
+
+    // The winner.
+    if (c.state === 'finished' && c.winner) {
+      const pod = Array.isArray(c.podium) && c.podium[0] ? c.podium[0] : { name: c.winner };
+      const pay = (c.payouts || [])[0] || 0;
+      const m = M === 1 ? r.matches[0] : null;
+      const fact = m && m.w && c.runnerUp ? `Beat ${escapeHtml(c.runnerUp)} <span class="nt-gold">${Math.max(m.sa, m.sb)}–${Math.min(m.sa, m.sb)}</span> in the final` : '';
+      const st = (c.standings || []).slice(0, 7);
+      const rows = st.map(p => `<div class="nt-row"><span class="nt-idx"${p.rank ? ' style="color:#F2F2F2"' : ''}>${p.rank ? pad2(p.rank) : '–'}</span><span class="nt-nm${p.rank ? '' : ' nt-grey'}">${escapeHtml(p.name)}</span>${p.amount > 0 ? `<span class="nt-amt">${fmt(p.amount)}</span>` : `<span class="nt-lbl dis">${up(p.note || '')}</span>`}</div>`).join('');
+      const name = pod.name || c.winner;
+      stage.innerHTML = top + `<div style="text-align:center;padding-top:calc(44 * var(--u))"><span class="nt-hero nt-gold" style="font-size:calc(72 * var(--u))">Winner</span></div>
+        <div class="nt-win"><div class="nt-win__l">
+          <div class="nt-win__av">${av(name, pod.photo, '')}</div>
+          <div style="display:flex;flex-direction:column;justify-content:center;gap:calc(20 * var(--u));min-width:0">
+            <div class="nt-win__n" style="font-size:calc(${heroSize(name, 112, 560)} * var(--u))">${escapeHtml(name)}</div>
+            ${pay > 0 ? `<div style="display:flex;align-items:baseline;gap:calc(16 * var(--u))"><span class="nt-big">${fmt(pay)}</span><span class="nt-lbl">Prize</span></div>` : ''}
+          </div>
+          ${fact ? `<div class="nt-win__fact" style="padding-left:0">${fact}</div>` : ''}
+        </div>
+        <div class="nt-right" style="justify-content:center">${rows ? `<span class="nt-lbl red">Final standings</span><div>${rows}</div>` : ''}</div></div>`;
+      return;
+    }
+
+    if (r.draw) {
+      const d = r.draw, R = d.reveal;
+      const drawn = r.matches.map((m, i) => ({ m, i })).filter(x => x.m.a || x.m.b);
+      const lineRows = (list) => list.map(({ m, i }) => `<div class="nt-row"><span class="nt-idx">${pad2(i + 1)}</span><span class="nt-nm">${escapeHtml(m.a || '…')}</span><span class="nt-vs">VS</span><span class="nt-nm${m.b ? '' : ' nt-grey'}">${escapeHtml(m.b || '…')}</span></div>`).join('');
+      // Before the first card: tonight's players.
+      if (R === 0) {
+        const names = Array.isArray(c.players) ? c.players : [];
+        const cols = names.length > 10 ? 2 : 1, small = names.length > 20;
+        const per = Math.ceil(names.length / (small ? 3 : cols));
+        const list = names.length ? `<span class="nt-lbl red">In tonight · ${names.length}</span><div class="nt-names${small ? ' small' : ''}" style="grid-template-rows:repeat(${per},auto);grid-template-columns:repeat(${small ? 3 : cols},minmax(0,1fr))">${names.map((n, i) => `<div class="nt-row"><span class="nt-idx">${pad2(i + 1)}</span><span class="nt-nm">${escapeHtml(n)}</span></div>`).join('')}</div>` : '';
+        const title = c.title || 'Tonight';
+        stage.innerHTML = top + `<div class="nt-cols"><div class="nt-left">
+            <span class="nt-lbl red">Tonight</span>
+            <h1 class="nt-hero" style="padding-top:calc(20 * var(--u));font-size:calc(${heroSize(title, 84, 720)} * var(--u))">${escapeHtml(title)}</h1>
+            <div class="nt-stats"><span><span class="nt-lbl">Players</span><b>${names.length || d.total}</b></span><span><span class="nt-lbl">Race to</span><b>${r.race}</b></span>${c.pot > 0 ? `<span><span class="nt-lbl">Prize pot</span><b class="gold">${fmt(c.pot)}</b></span>` : ''}</div>
+            <div class="nt-foot">${bar(M, 0)}<span class="nt-lbl">Waiting for the draw</span></div>
+          </div><div class="nt-right">${list}</div></div>`;
+        return;
+      }
+      const complete = R >= d.total && d.ack !== false;
+      if (complete) {
+        const byes = r.byes && r.byes.length ? `<div class="nt-row"><span class="nt-idx">–</span><span class="nt-nm">${r.byes.map(escapeHtml).join(', ')}</span><span class="nt-vs">BYE</span></div>` : '';
+        stage.innerHTML = top + `<div class="nt-cols"><div class="nt-left">
+            <span class="nt-lbl red">${up(r.name)} · Draw complete</span>
+            <h1 class="nt-hero" style="padding-top:calc(20 * var(--u))">${M} ${M === 1 ? 'match' : 'matches'}<br>set</h1>
+            <div class="nt-foot">${bar(M, M)}<span class="nt-lbl">Race to ${r.race}${c.pot > 0 ? ` · Pot <span class="nt-gold">${fmt(c.pot)}</span>` : ''}</span></div>
+          </div><div class="nt-right"><span class="nt-lbl red">Line-up · ${M} / ${M}</span><div>${lineRows(drawn.slice(-9))}${byes}</div></div></div>`;
+        return;
+      }
+      const inByes = R > 2 * M;
+      const mi = Math.min(Math.floor(Math.max(R - 1, 0) / 2), M - 1);
+      const card = (name, photo, isNew, empty) => name
+        ? `<div class="nt-card on${isNew ? ' new' : ''}">${av(name, photo)}<span class="nm">${escapeHtml(name)}</span></div>`
+        : `<div class="nt-card off"><span class="nt-lbl">${empty}</span></div>`;
+      let hero, cards, foot;
+      if (inByes) {
+        const k = R - 2 * M;
+        hero = `Bye ${pad2(k)}`;
+        cards = card(d.last, null, true, '');
+        foot = `${bar(d.byes, k)}<span class="nt-lbl">Bye ${k} of ${d.byes} · straight through</span>`;
+      } else {
+        const m = r.matches[mi] || {};
+        hero = `Match ${pad2(mi + 1)}`;
+        cards = card(m.a, m.pa, R % 2 === 1, 'Next card…') + '<span class="nt-lbl">VS</span>' + card(m.b, m.pb, R > 0 && R % 2 === 0, m.a ? 'Next card…' : '?');
+        foot = `${bar(M, mi + 1)}<span class="nt-lbl">Match ${mi + 1} of ${M}</span>`;
+      }
+      const k = Math.min(Math.floor(R / 2), M);
+      stage.innerHTML = top + `<div class="nt-cols"><div class="nt-left">
+          <span class="nt-lbl red">${up(r.name)} · The draw</span>
+          <h1 class="nt-hero" style="padding-top:calc(20 * var(--u));font-size:calc(100 * var(--u))">${hero}</h1>
+          <div class="nt-cards">${cards}</div>
+          <div class="nt-foot" style="margin-top:calc(26 * var(--u))">${foot}</div>
+        </div><div class="nt-right"><span class="nt-lbl red">Drawn so far · ${k} / ${M}</span><div>${lineRows(drawn.slice(-8))}</div></div></div>`;
+      return;
+    }
+
+    // A match just finished on the phone: who won, for a few seconds.
+    if (r.won && c.state !== 'finished') {
+      const w = r.won, aw = w.w === 'a';
+      const nmSize = Math.max(44, Math.min(80, Math.floor(420 / (Math.max(5, w.a.length, w.b.length) * 0.62))));
+      stage.innerHTML = top + `<div class="nt-body">
+          <span class="nt-lbl red" style="display:flex;align-items:center;gap:calc(10 * var(--u))"><i class="nt-dot"></i>Match won · ${up(r.name)}</span>
+          <div class="nt-won" style="padding-top:calc(60 * var(--u))">
+            <span class="n${aw ? '' : ' lose'}" style="font-size:calc(${nmSize} * var(--u))">${escapeHtml(w.a)}</span>
+            <span class="sc"><span class="${aw ? '' : 'lose'}">${w.sa}</span><i></i><span class="${aw ? 'lose' : ''}">${w.sb}</span></span>
+            <span class="n r${aw ? ' lose' : ''}" style="font-size:calc(${nmSize} * var(--u))">${escapeHtml(w.b)}</span>
+          </div>
+          <div class="nt-wonl"><span class="nt-lbl gold">${aw ? 'Winner' : ''}</span><span class="nt-lbl gold" style="text-align:right">${aw ? '' : 'Winner'}</span></div>
+          <div class="nt-foot">${bar(M, done)}<span class="nt-lbl">${done} / ${M} done${done === M ? ' · round complete' : ''}</span></div>
+        </div>`;
+      return;
+    }
+
+    // The round: every match, at the table first, then waiting, then done.
+    const live = r.matches.filter(m => !m.w), fin = r.matches.filter(m => m.w);
+    const ordered = [...live.filter(m => m.t).sort((x, y) => (x.tn || 99) - (y.tn || 99)), ...live.filter(m => !m.t), ...fin];
+    const two = M > 4, cols = two ? 2 : 1, rows = Math.ceil(M / cols);
+    const avail = 400 - (r.byes && r.byes.length ? 44 : 0);
+    const h = Math.max(40, Math.min(two ? 72 : 92, Math.floor((avail - (rows - 1) * 16) / Math.max(rows, 1))));
+    const row = (m) => {
+      const started = m.sa > 0 || m.sb > 0;
+      const cls = m.w ? ' done' : m.t ? ' t' : started ? '' : ' up';
+      const st = m.w ? '<span class="gold">Finished</span>' : m.t ? `<span class="red">${m.tn ? `Table ${m.tn}` : 'At the table'}</span>` : started ? '<span>Playing</span>' : '<span>Upcoming</span>';
+      const sa = `<span class="sc${m.w === 'b' ? ' lose' : ''}">${m.sa}</span>`, sb = `<span class="sc${m.w === 'a' ? ' lose' : ''}">${m.sb}</span>`;
+      const mid = started || m.w ? `<span class="mid">${sa}<span class="st"><i></i>${st}</span>${sb}</span>` : `<span class="mid"><span class="st"><i></i>${st}</span></span>`;
+      return `<div class="nt-m${cls}" style="height:calc(${h} * var(--u))"><span class="n${m.w === 'b' ? ' lose' : ''}">${escapeHtml(m.a)}</span>${mid}<span class="n r${m.w === 'a' ? ' lose' : ''}">${escapeHtml(m.b)}</span></div>`;
+    };
+    const byes = r.byes && r.byes.length ? `<div class="nt-byes"><span class="nt-lbl red">${r.byes.length === 1 ? 'Bye' : 'Byes'}</span>${r.byes.map(n => `<span class="nt-nm">${escapeHtml(n)}</span>`).join('')}</div>` : '';
+    const lbl = c.state === 'fill' ? `Round done · ${done} / ${M}` : `${two ? `${M} games · ` : ''}Race to ${r.race}${split}`;
+    stage.innerHTML = top + `<div class="nt-head"><div>
+          <span class="nt-lbl">${lbl}</span>
+          <h1 class="nt-hero" style="font-size:calc(${heroSize(r.name, 72, 760)} * var(--u))">${escapeHtml(r.name)}</h1>
+        </div>${c.pot > 0 ? `<div class="r"><span class="nt-lbl">Prize pot</span><span class="nt-big">${fmt(c.pot)}</span></div>` : ''}</div>
+      <div class="nt-list${two ? ' two' : ''}" style="grid-template-rows:repeat(${rows},auto);grid-template-columns:repeat(${cols},minmax(0,1fr))">${ordered.map(row).join('')}</div>${byes}`;
+  }
+
   // Competitions (app build 60+): { title, venue, pot, state, round: { name,
   // race, matches: [{ a, b, sa, sb, w }], byes }, winner, runnerUp, payouts, split }
   function renderCompetition(c) {
+    // Poolco (2026-11-17): its own Nothing-design screens.
+    if (c && c.style === 'nothing') { renderNothing(c); return; }
     stage.className = 'tv-stage';
     const fmt = (n) => Math.round(n || 0).toLocaleString();
     const places = ['WINNER', 'RUNNER-UP', '3RD'];
