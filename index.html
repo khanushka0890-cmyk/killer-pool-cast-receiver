@@ -1335,7 +1335,12 @@
         ? `<div class="nt-card on${isNew && fresh ? ' new' : ''}">${av(name, photo)}<span class="nm">${escapeHtml(name)}</span></div>`
         : `<div class="nt-card off"><span class="nt-lbl">${empty}</span></div>`;
       let hero, cards, foot;
-      if (inByes) {
+      // Next match / Next bye tapped on the phone (owner 2026-11-18): the
+      // TV clears to empty card outlines for the next one.
+      if (d.next && R > 0 && R < d.total) {
+        if (R >= 2 * M) { const k = R - 2 * M + 1; hero = `Bye ${pad2(k)}`; cards = card(null, null, false, 'Next card…'); foot = `${bar(d.byes, k - 1)}<span class="nt-lbl">Bye ${k} of ${d.byes} · straight through</span>`; }
+        else { const j = R / 2; hero = `Match ${pad2(j + 1)}`; cards = card(null, null, false, 'Next card…') + '<span class="nt-lbl">VS</span>' + card(null, null, false, '?'); foot = `${bar(M, j)}<span class="nt-lbl">Match ${j + 1} of ${M}</span>`; }
+      } else if (inByes) {
         const k = R - 2 * M;
         hero = `Bye ${pad2(k)}`;
         cards = card(d.last, null, true, '');
