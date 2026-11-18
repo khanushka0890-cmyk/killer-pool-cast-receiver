@@ -679,6 +679,34 @@
   .nt-amt { font: 400 calc(30 * var(--u))/1 'Space Mono', monospace; color: #FFC940; margin-left: auto; flex-shrink: 0; }
   .nt-right .nt-row .nt-lbl { margin-left: auto; flex-shrink: 0; }
   @media (prefers-reduced-motion: reduce) { .nt-card.new { animation: none; } }
+  /* Poolco knockout bracket (Figma "TV · Knockout bracket"). */
+  .nt-br { position: relative; margin-top: calc(14 * var(--u)); flex-shrink: 0; }
+  .nt-br > * { position: absolute; }
+  .nt-cl { top: 0; text-align: center; font-size: calc(13 * var(--u)); white-space: nowrap; }
+  .nt-ln { display: block; background: #333; }
+  .nt-ln.on { background: #8C8C8C; }
+  .nt-bx { box-sizing: border-box; border: 1px solid #333; border-radius: calc(7 * var(--u)); background: #111; overflow: hidden; }
+  .nt-bx.tbd { border-style: dashed; background: #050505; }
+  .nt-bx.live { border: calc(1.5 * var(--u)) solid #F2B84B; }
+  .nt-bx .dv { display: block; height: 1px; background: #262626; margin-top: -0.5px; }
+  .nt-br__r { display: flex; align-items: center; gap: calc(6 * var(--u)); }
+  .nt-br__r .n { flex: 1; min-width: 0; font-family: 'Space Grotesk', sans-serif; font-weight: 500; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.1; }
+  .nt-br__r .n.lose { color: #8C8C8C; }
+  .nt-br__r .ph { flex: 1; min-width: 0; font-family: 'Space Mono', monospace; letter-spacing: .04em; text-transform: uppercase; color: #6E6E6E; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .nt-br__r .s { font-family: 'Doto', monospace; font-weight: 700; color: #FFC940; line-height: 1; }
+  .nt-br__r .s.lose { color: #8C8C8C; }
+  .nt-bx .tg.in { position: absolute; right: calc(34 * var(--u)); top: calc(4 * var(--u)); font: 400 calc(9 * var(--u))/1 'Space Mono', monospace; color: #FF383C; }
+  .nt-tag { font: 400 calc(11 * var(--u))/1 'Space Mono', monospace; letter-spacing: .08em; text-transform: uppercase; color: #FF383C; white-space: nowrap; }
+  .nt-tag.dis { color: #6E6E6E; }
+  .nt-ch { box-sizing: border-box; border: 1px dashed #4D4D4D; border-radius: calc(7 * var(--u)); display: flex; align-items: center; justify-content: center; }
+  .nt-ch > span:not(.nt-lbl) { font: 700 calc(40 * var(--u))/1 'Doto', monospace; color: #4D4D4D; }
+  .nt-ch.on { border: calc(1.5 * var(--u)) solid #FFC940; background: #111; }
+  .nt-ch.on > span { color: #FFC940; text-transform: uppercase; white-space: nowrap; }
+  .nt-chn { display: flex; flex-direction: column; align-items: center; gap: calc(8 * var(--u)); }
+  .nt-chn b { font: 700 calc(52 * var(--u))/1 'Doto', monospace; color: #FFC940; text-transform: uppercase; white-space: nowrap; }
+  .nt-pz { display: flex; justify-content: space-between; align-items: baseline; }
+  .nt-pz span { font: 400 calc(11 * var(--u))/1 'Space Mono', monospace; letter-spacing: .06em; text-transform: uppercase; color: #8C8C8C; }
+  .nt-pz b { font: 400 calc(15 * var(--u))/1 'Space Mono', monospace; color: #FFC940; }
 </style>
 </head>
 <body>
@@ -1338,6 +1366,84 @@
           <div class="nt-wonl"><span class="nt-lbl gold">${aw ? 'Winner' : ''}</span><span class="nt-lbl gold" style="text-align:right">${aw ? '' : 'Winner'}</span></div>
           <div class="nt-foot">${bar(M, done)}<span class="nt-lbl">${done} / ${M} done${done === M ? ' · round complete' : ''}</span></div>
         </div>`;
+      return;
+    }
+
+    // Knockout (Poolco 2026-11-18, Figma "TV · Knockout bracket"): the whole
+    // bracket. 8 players or more: mirrored, meeting at the final in the
+    // middle. Fewer: one tree, left to right, ending in a Champion box.
+    if (c.bracket && c.bracket.cols && c.bracket.cols.length) {
+      const B = c.bracket, cols = B.cols, cur = Math.min(B.cur ?? 0, cols.length - 1);
+      const hasPre = cols[0].kind === 'pre', b0 = hasPre ? 1 : 0, M = cols[b0].m.length;
+      const N = B.n || (2 * M + (hasPre ? cols[0].m.length : 0));
+      const one = N < 8, fi = cols.length - 1;
+      const W = 1172, yT = 30, H = 420;
+      const nCols = one ? cols.length + 1 : 2 * fi + 1, colW = W / nCols;
+      const bw = one ? Math.min(226, colW - 60) : Math.min(200, colW - 18);
+      const per = one ? M : M / 2, band = H / Math.max(per, 1);
+      const fedTwice = (m) => hasPre && cols[0].m.filter(x => x.to && x.to.m === m).length > 1;
+      const anyTwice = hasPre && cols[b0].m.some((_, m) => fedTwice(m));
+      let rowH = Math.max(17, Math.min(35, band * 0.42, bw / 4.3)); if (anyTwice) rowH = Math.min(rowH, (band / 2 - 10) / 2); rowH = Math.round(rowH);
+      const bh = 2 * rowH, nf = Math.round(rowH * 0.62), sf = Math.round(rowH * 0.8);
+      const sideOf = (j, i) => one ? 0 : j === fi ? -1 : (cols[j].kind === 'pre' ? (cols[j].m[i].to.m < M / 2 ? 0 : 1) : (i < cols[j].m.length / 2 ? 0 : 1));
+      const colX = (side, j) => side === 0 ? j * colW + (colW - bw) / 2 : (nCols - 1 - j) * colW + (colW - bw) / 2;
+      const fW = one ? bw : Math.round(Math.min(colW - 16, bw * 1.15));
+      const boxL = (j, i) => (!one && j === fi) ? W / 2 - fW / 2 : colX(sideOf(j, i), j);
+      const boxW = (j) => j === fi ? fW : bw;
+      const cy = cols.map(() => []);
+      cols[b0].m.forEach((_, m) => { cy[b0][m] = yT + band * ((one ? m : m % per) + 0.5); });
+      for (let j = b0 + 1; j < cols.length; j++) cols[j].m.forEach((_, i) => { cy[j][i] = (cy[j - 1][2 * i] + cy[j - 1][2 * i + 1]) / 2; });
+      if (!one) cy[fi][0] = yT + H / 2;
+      if (hasPre) cols[0].m.forEach((x, i) => { const c0 = cy[b0][x.to.m]; cy[0][i] = fedTwice(x.to.m) ? c0 + (x.to.s === 'a' ? -band / 4 : band / 4) : c0 + (x.to.s === 'a' ? -rowH / 2 : rowH / 2); });
+      const px = (v) => `calc(${Math.round(v * 10) / 10} * var(--u))`;
+      const out = [];
+      const seg = (x, y, w, h, on) => out.push(`<i class="nt-ln${on ? ' on' : ''}" style="left:${px(x)};top:${px(y)};width:${px(Math.max(w, 1.5))};height:${px(Math.max(h, 1.5))}"></i>`);
+      const lbl = (j) => j < cur ? '' : j === cur ? ' red' : ' dis';
+      // Column labels
+      if (one) { cols.forEach((col, j) => out.push(`<span class="nt-lbl nt-cl${lbl(j)}" style="left:${px(colX(0, j))};width:${px(bw)};text-align:left">${up(col.name)}</span>`)); out.push(`<span class="nt-lbl nt-cl${c.state === 'finished' ? ' gold' : ' dis'}" style="left:${px(colX(0, cols.length))};width:${px(bw)};text-align:left">Champion</span>`); }
+      else { for (let j = 0; j < fi; j++) for (const side of [0, 1]) if (cols[j].m.some((_, i) => sideOf(j, i) === side)) out.push(`<span class="nt-lbl nt-cl${lbl(j)}" style="left:${px(colX(side, j) - 20)};width:${px(bw + 40)}">${up(cols[j].name)}</span>`); out.push(`<span class="nt-lbl nt-cl${lbl(fi)}" style="left:${px(W / 2 - 100)};width:${px(200)}">Final</span>`); }
+      // Lines first, under the boxes
+      for (let j = 0; j < fi; j++) cols[j].m.forEach((x, i) => {
+        const side = sideOf(j, i), x0 = boxL(j, i), w = boxW(j), ex = side === 0 ? x0 + w : x0, y0 = cy[j][i];
+        let tj, ti, ty; if (cols[j].kind === 'pre') { tj = b0; ti = x.to.m; ty = cy[b0][ti] + (x.to.s === 'a' ? -rowH / 2 : rowH / 2); } else { tj = j + 1; ti = Math.floor(i / 2); ty = cy[tj][ti]; }
+        const tx = side === 0 ? boxL(tj, ti) : boxL(tj, ti) + boxW(tj); const mx = (ex + tx) / 2, on = !!x.w;
+        seg(Math.min(ex, mx), y0 - 0.75, Math.abs(mx - ex), 0, on); seg(mx - 0.75, Math.min(y0, ty), 0, Math.abs(ty - y0), on); seg(Math.min(mx, tx), ty - 0.75, Math.abs(tx - mx), 0, on);
+      });
+      const tight = anyTwice && band / 2 - bh < 26;
+      cols.forEach((col, j) => col.m.forEach((x, i) => {
+        const isF = j === fi && !one, h = isF ? Math.round(bh * 1.15) : bh, w = boxW(j), l = boxL(j, i), t = cy[j][i] - h / 2;
+        const known = x.a && x.b, scored = x.w || x.sa > 0 || x.sb > 0 || x.t;
+        const f = isF ? Math.round(nf * 1.15) : nf, sz = isF ? Math.round(sf * 1.15) : sf, pad = Math.max(8, Math.round(rowH * 0.32));
+        const rowHtml = (s) => { const name = x[s], ph = x['p' + s], lose = x.w && x.w !== s, sc = s === 'a' ? x.sa : x.sb;
+          return `<div class="nt-br__r" style="height:${px(h / 2)};padding:0 ${px(pad)}">${name ? `<span class="n${lose ? ' lose' : ''}" style="font-size:${px(f)}">${escapeHtml(name)}</span>` : `<span class="ph" style="font-size:${px(Math.min(11, f * 0.7))}">${ph ? 'Winner ' + escapeHtml(ph) : '—'}</span>`}${scored && name ? `<span class="s${lose ? ' lose' : ''}" style="font-size:${px(sz)}">${sc}</span>` : ''}</div>`; };
+        out.push(`<div class="nt-bx${x.t ? ' live' : ''}${known || x.w ? '' : ' tbd'}" style="left:${px(l)};top:${px(t)};width:${px(w)};height:${px(h)}">${rowHtml('a')}<i class="dv"></i>${rowHtml('b')}${x.t && tight ? `<span class="tg in">● T${x.tn || ''}</span>` : ''}</div>`);
+        if (x.t && !tight) out.push(`<span class="nt-tag" style="left:${px(l)};top:${px(t - 16)}">● ${x.tn ? 'Table ' + x.tn : 'At the table'}</span>`);
+        else if (col.kind === 'pre' && !tight) out.push(`<span class="nt-tag dis" style="left:${px(l)};top:${px(t - 16)}">M${i + 1}</span>`);
+      }));
+      // Champion and the prizes
+      const fx = cols[fi].m[0], champ = c.state === 'finished' && fx && fx.w ? (fx.w === 'a' ? fx.a : fx.b) : (c.winner || null);
+      const pays = (c.payouts || []); const prizeRows = (x0, w, y) => ['Winner', 'Runner-up', '3rd · each'].map((l, i) => { const v = i === 2 ? (Array.isArray(c.thirds) && c.thirds[0] ? c.thirds[0].amount : (pays[2] || 0) / 2) : pays[i]; return v > 0 ? `<div class="nt-pz" style="left:${px(x0)};top:${px(y + i * 23)};width:${px(w)}"><span>${l}</span><b>${fmt(v)}</b></div>` : ''; }).join('');
+      const fc = cy[fi][0];
+      if (one) {
+        const cx = colX(0, cols.length), chH = Math.max(74, bh + 14), ex = boxL(fi, 0) + boxW(fi);
+        seg(ex, fc - 0.75, cx - ex, 0, !!champ);
+        out.push(champ ? `<div class="nt-ch on" style="left:${px(cx)};top:${px(fc - chH / 2)};width:${px(bw)};height:${px(chH)}"><span style="font-size:${px(Math.min(48, (bw - 26) / Math.max(4, champ.length) / 0.62))}">${escapeHtml(champ)}</span></div>`
+          : `<div class="nt-ch" style="left:${px(cx)};top:${px(fc - chH / 2)};width:${px(bw)};height:${px(chH)}"><span>?</span></div>`);
+        out.push(prizeRows(cx, bw, fc + chH / 2 + 22));
+      } else {
+        const fh = Math.round(bh * 1.15), top = fc - fh / 2 - 26;
+        out.push(champ ? `<div class="nt-chn" style="left:${px(W / 2 - 300)};width:${px(600)};top:${px(top - 74)}"><span class="nt-lbl gold">Champion</span><b style="font-size:${px(Math.min(52, fW * 1.4 / Math.max(4, champ.length) / 0.62))}">${escapeHtml(champ)}</b></div>`
+          : `<div class="nt-ch" style="left:${px(W / 2 - fW / 2)};top:${px(top - 46)};width:${px(fW)};height:${px(46)}"><span class="nt-lbl dis" style="font-size:calc(13 * var(--u))">Champion</span></div>`);
+        out.push(prizeRows(W / 2 - fW / 2, fW, fc + fh / 2 + 22));
+      }
+      const curCol = cols[cur];
+      const hero = c.state === 'finished' ? 'Champion' : curCol.name;
+      const race = r.race || 1;
+      stage.innerHTML = top + `<div class="nt-head" style="padding-top:calc(26 * var(--u))"><div>
+          <span class="nt-lbl">Knockout · ${N} players · race to ${race}</span>
+          <h1 class="nt-hero" style="font-size:calc(58 * var(--u))">${escapeHtml(hero)}</h1>
+        </div>${c.pot > 0 ? `<div class="r"><span class="nt-lbl">Prize pot</span><span class="nt-big" style="font-size:calc(64 * var(--u))">${fmt(c.pot)}</span></div>` : ''}</div>
+        <div class="nt-br" style="width:${px(W)};height:${px(yT + H + 10)}">${out.join('')}</div>`;
       return;
     }
 
