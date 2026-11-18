@@ -1352,6 +1352,23 @@
       return;
     }
 
+    // The phone has this match's score sheet open (Poolco, owner
+    // 2026-11-18): the TV shows it big, live, until the sheet closes.
+    if (r.focus && c.state !== 'finished') {
+      const f = r.focus;
+      const nmSize = Math.max(44, Math.min(84, Math.floor(420 / (Math.max(5, f.a.length, f.b.length) * 0.62))));
+      stage.innerHTML = top + `<div class="nt-body">
+          <span class="nt-lbl red" style="display:flex;align-items:center;gap:calc(10 * var(--u))"><i class="nt-dot"></i>Now playing${f.tn ? ` · Table ${f.tn}` : ''} · ${up(r.name)}</span>
+          <div class="nt-won" style="padding-top:calc(60 * var(--u))">
+            <span class="n" style="font-size:calc(${nmSize} * var(--u))">${escapeHtml(f.a)}</span>
+            <span class="sc"><span>${f.sa}</span><i></i><span>${f.sb}</span></span>
+            <span class="n r" style="font-size:calc(${nmSize} * var(--u))">${escapeHtml(f.b)}</span>
+          </div>
+          <div class="nt-wonl"><span class="nt-lbl">Race to ${r.race}</span><span class="nt-lbl" style="text-align:right">First to ${r.race} ${r.race === 1 ? 'frame' : 'frames'} wins</span></div>
+          <div class="nt-foot">${bar(M, done)}<span class="nt-lbl">${done} / ${M} done</span></div>
+        </div>`;
+      return;
+    }
     // A match just finished on the phone: who won, for a few seconds.
     if (r.won && c.state !== 'finished') {
       const w = r.won, aw = w.w === 'a';
