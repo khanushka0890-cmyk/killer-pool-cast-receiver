@@ -1256,6 +1256,9 @@
   // Poolco sends style: 'nothing'. Extra fields: players (names still in,
   // for the waiting screen), standings (when finished), idle (no
   // competition yet). Everything else is the competition payload above.
+  // The reveal count last shown, so a card flips once, when it's turned,
+  // not again on every update from the phone (owner 2026-11-18).
+  let ntLastReveal = -1;
   function renderNothing(c) {
     stage.className = 'tv-stage nt';
     const fmt = (n) => Math.round(n || 0).toLocaleString();
@@ -1327,8 +1330,9 @@
       }
       const inByes = R > 2 * M;
       const mi = Math.min(Math.floor(Math.max(R - 1, 0) / 2), M - 1);
+      const fresh = R !== ntLastReveal; ntLastReveal = R;
       const card = (name, photo, isNew, empty) => name
-        ? `<div class="nt-card on${isNew ? ' new' : ''}">${av(name, photo)}<span class="nm">${escapeHtml(name)}</span></div>`
+        ? `<div class="nt-card on${isNew && fresh ? ' new' : ''}">${av(name, photo)}<span class="nm">${escapeHtml(name)}</span></div>`
         : `<div class="nt-card off"><span class="nt-lbl">${empty}</span></div>`;
       let hero, cards, foot;
       if (inByes) {
