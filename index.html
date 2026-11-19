@@ -688,6 +688,11 @@
   .nt-bx { box-sizing: border-box; border: 1px solid #333; border-radius: calc(7 * var(--u)); background: #111; overflow: hidden; }
   .nt-bx.tbd { border-style: dashed; background: #050505; }
   .nt-bx.live { border: calc(1.5 * var(--u)) solid #F2B84B; }
+  /* Owner 2026-11-19: the round being played (or, once it's done, the
+     round up next) has a frame round it, and its matches still waiting
+     for a result a thick white outline. Same on the phone. */
+  .nt-bx.wait { border: calc(2.5 * var(--u)) solid #FFFFFF; background: #161616; }
+  .nt-fr { box-sizing: border-box; border: calc(2.5 * var(--u)) dotted #FFC940; border-radius: calc(7 * var(--u)); }
   .nt-bx .dv { display: block; height: 1px; background: #262626; margin-top: -0.5px; }
   .nt-br__r { display: flex; align-items: center; gap: calc(6 * var(--u)); }
   .nt-br__r .n { flex: 1; min-width: 0; font-family: 'Space Grotesk', sans-serif; font-weight: 500; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.1; }
@@ -1428,7 +1433,10 @@
       const px = (v) => `calc(${Math.round(v * 10) / 10} * var(--u))`;
       const out = [];
       const seg = (x, y, w, h, on) => out.push(`<i class="nt-ln${on ? ' on' : ''}" style="left:${px(x)};top:${px(y)};width:${px(Math.max(w, 1.5))};height:${px(Math.max(h, 1.5))}"></i>`);
-      const lbl = (j) => j < cur ? '' : j === cur ? ' red' : ' dis';
+      // The column to look at: this round, or the next one once it's all done.
+      const roundDone = c.state === 'fill' || (cols[cur].m.length > 0 && cols[cur].m.every(x => x.w));
+      const hl = c.state === 'finished' ? -1 : roundDone ? (cur + 1 < cols.length ? cur + 1 : -1) : cur;
+      const lbl = (j) => j === hl ? ' red' : j <= cur ? '' : ' dis';
       // Column labels
       if (one) { cols.forEach((col, j) => out.push(`<span class="nt-lbl nt-cl${lbl(j)}" style="left:${px(colX(0, j))};width:${px(bw)};text-align:left">${up(col.name)}</span>`)); out.push(`<span class="nt-lbl nt-cl${c.state === 'finished' ? ' gold' : ' dis'}" style="left:${px(colX(0, cols.length))};width:${px(bw)};text-align:left">Champion</span>`); }
       else { for (let j = 0; j < fi; j++) for (const side of [0, 1]) if (cols[j].m.some((_, i) => sideOf(j, i) === side)) out.push(`<span class="nt-lbl nt-cl${lbl(j)}" style="left:${px(colX(side, j) - 20)};width:${px(bw + 40)}">${up(cols[j].name)}</span>`); out.push(`<span class="nt-lbl nt-cl${lbl(fi)}" style="left:${px(W / 2 - 100)};width:${px(200)}">Final</span>`); }
@@ -1440,13 +1448,24 @@
         seg(Math.min(ex, mx), y0 - 0.75, Math.abs(mx - ex), 0, on); seg(mx - 0.75, Math.min(y0, ty), 0, Math.abs(ty - y0), on); seg(Math.min(mx, tx), ty - 0.75, Math.abs(tx - mx), 0, on);
       });
       const tight = anyTwice && band / 2 - bh < 26;
+      if (hl >= 0) {
+        const isF = hl === fi && !one, fh = isF ? Math.round(bh * 1.15) : bh, padT = (cols[hl].kind === 'pre' || roundDone) ? 24 : 10;
+        for (const side of (one || hl === fi ? [0] : [0, 1])) {
+          const idx = cols[hl].m.map((_, i) => i).filter(i => one || hl === fi || sideOf(hl, i) === side);
+          if (!idx.length) continue;
+          const ys = idx.map(i => cy[hl][i]), l = boxL(hl, idx[0]) - 10, w = boxW(hl) + 20;
+          const t0 = Math.min(...ys) - fh / 2 - padT, b0 = Math.max(...ys) + fh / 2 + 10;
+          out.push(`<div class="nt-fr" style="left:${px(l)};top:${px(t0)};width:${px(w)};height:${px(b0 - t0)}"></div>`);
+          if (roundDone) out.push(`<span class="nt-tag" style="left:${px(l + 10)};top:${px(t0 + 7)}">Up next</span>`);
+        }
+      }
       cols.forEach((col, j) => col.m.forEach((x, i) => {
         const isF = j === fi && !one, h = isF ? Math.round(bh * 1.15) : bh, w = boxW(j), l = boxL(j, i), t = cy[j][i] - h / 2;
         const known = x.a && x.b, scored = x.w || x.sa > 0 || x.sb > 0 || x.t;
         const f = isF ? Math.round(nf * 1.15) : nf, sz = isF ? Math.round(sf * 1.15) : sf, pad = Math.max(8, Math.round(rowH * 0.32));
         const rowHtml = (s) => { const name = x[s], ph = x['p' + s], lose = x.w && x.w !== s, sc = s === 'a' ? x.sa : x.sb;
           return `<div class="nt-br__r" style="height:${px(h / 2)};padding:0 ${px(pad)}">${name ? `<span class="n${lose ? ' lose' : ''}" style="font-size:${px(f)}">${escapeHtml(name)}</span>` : `<span class="ph" style="font-size:${px(Math.min(11, f * 0.7))}">${ph ? 'Winner ' + escapeHtml(ph) : '—'}</span>`}${scored && name ? `<span class="s${lose ? ' lose' : ''}" style="font-size:${px(sz)}">${sc}</span>` : ''}</div>`; };
-        out.push(`<div class="nt-bx${x.t ? ' live' : ''}${known || x.w ? '' : ' tbd'}" style="left:${px(l)};top:${px(t)};width:${px(w)};height:${px(h)}">${rowHtml('a')}<i class="dv"></i>${rowHtml('b')}${x.t && tight ? `<span class="tg in">● T${x.tn || ''}</span>` : ''}</div>`);
+        out.push(`<div class="nt-bx${x.t ? ' live' : j === hl && known && !x.w ? ' wait' : ''}${known || x.w ? '' : ' tbd'}" style="left:${px(l)};top:${px(t)};width:${px(w)};height:${px(h)}">${rowHtml('a')}<i class="dv"></i>${rowHtml('b')}${x.t && tight ? `<span class="tg in">● T${x.tn || ''}</span>` : ''}</div>`);
         if (x.t && !tight) out.push(`<span class="nt-tag" style="left:${px(l)};top:${px(t - 16)}">● ${x.tn ? 'Table ' + x.tn : 'At the table'}</span>`);
         else if (col.kind === 'pre' && !tight) out.push(`<span class="nt-tag dis" style="left:${px(l)};top:${px(t - 16)}">M${i + 1}</span>`);
       }));
@@ -1467,10 +1486,10 @@
         out.push(prizeRows(W / 2 - fW / 2, fW, fc + fh / 2 + 22));
       }
       const curCol = cols[cur];
-      const hero = c.state === 'finished' ? 'Champion' : curCol.name;
+      const hero = c.state === 'finished' ? 'Champion' : roundDone && hl >= 0 ? cols[hl].name : curCol.name;
       const race = r.race || 1;
       stage.innerHTML = top + `<div class="nt-head" style="padding-top:calc(26 * var(--u))"><div>
-          <span class="nt-lbl">Knockout · ${N} players · race to ${race}</span>
+          <span class="nt-lbl${roundDone && hl >= 0 ? ' red' : ''}">${roundDone && hl >= 0 ? `${escapeHtml(curCol.name)} done · up next` : `Knockout · ${N} players · race to ${race}`}</span>
           <h1 class="nt-hero" style="font-size:calc(58 * var(--u))">${escapeHtml(hero)}</h1>
         </div>${c.pot > 0 ? `<div class="r"><span class="nt-lbl">Prize pot</span><span class="nt-big" style="font-size:calc(64 * var(--u))">${fmt(c.pot)}</span></div>` : ''}</div>
         <div class="nt-br" style="width:${px(W)};height:${px(yT + H + 10)}">${out.join('')}</div>`;
