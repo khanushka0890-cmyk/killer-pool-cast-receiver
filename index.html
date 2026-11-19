@@ -24,7 +24,7 @@
   })();
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&family=Doto:wght@700&family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Chakra+Petch:wght@500;600;700&family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&family=Doto:wght@700&family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root {
     /* 1 design px. Stage is designed at 1280x720 and scales to fit any
@@ -57,9 +57,9 @@
   .tv-idle { position: absolute; inset: 0; display: flex; flex-direction: column;
     align-items: center; justify-content: center; gap: calc(20 * var(--u)); text-align: center; }
   .tv-idle__ball { width: calc(84 * var(--u)); height: calc(84 * var(--u)); }
-  .tv-idle__title { font: 400 calc(52 * var(--u))/1 'Bebas Neue', sans-serif; letter-spacing: calc(4 * var(--u)); color: var(--gold); }
-  .tv-idle__elim { font: 600 calc(20 * var(--u))/1 'Barlow Condensed', sans-serif; letter-spacing: calc(10 * var(--u)); padding-left: calc(10 * var(--u)); color: #CBC2E0; margin-top: calc(-6 * var(--u)); }
-  .tv-idle__sub { font: 600 calc(17 * var(--u))/1 'Barlow Condensed', sans-serif; letter-spacing: calc(3 * var(--u)); color: var(--text-2); }
+  .tv-idle__title { font: 700 calc(42.6 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase; letter-spacing: calc(1.4 * var(--u)); color: var(--gold); }
+  .tv-idle__elim { font: 600 calc(17.6 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase; letter-spacing: calc(4.5 * var(--u)); padding-left: calc(10 * var(--u)); color: #CBC2E0; margin-top: calc(-6 * var(--u)); }
+  .tv-idle__sub { font: 600 calc(15 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase; letter-spacing: calc(1.35 * var(--u)); color: var(--text-2); }
 
   /* Ticket: felt | perforation | stub, inside the 5% title-safe area. Used
      for the live screen AND, per UPDATE 3, the winner/no-winner screens -
@@ -85,17 +85,17 @@
   .tv-brand__logo { height: calc(44 * var(--u)); width: auto; display: block; }
   .tv-idle__logo { height: calc(84 * var(--u)); width: auto; display: block; }
   .tv-brand__lockup { display: flex; flex-direction: column; gap: 0; }
-  .tv-brand__name { font: 400 calc(30 * var(--u))/1 'Bebas Neue', sans-serif; letter-spacing: calc(3 * var(--u)); color: var(--gold); }
-  .tv-brand__sub { font: 600 calc(12 * var(--u))/1 'Barlow Condensed', sans-serif; letter-spacing: calc(6 * var(--u)); color: #CBC2E0; }
+  .tv-brand__name { font: 700 calc(24.6 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase; letter-spacing: calc(1.05 * var(--u)); color: var(--gold); }
+  .tv-brand__sub { font: 600 calc(10.6 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase; letter-spacing: calc(2.7 * var(--u)); color: #CBC2E0; }
   .tv-live { display: inline-flex; align-items: center; gap: calc(8 * var(--u)); height: calc(32 * var(--u));
     padding: 0 calc(14 * var(--u)) 0 calc(12 * var(--u)); border-radius: calc(16 * var(--u)); background: rgba(240,98,90,.14);
-    font: 700 calc(16 * var(--u))/1 'Barlow Condensed', sans-serif; letter-spacing: calc(2 * var(--u)); color: var(--live-text);
+    font: 700 calc(14.1 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase; letter-spacing: calc(0.9 * var(--u)); color: var(--live-text);
     margin-left: calc(14 * var(--u)); }
   .tv-live::before { content: ""; width: calc(9 * var(--u)); height: calc(9 * var(--u)); border-radius: 50%; background: var(--live); }
   .tv-round { display: flex; align-items: center; gap: calc(12 * var(--u)); height: calc(52 * var(--u)); box-sizing: border-box;
     padding: 0 calc(16 * var(--u)); border-radius: calc(14 * var(--u)); background: rgba(11,10,18,.45); border: 1px solid rgba(242,184,75,.35); }
-  .tv-round__lbl { font: 600 calc(18 * var(--u))/1 'Barlow Condensed', sans-serif; letter-spacing: calc(3 * var(--u)); padding-left: calc(3 * var(--u)); color: var(--text-2); }
-  .tv-round__num { font: 400 calc(40 * var(--u))/1 'Bebas Neue', sans-serif; color: var(--gold); padding-top: calc(4 * var(--u)); }
+  .tv-round__lbl { font: 600 calc(15.8 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase; letter-spacing: calc(1.35 * var(--u)); padding-left: calc(3 * var(--u)); color: var(--text-2); }
+  .tv-round__num { font: 700 calc(32.8 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase; color: var(--gold); padding-top: calc(4 * var(--u)); }
 
   /* Hero - UPDATE 3: UP NOW + name are their own group (.tv-hero__id);
      lives is now a SIBLING of that group, not nested inside it, so
@@ -107,15 +107,15 @@
   .tv-avatar { width: calc(168 * var(--u)); height: calc(168 * var(--u)); flex-shrink: 0; box-sizing: border-box; border-radius: 50%;
     padding: calc(5 * var(--u)); background: var(--gold); }
   .tv-avatar__inner { width: 100%; height: 100%; box-sizing: border-box; border-radius: 50%; border: calc(5 * var(--u)) solid var(--felt);
-    display: flex; align-items: center; justify-content: center; font: 400 calc(80 * var(--u))/1 'Bebas Neue', sans-serif;
+    display: flex; align-items: center; justify-content: center; font: 700 calc(65.6 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase;
     color: #fff; padding-top: calc(6 * var(--u)); overflow: hidden; }
   .tv-avatar__inner img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 50%; }
   .tv-hero__text { flex: 1 1 auto; display: flex; flex-direction: column; min-width: 0; }
   .tv-hero__id { display: flex; flex-direction: column; gap: calc(6 * var(--u)); min-width: 0; }
-  .tv-upnow { font: 700 calc(22 * var(--u))/1 'Barlow Condensed', sans-serif; letter-spacing: calc(6 * var(--u)); color: var(--gold-text); }
+  .tv-upnow { font: 700 calc(19.4 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase; letter-spacing: calc(2.7 * var(--u)); color: var(--gold-text); }
   /* 150/128 -> 96/0.7 - a smaller name, closer line-height, per the
      UPDATE 3 spacing/type pass. */
-  .tv-name { font: 400 calc(96 * var(--u))/0.7 'Bebas Neue', sans-serif; letter-spacing: calc(3 * var(--u));
+  .tv-name { font: 700 calc(78.7 * var(--u))/0.7 'Chakra Petch', sans-serif; text-transform: uppercase; letter-spacing: calc(1.05 * var(--u));
     color: var(--text); padding-top: calc(10 * var(--u)); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   /* margin-top:6 (nested in the id group) -> padding-top:16 (sibling of it) */
   .tv-lives { display: flex; align-items: center; gap: calc(12 * var(--u)); padding-top: calc(16 * var(--u)); flex-wrap: wrap; }
@@ -136,16 +136,16 @@
     background: rgba(11,10,18,.45); border: 1px solid var(--next-edge); }
   .tv-next__av { width: calc(38 * var(--u)); height: calc(38 * var(--u)); flex-shrink: 0; box-sizing: border-box; border-radius: 50%;
     display: flex; align-items: center; justify-content: center; overflow: hidden;
-    font: 400 calc(20 * var(--u))/1 'Bebas Neue', sans-serif; color: #fff; padding-top: calc(2 * var(--u)); }
+    font: 700 calc(16.4 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase; color: #fff; padding-top: calc(2 * var(--u)); }
   .tv-next__av img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 50%; }
-  .tv-next__lbl { font: 700 calc(17 * var(--u))/1 'Barlow Condensed', sans-serif; letter-spacing: calc(3 * var(--u)); color: var(--next); }
+  .tv-next__lbl { font: 700 calc(15 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase; letter-spacing: calc(1.35 * var(--u)); color: var(--next); }
   .tv-next__name { font: 700 calc(24 * var(--u))/1.3 'Barlow', sans-serif; color: #fff;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: calc(320 * var(--u)); }
 
   .tv-stats { display: grid; grid-template-columns: 1fr 1fr; gap: calc(48 * var(--u)); padding-top: calc(28 * var(--u)); border-top: 1px solid rgba(255,255,255,.1); }
   .tv-stat { display: flex; flex-direction: column; gap: calc(12 * var(--u)); min-width: 0; }
   .tv-stat__row { display: flex; justify-content: space-between; align-items: baseline; }
-  .tv-stat__lbl { font: 700 calc(17 * var(--u))/1 'Barlow Condensed', sans-serif; letter-spacing: calc(3 * var(--u)); color: var(--text-2); }
+  .tv-stat__lbl { font: 700 calc(15 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase; letter-spacing: calc(1.35 * var(--u)); color: var(--text-2); }
   .tv-stat__val { font: 400 calc(22 * var(--u))/1 'Barlow', sans-serif; color: var(--text-2); font-variant-numeric: tabular-nums; }
   .tv-stat__val b { color: #fff; font-weight: 700; }
   .tv-bar { height: calc(8 * var(--u)); border-radius: calc(4 * var(--u)); background: rgba(255,255,255,.12); overflow: hidden; }
@@ -172,16 +172,16 @@
     display: flex; flex-direction: column; align-items: center; justify-content: center; gap: calc(26 * var(--u)); }
   .tv-qr { padding: calc(16 * var(--u)); border-radius: calc(18 * var(--u)); background: var(--ivory); box-shadow: 0 0 0 1px rgba(242,184,75,.5); }
   .tv-qr svg { display: block; width: calc(184 * var(--u)); height: calc(184 * var(--u)); }
-  .tv-qr__cap { font: 700 calc(17 * var(--u))/1 'Barlow Condensed', sans-serif; letter-spacing: calc(3 * var(--u)); padding-left: calc(3 * var(--u)); color: var(--gold-text); text-align: center; }
+  .tv-qr__cap { font: 700 calc(15 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase; letter-spacing: calc(1.35 * var(--u)); padding-left: calc(3 * var(--u)); color: var(--gold-text); text-align: center; }
 
   /* Prize pot (stub). No currency unit anywhere - the app runs in
      different countries, so only the plain number (as the organizer
      typed it, comma-grouped for readability) is shown - same decision
      already shipped in the app's own Spectate screen. */
   .tv-prize { display: flex; flex-direction: column; align-items: center; gap: calc(6 * var(--u)); }
-  .tv-prize__lbl { font: 700 calc(17 * var(--u))/1 'Barlow Condensed', sans-serif; letter-spacing: calc(3 * var(--u)); padding-left: calc(3 * var(--u)); color: var(--text-2); }
+  .tv-prize__lbl { font: 700 calc(15 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase; letter-spacing: calc(1.35 * var(--u)); padding-left: calc(3 * var(--u)); color: var(--text-2); }
   .tv-prize__lbl.is-win { color: var(--gold-text); }
-  .tv-prize__val { font: 400 calc(54 * var(--u))/1 'Bebas Neue', sans-serif; letter-spacing: calc(1 * var(--u)); color: var(--gold); padding-top: calc(4 * var(--u)); white-space: nowrap; }
+  .tv-prize__val { font: 700 calc(44.3 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase; letter-spacing: calc(0.35 * var(--u)); color: var(--gold); padding-top: calc(4 * var(--u)); white-space: nowrap; }
   .tv-prize__val.is-void { color: var(--text-2); }
   .tv-prize__sub { font: 500 calc(16 * var(--u))/1 'Barlow', sans-serif; color: #8C86A3; text-align: center; }
   .tv-stub__rule { width: calc(72 * var(--u)); height: 1px; background: rgba(242,184,75,.3); }
@@ -192,7 +192,7 @@
      visually different app. */
   .tv-flag { display: inline-flex; align-items: center; gap: calc(8 * var(--u)); height: calc(32 * var(--u));
     padding: 0 calc(14 * var(--u)); border-radius: calc(16 * var(--u));
-    font: 700 calc(16 * var(--u))/1 'Barlow Condensed', sans-serif; letter-spacing: calc(2 * var(--u));
+    font: 700 calc(14.1 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase; letter-spacing: calc(0.9 * var(--u));
     margin-left: calc(14 * var(--u)); }
   .tv-flag--done { background: rgba(242,184,75,.16); color: var(--gold-text); }
   .tv-flag--void { background: rgba(255,255,255,.07); color: var(--muted); }
@@ -209,7 +209,7 @@
   .tv-avatar--void { background: none; border: calc(2 * var(--u)) dashed var(--line); display: flex; align-items: center; justify-content: center; }
   .tv-avatar--void svg { width: calc(92 * var(--u)); height: calc(92 * var(--u)); }
 
-  .tv-winlbl { font: 700 calc(22 * var(--u))/1 'Barlow Condensed', sans-serif; letter-spacing: calc(6 * var(--u)); color: var(--gold-text); }
+  .tv-winlbl { font: 700 calc(19.4 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase; letter-spacing: calc(2.7 * var(--u)); color: var(--gold-text); }
   .tv-winlbl--void { color: var(--muted); }
   .tv-name--void { color: var(--ivory); }
   .tv-sub { font: 500 calc(22 * var(--u))/1 'Barlow', sans-serif; color: var(--text-2); padding-top: calc(16 * var(--u)); }
@@ -218,11 +218,11 @@
      replaces on both end-of-game screens. */
   .tv-facts { display: grid; grid-template-columns: 1fr 1fr; gap: calc(48 * var(--u)); padding-top: calc(28 * var(--u)); border-top: 1px solid rgba(255,255,255,.1); }
   .tv-fact { display: flex; flex-direction: column; gap: calc(10 * var(--u)); min-width: 0; }
-  .tv-fact__lbl { font: 700 calc(17 * var(--u))/1 'Barlow Condensed', sans-serif; letter-spacing: calc(3 * var(--u)); color: var(--text-2); }
+  .tv-fact__lbl { font: 700 calc(15 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase; letter-spacing: calc(1.35 * var(--u)); color: var(--text-2); }
   .tv-fact__val { display: flex; align-items: center; gap: calc(10 * var(--u)); font: 700 calc(24 * var(--u))/1.3 'Barlow', sans-serif; color: #fff;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .tv-fact__av { width: calc(30 * var(--u)); height: calc(30 * var(--u)); flex-shrink: 0; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-    overflow: hidden; font: 400 calc(16 * var(--u))/1 'Bebas Neue', sans-serif; color: #fff; padding-top: calc(2 * var(--u)); }
+    overflow: hidden; font: 700 calc(13.1 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase; color: #fff; padding-top: calc(2 * var(--u)); }
   .tv-fact__av img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 50%; }
 
   /* ── New layout (build 41): pot in the left card, players on the right.
@@ -231,16 +231,16 @@
      the app sends a players/standings list; older app builds keep the
      layout above. */
   .tv-pot { display: flex; align-items: baseline; justify-content: space-between; padding-top: calc(28 * var(--u)); border-top: 1px solid rgba(255,255,255,.1); }
-  .tv-pot__lbl { font: 700 calc(17 * var(--u))/1 'Barlow Condensed', sans-serif; letter-spacing: calc(3 * var(--u)); color: var(--gold-text); }
-  .tv-pot__val { font: 400 calc(54 * var(--u))/1 'Bebas Neue', sans-serif; letter-spacing: calc(1 * var(--u)); color: var(--gold); }
+  .tv-pot__lbl { font: 700 calc(15 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase; letter-spacing: calc(1.35 * var(--u)); color: var(--gold-text); }
+  .tv-pot__val { font: 700 calc(44.3 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase; letter-spacing: calc(0.35 * var(--u)); color: var(--gold); }
   .tv-pot.is-void .tv-pot__lbl, .tv-pot.is-void .tv-pot__val { color: var(--text-2); }
 
   .tv-stub.roster { width: calc(360 * var(--u)); justify-content: flex-start; align-items: stretch; gap: calc(16 * var(--u));
     padding: calc(24 * var(--u)) calc(32 * var(--u)) calc(24 * var(--u)) calc(18 * var(--u)); }
   .tv-ro__head { display: flex; justify-content: space-between; align-items: center; }
-  .tv-ro__lbl { font: 700 calc(17 * var(--u))/1 'Barlow Condensed', sans-serif; letter-spacing: calc(3 * var(--u)); color: var(--text-2); }
+  .tv-ro__lbl { font: 700 calc(15 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase; letter-spacing: calc(1.35 * var(--u)); color: var(--text-2); }
   .tv-ro__cnt { font: 500 calc(22 * var(--u))/1 'Barlow', sans-serif; color: var(--text-2); }
-  .tv-ro__cnt b { font: 400 calc(34 * var(--u))/1 'Bebas Neue', sans-serif; color: var(--gold); vertical-align: calc(-3 * var(--u)); margin-right: calc(2 * var(--u)); }
+  .tv-ro__cnt b { font: 700 calc(27.9 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase; color: var(--gold); vertical-align: calc(-3 * var(--u)); margin-right: calc(2 * var(--u)); }
   .tv-ro__view { position: relative; flex: 1 1 auto; min-height: 0; overflow: hidden; }
   .tv-ro__view.is-scrolling { -webkit-mask-image: linear-gradient(to bottom, #000 0, #000 82%, transparent 100%); mask-image: linear-gradient(to bottom, #000 0, #000 82%, transparent 100%); }
   .tv-ro__list { display: flex; flex-direction: column; gap: calc(6 * var(--u)); }
@@ -250,17 +250,17 @@
   .tv-ro__row.is-now { background: rgba(242,184,75,.14); box-shadow: inset 0 0 0 1px rgba(242,184,75,.6); }
   .tv-ro__row.is-next { box-shadow: inset 0 0 0 1px rgba(183,156,240,.55); }
   .tv-ro__av { width: calc(28 * var(--u)); height: calc(28 * var(--u)); border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
-    font: 400 calc(16 * var(--u))/1 'Bebas Neue', sans-serif; color: #fff; padding-top: calc(2 * var(--u)); }
+    font: 700 calc(13.1 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase; color: #fff; padding-top: calc(2 * var(--u)); }
   .tv-ro__name { flex: 1 1 auto; min-width: 0; font: 600 calc(20 * var(--u))/1.3 'Barlow', sans-serif; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .tv-ro__hearts { display: flex; gap: calc(3 * var(--u)); flex-shrink: 0; }
   .tv-ro__hearts svg { width: calc(16 * var(--u)); height: calc(15 * var(--u)); display: block; }
-  .tv-ro__nextchip { flex-shrink: 0; font: 700 calc(13 * var(--u))/1 'Barlow Condensed', sans-serif; letter-spacing: calc(1.5 * var(--u)); color: var(--next);
+  .tv-ro__nextchip { flex-shrink: 0; font: 700 calc(11.4 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase; letter-spacing: calc(0.68 * var(--u)); color: var(--next);
     padding: calc(4 * var(--u)) calc(7 * var(--u)); border-radius: calc(8 * var(--u)); background: rgba(183,156,240,.14); }
-  .tv-ro__rank { width: calc(18 * var(--u)); flex-shrink: 0; text-align: center; font: 400 calc(24 * var(--u))/1 'Bebas Neue', sans-serif; color: var(--text-2); padding-top: calc(2 * var(--u)); }
+  .tv-ro__rank { width: calc(18 * var(--u)); flex-shrink: 0; text-align: center; font: 700 calc(19.7 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase; color: var(--text-2); padding-top: calc(2 * var(--u)); }
   .tv-ro__row.is-now .tv-ro__rank { color: var(--gold); }
   .tv-ro__rank.is-bronze { color: #C6905E; }
-  .tv-ro__tag { flex-shrink: 0; font: 700 calc(13 * var(--u))/1 'Barlow Condensed', sans-serif; letter-spacing: calc(1.5 * var(--u)); color: var(--gold); }
-  .tv-ro__out { flex-shrink: 0; font: 600 calc(14 * var(--u))/1 'Barlow Condensed', sans-serif; letter-spacing: calc(1.5 * var(--u)); color: #8C86A3; }
+  .tv-ro__tag { flex-shrink: 0; font: 700 calc(11.4 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase; letter-spacing: calc(0.68 * var(--u)); color: var(--gold); }
+  .tv-ro__out { flex-shrink: 0; font: 600 calc(12.3 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase; letter-spacing: calc(0.68 * var(--u)); color: #8C86A3; }
   .tv-ro__prog { display: flex; flex-direction: column; gap: calc(10 * var(--u)); }
   .tv-ro__prog.is-row { flex-direction: row; justify-content: space-between; align-items: baseline; }
   .tv-ro__prog .tv-stat__lbl { font-size: calc(16 * var(--u)); letter-spacing: calc(2.5 * var(--u)); }
@@ -268,7 +268,7 @@
   .tv-ro__foot { display: flex; align-items: center; gap: calc(12 * var(--u)); padding-top: calc(16 * var(--u)); border-top: 1px solid rgba(255,255,255,.08); }
   .tv-ro__foot .tv-qr { padding: calc(6 * var(--u)); border-radius: calc(8 * var(--u)); flex-shrink: 0; }
   .tv-ro__foot .tv-qr svg { width: calc(80 * var(--u)); height: calc(80 * var(--u)); }
-  .tv-ro__foot .tv-qr__cap { white-space: nowrap; font: 700 calc(26 * var(--u))/1.3 'Barlow Condensed', sans-serif; letter-spacing: calc(2 * var(--u)); padding-left: 0; color: var(--gold-text); text-align: left; }
+  .tv-ro__foot .tv-qr__cap { white-space: nowrap; font: 700 calc(22.9 * var(--u))/1.3 'Chakra Petch', sans-serif; text-transform: uppercase; letter-spacing: calc(0.9 * var(--u)); padding-left: 0; color: var(--gold-text); text-align: left; }
   /* Hearts for lives (new layout) */
   .tv-lives svg { width: calc(34 * var(--u)); height: calc(31 * var(--u)); display: block; flex-shrink: 0; }
 
@@ -278,16 +278,16 @@
 .tv-ticket.big{left:calc(56 * var(--u));top:calc(36 * var(--u));width:calc(1168 * var(--u));height:calc(648 * var(--u));}
 .tv-main.big{padding:calc(28 * var(--u)) calc(28 * var(--u)) calc(28 * var(--u)) calc(32 * var(--u));gap:calc(18 * var(--u));}
 .kb-head{display:flex;align-items:center;gap:calc(18 * var(--u));height:calc(44 * var(--u));}
-.kb-title{flex:1 1 auto;min-width:0;text-align:right;font:400 calc(34 * var(--u))/1 'Bebas Neue',sans-serif;letter-spacing:calc(3 * var(--u));color:#fff;padding-top:calc(4 * var(--u));white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.kb-title{flex:1 1 auto;min-width:0;text-align:right;font: 700 calc(27.9 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase;letter-spacing: calc(1.05 * var(--u));color:#fff;padding-top:calc(4 * var(--u));white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .kb-count{font:500 calc(20 * var(--u))/1 'Barlow',sans-serif;color:var(--text-2);white-space:nowrap;}
-.kb-count b{font:400 calc(34 * var(--u))/1 'Bebas Neue',sans-serif;color:var(--gold);vertical-align:calc(-3 * var(--u));margin-right:calc(3 * var(--u));}
+.kb-count b{font: 700 calc(27.9 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase;color:var(--gold);vertical-align:calc(-3 * var(--u));margin-right:calc(3 * var(--u));}
 .kb-grid{flex:1 1 auto;min-height:0;display:grid;grid-auto-flow:column;grid-template-rows:repeat(12,minmax(0,1fr));grid-template-columns:repeat(3,minmax(0,1fr));gap:calc(5 * var(--u)) calc(14 * var(--u));}
 .kb-row{display:flex;align-items:center;gap:calc(10 * var(--u));padding:0 calc(10 * var(--u)) 0 calc(6 * var(--u));border-radius:calc(9 * var(--u));background:rgba(11,10,18,.32);min-width:0;}
-.kb-num{flex-shrink:0;min-width:calc(30 * var(--u));height:calc(24 * var(--u));box-sizing:border-box;padding:0 calc(5 * var(--u));border-radius:calc(6 * var(--u));background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font:400 calc(20 * var(--u))/1 'Bebas Neue',sans-serif;color:var(--text-2);padding-top:calc(2 * var(--u));}
+.kb-num{flex-shrink:0;min-width:calc(30 * var(--u));height:calc(24 * var(--u));box-sizing:border-box;padding:0 calc(5 * var(--u));border-radius:calc(6 * var(--u));background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font: 700 calc(16.4 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase;color:var(--text-2);padding-top:calc(2 * var(--u));}
 .kb-name{flex:1 1 auto;min-width:0;font:600 calc(19 * var(--u))/1.3 'Barlow',sans-serif;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .kb-hearts{display:flex;gap:calc(3 * var(--u));flex-shrink:0;}
 .kb-hearts svg{width:calc(15 * var(--u));height:calc(14 * var(--u));}
-.kb-tag{flex-shrink:0;font:700 calc(12 * var(--u))/1 'Barlow Condensed',sans-serif;letter-spacing:calc(1.5 * var(--u));color:#B79CF0;padding:calc(4 * var(--u)) calc(6 * var(--u));border-radius:calc(6 * var(--u));background:rgba(183,156,240,.14);}
+.kb-tag{flex-shrink:0;font: 700 calc(10.6 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase;letter-spacing: calc(0.68 * var(--u));color:#B79CF0;padding:calc(4 * var(--u)) calc(6 * var(--u));border-radius:calc(6 * var(--u));background:rgba(183,156,240,.14);}
 .kb-row.is-now{background:var(--gold);}
 .kb-row.is-now .kb-num{background:rgba(26,16,48,.18);color:#1A1030;}
 .kb-row.is-now .kb-name{color:#1A1030;font-weight:700;}
@@ -299,21 +299,21 @@
 .kb-row.is-out{background:transparent;box-shadow:inset 0 0 0 1px rgba(255,255,255,.06);}
 .kb-row.is-out .kb-num{color:#6A6388;background:transparent;}
 .kb-row.is-out .kb-name{color:#6A6388;font-weight:500;text-decoration:line-through;text-decoration-color:rgba(106,99,136,.7);}
-.kb-out{font:700 calc(13 * var(--u))/1 'Barlow Condensed',sans-serif;letter-spacing:calc(1.5 * var(--u));color:#6A6388;}
+.kb-out{font: 700 calc(11.4 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase;letter-spacing: calc(0.68 * var(--u));color:#6A6388;}
 
 .tv-stub.big{width:calc(368 * var(--u));justify-content:flex-start;align-items:stretch;gap:0;padding:calc(24 * var(--u)) calc(30 * var(--u)) calc(24 * var(--u)) calc(20 * var(--u));}
 .kb-now{display:flex;flex-direction:column;align-items:center;text-align:center;gap:calc(10 * var(--u));}
 .kb-now .tv-avatar{width:calc(104 * var(--u));height:calc(104 * var(--u));}
 .kb-now .tv-avatar__inner{font-size:calc(52 * var(--u));}
 .kb-nowname{display:flex;align-items:baseline;justify-content:center;gap:calc(12 * var(--u));max-width:100%;}
-.kb-nownum{font:400 calc(44 * var(--u))/1 'Bebas Neue',sans-serif;color:var(--gold);}
+.kb-nownum{font: 700 calc(36.1 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase;color:var(--gold);}
 .kb-nowname .tv-name{font-size:calc(64 * var(--u));line-height:.8;padding-top:calc(6 * var(--u));}
 .kb-now .tv-lives{padding-top:calc(4 * var(--u));justify-content:center;}
 .kb-now .tv-next{align-self:center;margin:calc(10 * var(--u)) 0 0;}
 .kb-sep{height:1px;background:rgba(255,255,255,.08);margin:calc(16 * var(--u)) 0 calc(14 * var(--u));}
 .kb-round{display:flex;align-items:baseline;justify-content:space-between;}
-.kb-round__l{font:700 calc(17 * var(--u))/1 'Barlow Condensed',sans-serif;letter-spacing:calc(3 * var(--u));color:var(--text-2);}
-.kb-round__l b{font:400 calc(30 * var(--u))/1 'Bebas Neue',sans-serif;color:var(--gold);letter-spacing:0;margin-left:calc(6 * var(--u));}
+.kb-round__l{font: 700 calc(15 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase;letter-spacing: calc(1.35 * var(--u));color:var(--text-2);}
+.kb-round__l b{font: 700 calc(24.6 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase;color:var(--gold);letter-spacing:0;margin-left:calc(6 * var(--u));}
 .kb-shoot{font:500 calc(22 * var(--u))/1 'Barlow',sans-serif;color:var(--text-2);}
 .kb-shoot b{color:#fff;font-weight:700;}
 .kb-foot{margin-top:auto;display:flex;align-items:center;gap:calc(14 * var(--u));}
@@ -321,23 +321,23 @@
 .kb-foot .tv-qr svg{width:calc(80 * var(--u));height:calc(80 * var(--u));}
 .kb-foot .tv-ro__pot{flex:1;flex-direction:column;align-items:flex-start;gap:calc(4 * var(--u));padding:calc(12 * var(--u)) calc(14 * var(--u));}
 .kb-foot .tv-ro__pot-val{font-size:calc(46 * var(--u));}
-.kb-scan{font:600 calc(13 * var(--u))/1.2 'Barlow Condensed',sans-serif;letter-spacing:calc(1.5 * var(--u));color:var(--text-2);margin-top:calc(8 * var(--u));text-align:center;}
+.kb-scan{font: 600 calc(11.4 * var(--u))/1.2 'Chakra Petch', sans-serif; text-transform: uppercase;letter-spacing: calc(0.68 * var(--u));color:var(--text-2);margin-top:calc(8 * var(--u));text-align:center;}
 
 /* Owner comments 2026-10-20: round + still-in as badges top-left, brand as one line under the list, # beside UP NOW */
 .kb-head{gap:calc(10 * var(--u));}
 .kb-title{flex:1 1 auto;min-width:calc(160 * var(--u));text-align:left;font-size:calc(36 * var(--u));}
 .kb-badge{flex-shrink:0;display:inline-flex;align-items:center;gap:calc(8 * var(--u));height:calc(40 * var(--u));box-sizing:border-box;padding:0 calc(16 * var(--u));border-radius:calc(20 * var(--u));background:var(--stub);border:1px solid #4A4463;
-  font:700 calc(16 * var(--u))/1 'Barlow Condensed',sans-serif;letter-spacing:calc(2 * var(--u));color:var(--text-2);white-space:nowrap;}
-.kb-badge b{font:400 calc(28 * var(--u))/1 'Bebas Neue',sans-serif;letter-spacing:0;color:var(--gold);padding-top:calc(3 * var(--u));}
+  font: 700 calc(14.1 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase;letter-spacing: calc(0.9 * var(--u));color:var(--text-2);white-space:nowrap;}
+.kb-badge b{font: 700 calc(23 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase;letter-spacing:0;color:var(--gold);padding-top:calc(3 * var(--u));}
 .kb-badge i{width:1px;height:calc(18 * var(--u));background:#4A4463;margin:0 calc(4 * var(--u));}
 .kb-brandline{display:flex;align-items:center;gap:calc(10 * var(--u));height:calc(40 * var(--u));padding-top:calc(2 * var(--u));}
 .kb-brandline__ball{width:calc(34 * var(--u));height:calc(34 * var(--u));flex-shrink:0;}
 .kb-brandline__lockup{display:flex;flex-direction:column;align-items:flex-start;gap:calc(2 * var(--u));}
-.kb-brandline__name{font:400 calc(22 * var(--u))/1 'Bebas Neue',sans-serif;letter-spacing:calc(2.5 * var(--u));color:var(--gold);padding-top:calc(3 * var(--u));}
-.kb-brandline__sub{font:600 calc(12 * var(--u))/1 'Barlow Condensed',sans-serif;letter-spacing:calc(5 * var(--u));color:#CBC2E0;}
+.kb-brandline__name{font: 700 calc(18 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase;letter-spacing: calc(0.88 * var(--u));color:var(--gold);padding-top:calc(3 * var(--u));}
+.kb-brandline__sub{font: 600 calc(10.6 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase;letter-spacing: calc(2.25 * var(--u));color:#CBC2E0;}
 .kb-brandline .tv-live{margin-left:auto;height:calc(28 * var(--u));background:#3A1A22;}
 .tv-upnow{display:inline-flex;align-items:center;gap:calc(10 * var(--u));}
-.kb-upnum{font:400 calc(26 * var(--u))/1 'Bebas Neue',sans-serif;letter-spacing:calc(1 * var(--u));color:#B8924A;padding-top:calc(3 * var(--u));}
+.kb-upnum{font: 700 calc(21.3 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase;letter-spacing: calc(0.35 * var(--u));color:#B8924A;padding-top:calc(3 * var(--u));}
 .kb-now{flex:1 1 auto;justify-content:center;}
 .kb-now .tv-avatar{width:calc(132 * var(--u));height:calc(132 * var(--u));}
 .kb-now .tv-avatar__inner{font-size:calc(64 * var(--u));}
@@ -346,11 +346,11 @@
 .kb-scanfoot{align-items:center;justify-content:flex-start;gap:calc(18 * var(--u));padding-top:calc(18 * var(--u));border-top:1px solid #3A2F5C;}
 .kb-scanfoot .tv-qr{padding:calc(8 * var(--u));border-radius:calc(12 * var(--u));}
 .kb-scanfoot .tv-qr svg{width:calc(128 * var(--u));height:calc(128 * var(--u));}
-.kb-scanfoot__txt{font:700 calc(28 * var(--u))/1.25 'Barlow Condensed',sans-serif;letter-spacing:calc(2 * var(--u));color:var(--gold-text);}
+.kb-scanfoot__txt{font: 700 calc(24.6 * var(--u))/1.25 'Chakra Petch', sans-serif; text-transform: uppercase;letter-spacing: calc(0.9 * var(--u));color:var(--gold-text);}
 /* Owner 2026-10-20: prize pot big in the header, players still in at the bottom, 17/34 at the end of the progress line */
 .kb-pot{flex-shrink:0;display:flex;align-items:baseline;gap:calc(12 * var(--u));}
-.kb-pot__lbl{font:700 calc(16 * var(--u))/1 'Barlow Condensed',sans-serif;letter-spacing:calc(3 * var(--u));color:var(--gold-text);}
-.kb-pot__val{font:400 calc(52 * var(--u))/1 'Bebas Neue',sans-serif;letter-spacing:calc(1 * var(--u));color:var(--gold);padding-top:calc(4 * var(--u));}
+.kb-pot__lbl{font: 700 calc(14.1 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase;letter-spacing: calc(1.35 * var(--u));color:var(--gold-text);}
+.kb-pot__val{font: 700 calc(42.6 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase;letter-spacing: calc(0.35 * var(--u));color:var(--gold);padding-top:calc(4 * var(--u));}
 .kb-head{height:calc(52 * var(--u));}
 .kb-progrow{display:flex;align-items:center;gap:calc(12 * var(--u));flex-shrink:0;}
 .kb-progrow .kb-progress{flex:1 1 auto;}
@@ -363,7 +363,7 @@
 .tv-main.big{gap:calc(14 * var(--u));}
 .kb-progress{height:calc(4 * var(--u));border-radius:calc(2 * var(--u));background:#3A2F5C;overflow:hidden;flex-shrink:0;}
 .kb-progress span{display:block;height:100%;border-radius:inherit;background:var(--gold);}
-.kb-roundtag{align-self:center;margin-bottom:calc(16 * var(--u));height:calc(26 * var(--u));display:inline-flex;align-items:center;gap:calc(6 * var(--u));padding:0 calc(12 * var(--u));border-radius:calc(13 * var(--u));border:1px solid #4A4463;font:600 calc(14 * var(--u))/1 'Barlow Condensed',sans-serif;letter-spacing:calc(2 * var(--u));color:var(--text-2);}
+.kb-roundtag{align-self:center;margin-bottom:calc(16 * var(--u));height:calc(26 * var(--u));display:inline-flex;align-items:center;gap:calc(6 * var(--u));padding:0 calc(12 * var(--u));border-radius:calc(13 * var(--u));border:1px solid #4A4463;font: 600 calc(12.3 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase;letter-spacing: calc(0.9 * var(--u));color:var(--text-2);}
 .kb-roundtag b{font-weight:600;color:var(--gold);}
 .kb-toshoot{margin-left:auto;font:500 calc(18 * var(--u))/1 'Barlow',sans-serif;color:var(--text-2);white-space:nowrap;}
 .kb-toshoot b{font-weight:600;color:var(--gold);}
@@ -391,13 +391,13 @@
 .kb-scanfoot .tv-qr svg{width:calc(116 * var(--u));height:calc(116 * var(--u));}
 /* Owner 2026-10-20 (2): numbers in photo-less avatars, no UP NOW label, #number beside the name (outside its centring), quieter NEXT UP */
 .kb-nowname .tv-name{position:relative;overflow:visible;}
-.kb-namenum{position:absolute;left:100%;top:50%;transform:translateY(-50%);margin-left:calc(12 * var(--u));font:400 calc(28 * var(--u))/1 'Bebas Neue',sans-serif;letter-spacing:calc(1 * var(--u));color:#B8924A;}
+.kb-namenum{position:absolute;left:100%;top:50%;transform:translateY(-50%);margin-left:calc(12 * var(--u));font: 700 calc(23 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase;letter-spacing: calc(0.35 * var(--u));color:#B8924A;}
 .kb-now .tv-avatar__inner{font-size:calc(52 * var(--u));}
 .kb-now .kb-roundtag{margin-bottom:calc(20 * var(--u));}
 .kb-nextnum{font:700 calc(18 * var(--u))/1 'Barlow',sans-serif;color:#fff;}
 .tv-next .tv-next__av{width:calc(40 * var(--u));height:calc(40 * var(--u));padding-top:0;}
 .kb-now .tv-next{padding:0 calc(22 * var(--u)) 0 calc(8 * var(--u));height:calc(56 * var(--u));gap:calc(12 * var(--u));}
-.kb-now .tv-next__lbl{font:600 calc(12 * var(--u))/1 'Barlow Condensed',sans-serif;letter-spacing:calc(2.5 * var(--u));color:#8C86A3;}
+.kb-now .tv-next__lbl{font: 600 calc(10.6 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase;letter-spacing: calc(1.12 * var(--u));color:#8C86A3;}
 .kb-now .tv-next__name{font-size:calc(22 * var(--u));}
 /* Next up is secondary: clear space from the hearts above */
 .kb-now .tv-next{margin-top:calc(44 * var(--u));}
@@ -412,15 +412,15 @@
 /* End screens (winner / no winner) on the new layout */
 .kb-end{gap:0;padding-top:calc(4 * var(--u));}
 .kb-end .kb-roundtag{margin-bottom:calc(22 * var(--u));}
-.kb-endlbl{font:700 calc(18 * var(--u))/1 'Barlow Condensed',sans-serif;letter-spacing:calc(5 * var(--u));padding-left:calc(5 * var(--u));color:var(--gold-text);margin-bottom:calc(10 * var(--u));}
+.kb-endlbl{font: 700 calc(15.8 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase;letter-spacing: calc(2.25 * var(--u));padding-left:calc(5 * var(--u));color:var(--gold-text);margin-bottom:calc(10 * var(--u));}
 .kb-endsub{font:500 calc(20 * var(--u))/1.3 'Barlow',sans-serif;color:var(--text-2);margin-top:calc(10 * var(--u));}
 .kb-endpot{margin-top:calc(30 * var(--u));display:flex;flex-direction:column;align-items:center;gap:calc(6 * var(--u));}
-.kb-endpot__lbl{font:600 calc(14 * var(--u))/1 'Barlow Condensed',sans-serif;letter-spacing:calc(3 * var(--u));color:#8C86A3;}
-.kb-endpot__val{font:400 calc(60 * var(--u))/1 'Bebas Neue',sans-serif;letter-spacing:calc(1 * var(--u));color:var(--gold);}
+.kb-endpot__lbl{font: 600 calc(12.3 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase;letter-spacing: calc(1.35 * var(--u));color:#8C86A3;}
+.kb-endpot__val{font: 700 calc(49.2 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase;letter-spacing: calc(0.35 * var(--u));color:var(--gold);}
 .kb-endicon{width:calc(112 * var(--u));height:calc(112 * var(--u));border-radius:50%;box-sizing:border-box;border:calc(3 * var(--u)) solid #4A4463;background:var(--felt);display:flex;align-items:center;justify-content:center;color:var(--gold);margin-bottom:calc(18 * var(--u));}
 .kb-endicon svg{width:calc(48 * var(--u));height:calc(48 * var(--u));}
 .kb-end .tv-avatar{margin-bottom:calc(18 * var(--u));}
-.kb-place{flex-shrink:0;font:700 calc(15 * var(--u))/1 'Barlow Condensed',sans-serif;letter-spacing:calc(1.5 * var(--u));color:#8C86A3;}
+.kb-place{flex-shrink:0;font: 700 calc(13.2 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase;letter-spacing: calc(0.68 * var(--u));color:#8C86A3;}
 .kb-row.is-win .kb-place{color:#1A1030;}
 .kb-row.is-podium .kb-place{color:var(--gold-text);}
 .kb-row.is-done{background:rgba(11,10,18,.32);}
@@ -548,23 +548,23 @@
 .ch-confetti i{position:absolute;top:0;display:block;animation:chFall linear infinite;}
 @keyframes chFall{from{transform:translateY(calc(-40 * var(--u))) rotate(0deg)}to{transform:translateY(calc(770 * var(--u))) rotate(600deg)}}
 .ch-body{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;padding:calc(26 * var(--u)) calc(40 * var(--u)) calc(26 * var(--u));}
-.ch-top{display:flex;align-items:baseline;justify-content:center;gap:calc(14 * var(--u));min-height:calc(30 * var(--u));max-width:100%;font:700 calc(24 * var(--u))/1.25 'Barlow Condensed',sans-serif;letter-spacing:calc(4 * var(--u));color:var(--gold-text);white-space:nowrap;}
+.ch-top{display:flex;align-items:baseline;justify-content:center;gap:calc(14 * var(--u));min-height:calc(30 * var(--u));max-width:100%;font: 700 calc(21.1 * var(--u))/1.25 'Chakra Petch', sans-serif; text-transform: uppercase;letter-spacing: calc(1.8 * var(--u));color:var(--gold-text);white-space:nowrap;}
 .ch-top .v{color:var(--text-2);}
 .ch-top .dot{color:var(--line);}
 .ch-main{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:calc(10 * var(--u));width:100%;padding:calc(10 * var(--u)) 0 calc(18 * var(--u));}
-.ch-lbl{display:inline-flex;align-items:center;gap:calc(12 * var(--u));height:calc(44 * var(--u));padding:0 calc(22 * var(--u));border-radius:calc(22 * var(--u));background:var(--gold);color:#1A1030;font:700 calc(24 * var(--u))/1 'Barlow Condensed',sans-serif;letter-spacing:calc(6 * var(--u));animation:chPop .7s cubic-bezier(.2,1.3,.4,1) both;}
+.ch-lbl{display:inline-flex;align-items:center;gap:calc(12 * var(--u));height:calc(44 * var(--u));padding:0 calc(22 * var(--u));border-radius:calc(22 * var(--u));background:var(--gold);color:#1A1030;font: 700 calc(21.1 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase;letter-spacing: calc(2.7 * var(--u));animation:chPop .7s cubic-bezier(.2,1.3,.4,1) both;}
 .ch-lbl svg{width:calc(24 * var(--u));height:calc(24 * var(--u));}
 .ch-av{width:calc(188 * var(--u));height:calc(188 * var(--u));border-radius:50%;border:calc(7 * var(--u)) solid var(--gold);background:#1A1030;padding:calc(6 * var(--u));flex-shrink:0;animation:chPop .9s cubic-bezier(.2,1.3,.4,1) .15s both;}
-.ch-av > span,.ch-av > img{display:flex;align-items:center;justify-content:center;width:100%;height:100%;border-radius:50%;object-fit:cover;font:400 calc(96 * var(--u))/1 'Bebas Neue',sans-serif;color:#FFFFFF;padding-top:calc(7 * var(--u));}
+.ch-av > span,.ch-av > img{display:flex;align-items:center;justify-content:center;width:100%;height:100%;border-radius:50%;object-fit:cover;font: 700 calc(78.7 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase;color:#FFFFFF;padding-top:calc(7 * var(--u));}
 .ch-av > img{padding:0;}
 @keyframes chPop{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}
 @keyframes chRise{from{opacity:0;transform:translateY(calc(24 * var(--u)))}to{opacity:1;transform:none}}
-.ch-name{max-width:100%;font:400 calc(104 * var(--u))/1.3 'Bebas Neue',sans-serif;letter-spacing:calc(4 * var(--u));color:#FFFFFF;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:calc(-12 * var(--u)) 0 calc(-20 * var(--u));padding:0 calc(8 * var(--u));animation:chRise .8s ease-out .45s both;}
+.ch-name{max-width:100%;font: 700 calc(85.3 * var(--u))/1.3 'Chakra Petch', sans-serif; text-transform: uppercase;letter-spacing: calc(1.4 * var(--u));color:#FFFFFF;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:calc(-12 * var(--u)) 0 calc(-20 * var(--u));padding:0 calc(8 * var(--u));animation:chRise .8s ease-out .45s both;}
 .ch-name.mid{font-size:calc(88 * var(--u));}
 .ch-name.long{font-size:calc(72 * var(--u));}
 .ch-prize{display:flex;align-items:center;justify-content:center;width:100%;animation:chRise .8s ease-out .8s both;}
-.ch-prize .n{font:400 calc(92 * var(--u))/1.3 'Bebas Neue',sans-serif;letter-spacing:calc(2 * var(--u));color:var(--gold);margin:calc(-11 * var(--u)) 0 calc(-18 * var(--u));}
-.ch-fact{font:600 calc(22 * var(--u))/1.25 'Barlow Condensed',sans-serif;letter-spacing:calc(3.5 * var(--u));color:var(--text-2);text-align:center;white-space:nowrap;animation:chRise .8s ease-out 1.1s both;}
+.ch-prize .n{font: 700 calc(75.4 * var(--u))/1.3 'Chakra Petch', sans-serif; text-transform: uppercase;letter-spacing: calc(0.7 * var(--u));color:var(--gold);margin:calc(-11 * var(--u)) 0 calc(-18 * var(--u));}
+.ch-fact{font: 600 calc(19.4 * var(--u))/1.25 'Chakra Petch', sans-serif; text-transform: uppercase;letter-spacing: calc(1.57 * var(--u));color:var(--text-2);text-align:center;white-space:nowrap;animation:chRise .8s ease-out 1.1s both;}
 .ch-fact b{color:#FFFFFF;font-weight:700;}
 .ch-foot{display:grid;grid-template-columns:1fr auto 1fr;align-items:end;gap:calc(20 * var(--u));width:100%;min-height:calc(92 * var(--u));}
 .ch-foot .kb-brandline{align-self:end;}
@@ -572,16 +572,16 @@
 .ch-place{display:flex;align-items:center;gap:calc(14 * var(--u));height:calc(92 * var(--u));min-width:calc(330 * var(--u));max-width:calc(420 * var(--u));padding:0 calc(22 * var(--u)) 0 calc(14 * var(--u));border-radius:calc(20 * var(--u));background:#0B0A12;border:calc(1.5 * var(--u)) solid var(--line);}
 .ch-place.bare{min-width:0;padding:0 calc(24 * var(--u));gap:calc(18 * var(--u));}
 .ch-place.bare .t{flex:none;}
-.ch-place .av{width:calc(64 * var(--u));height:calc(64 * var(--u));border-radius:50%;flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;border:calc(2 * var(--u)) solid var(--text-2);font:400 calc(34 * var(--u))/1 'Bebas Neue',sans-serif;color:#FFFFFF;padding-top:calc(3 * var(--u));}
+.ch-place .av{width:calc(64 * var(--u));height:calc(64 * var(--u));border-radius:50%;flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;border:calc(2 * var(--u)) solid var(--text-2);font: 700 calc(27.9 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase;color:#FFFFFF;padding-top:calc(3 * var(--u));}
 .ch-place .av img{width:100%;height:100%;object-fit:cover;margin-top:calc(-3 * var(--u));}
 .ch-place .t{display:flex;flex-direction:column;gap:calc(2 * var(--u));min-width:0;flex:1;}
-.ch-place .t .l{font:700 calc(16 * var(--u))/1 'Barlow Condensed',sans-serif;letter-spacing:calc(3.5 * var(--u));color:var(--text-2);}
-.ch-place .t .n{font:400 calc(42 * var(--u))/1.3 'Bebas Neue',sans-serif;letter-spacing:calc(1.5 * var(--u));color:#FFFFFF;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:calc(-5 * var(--u)) 0 calc(-9 * var(--u));}
-.ch-place .p{font:400 calc(50 * var(--u))/1.3 'Bebas Neue',sans-serif;color:var(--gold);flex-shrink:0;margin:calc(-6 * var(--u)) 0 calc(-10 * var(--u));}
+.ch-place .t .l{font: 700 calc(14.1 * var(--u))/1 'Chakra Petch', sans-serif; text-transform: uppercase;letter-spacing: calc(1.57 * var(--u));color:var(--text-2);}
+.ch-place .t .n{font: 700 calc(34.4 * var(--u))/1.3 'Chakra Petch', sans-serif; text-transform: uppercase;letter-spacing: calc(0.52 * var(--u));color:#FFFFFF;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:calc(-5 * var(--u)) 0 calc(-9 * var(--u));}
+.ch-place .p{font: 700 calc(41 * var(--u))/1.3 'Chakra Petch', sans-serif; text-transform: uppercase;color:var(--gold);flex-shrink:0;margin:calc(-6 * var(--u)) 0 calc(-10 * var(--u));}
 .ch-scan{justify-self:end;display:flex;align-items:center;gap:calc(12 * var(--u));}
 .ch-scan .tv-qr{width:calc(84 * var(--u));height:calc(84 * var(--u));padding:calc(5 * var(--u));background:#FFFFFF;border-radius:calc(8 * var(--u));}
 .ch-scan .tv-qr svg{width:100%;height:100%;display:block;}
-.ch-scan span{font:700 calc(15 * var(--u))/1.3 'Barlow Condensed',sans-serif;letter-spacing:calc(2.5 * var(--u));color:var(--text-2);}
+.ch-scan span{font: 700 calc(13.2 * var(--u))/1.3 'Chakra Petch', sans-serif; text-transform: uppercase;letter-spacing: calc(1.12 * var(--u));color:var(--text-2);}
 @media (prefers-reduced-motion: reduce){.ch-burst,.ch-confetti i,.ch-lbl,.ch-av,.ch-name,.ch-prize,.ch-fact,.ch-places{animation:none}}
   /* ── Poolco TV, Nothing design (owner 2026-11-17, Figma "TV · Nothing").
      Only for competitions sent by Poolco (style: 'nothing'); Killer Pool's
@@ -718,7 +718,7 @@
   <div class="tv-stage" id="stage">
     <div class="tv-idle">
       <svg class="tv-idle__ball" viewBox="0 0 26 26" aria-hidden="true"><circle cx="13" cy="13" r="12" fill="#0B0A12" stroke="#F2B84B" stroke-width="1"/><circle cx="13" cy="13" r="6" fill="#F4F1FA"/><text x="13" y="16.5" text-anchor="middle" font-family="Barlow, sans-serif" font-weight="700" font-size="9" fill="#0B0A12">8</text></svg>
-      <svg class="tv-idle__logo" viewBox="0 0 166 44" role="img" aria-label="Killer Pool Elimination"><text x="0" y="28.4" font-family="Bebas Neue, sans-serif" font-size="40" textLength="166" lengthAdjust="spacing" fill="#F2B84B">KILLER POOL</text><text x="0.6" y="43.4" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Barlow, sans-serif" font-size="12" font-weight="600" textLength="165.4" lengthAdjust="spacing" fill="#E4DCF3">ELIMINATION</text></svg>
+      <svg class="tv-idle__logo" viewBox="0 0 166 44" role="img" aria-label="Killer Pool Elimination"><text x="0" y="27" font-family="Chakra Petch, sans-serif" font-weight="700" font-size="25.5" textLength="166" lengthAdjust="spacing" fill="#F2B84B">KILLER POOL</text><text x="0.6" y="43.4" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Barlow, sans-serif" font-size="12" font-weight="600" textLength="165.4" lengthAdjust="spacing" fill="#E4DCF3">ELIMINATION</text></svg>
       <div class="tv-idle__sub">WAITING FOR ORGANISER TO START A GAME…</div>
     </div>
   </div>
@@ -777,7 +777,7 @@
     stage.innerHTML = `
       <div class="tv-idle">
         ${BRAND_BALL_SVG.replace('tv-brand__ball', 'tv-idle__ball')}
-        <svg class="tv-idle__logo" viewBox="0 0 166 44" role="img" aria-label="Killer Pool Elimination"><text x="0" y="28.4" font-family="Bebas Neue, sans-serif" font-size="40" textLength="166" lengthAdjust="spacing" fill="#F2B84B">KILLER POOL</text><text x="0.6" y="43.4" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Barlow, sans-serif" font-size="12" font-weight="600" textLength="165.4" lengthAdjust="spacing" fill="#E4DCF3">ELIMINATION</text></svg>
+        <svg class="tv-idle__logo" viewBox="0 0 166 44" role="img" aria-label="Killer Pool Elimination"><text x="0" y="27" font-family="Chakra Petch, sans-serif" font-weight="700" font-size="25.5" textLength="166" lengthAdjust="spacing" fill="#F2B84B">KILLER POOL</text><text x="0.6" y="43.4" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Barlow, sans-serif" font-size="12" font-weight="600" textLength="165.4" lengthAdjust="spacing" fill="#E4DCF3">ELIMINATION</text></svg>
         <div class="tv-idle__sub">WAITING FOR ORGANISER TO START A GAME…</div>
       </div>
     `;
@@ -942,7 +942,7 @@
           <header class="tv-head">
             <div class="tv-brand">
               ${BRAND_BALL_SVG}
-              <svg class="tv-brand__logo" viewBox="0 0 166 44" role="img" aria-label="Killer Pool Elimination"><text x="0" y="28.4" font-family="Bebas Neue, sans-serif" font-size="40" textLength="166" lengthAdjust="spacing" fill="#F2B84B">KILLER POOL</text><text x="0.6" y="43.4" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Barlow, sans-serif" font-size="12" font-weight="600" textLength="165.4" lengthAdjust="spacing" fill="#E4DCF3">ELIMINATION</text></svg>
+              <svg class="tv-brand__logo" viewBox="0 0 166 44" role="img" aria-label="Killer Pool Elimination"><text x="0" y="27" font-family="Chakra Petch, sans-serif" font-weight="700" font-size="25.5" textLength="166" lengthAdjust="spacing" fill="#F2B84B">KILLER POOL</text><text x="0.6" y="43.4" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Barlow, sans-serif" font-size="12" font-weight="600" textLength="165.4" lengthAdjust="spacing" fill="#E4DCF3">ELIMINATION</text></svg>
               <span class="tv-live">LIVE</span>
             </div>
             <div class="tv-round"><span class="tv-round__lbl">ROUND</span><span class="tv-round__num">${state.round ?? 1}</span></div>
@@ -1013,7 +1013,7 @@
           <header class="tv-head">
             <div class="tv-brand">
               ${BRAND_BALL_SVG}
-              <svg class="tv-brand__logo" viewBox="0 0 166 44" role="img" aria-label="Killer Pool Elimination"><text x="0" y="28.4" font-family="Bebas Neue, sans-serif" font-size="40" textLength="166" lengthAdjust="spacing" fill="#F2B84B">KILLER POOL</text><text x="0.6" y="43.4" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Barlow, sans-serif" font-size="12" font-weight="600" textLength="165.4" lengthAdjust="spacing" fill="#E4DCF3">ELIMINATION</text></svg>
+              <svg class="tv-brand__logo" viewBox="0 0 166 44" role="img" aria-label="Killer Pool Elimination"><text x="0" y="27" font-family="Chakra Petch, sans-serif" font-weight="700" font-size="25.5" textLength="166" lengthAdjust="spacing" fill="#F2B84B">KILLER POOL</text><text x="0.6" y="43.4" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Barlow, sans-serif" font-size="12" font-weight="600" textLength="165.4" lengthAdjust="spacing" fill="#E4DCF3">ELIMINATION</text></svg>
               <span class="tv-flag tv-flag--done">GAME OVER</span>
             </div>
             <div class="tv-round"><span class="tv-round__lbl">ROUNDS</span><span class="tv-round__num">${state.rounds ?? 1}</span></div>
@@ -1084,7 +1084,7 @@
           <header class="tv-head">
             <div class="tv-brand">
               ${BRAND_BALL_SVG}
-              <svg class="tv-brand__logo" viewBox="0 0 166 44" role="img" aria-label="Killer Pool Elimination"><text x="0" y="28.4" font-family="Bebas Neue, sans-serif" font-size="40" textLength="166" lengthAdjust="spacing" fill="#F2B84B">KILLER POOL</text><text x="0.6" y="43.4" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Barlow, sans-serif" font-size="12" font-weight="600" textLength="165.4" lengthAdjust="spacing" fill="#E4DCF3">ELIMINATION</text></svg>
+              <svg class="tv-brand__logo" viewBox="0 0 166 44" role="img" aria-label="Killer Pool Elimination"><text x="0" y="27" font-family="Chakra Petch, sans-serif" font-weight="700" font-size="25.5" textLength="166" lengthAdjust="spacing" fill="#F2B84B">KILLER POOL</text><text x="0.6" y="43.4" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Barlow, sans-serif" font-size="12" font-weight="600" textLength="165.4" lengthAdjust="spacing" fill="#E4DCF3">ELIMINATION</text></svg>
               <span class="tv-flag tv-flag--void">ROUND ENDED</span>
             </div>
             <div class="tv-round"><span class="tv-round__lbl">ROUND</span><span class="tv-round__num">${state.round ?? 1}</span></div>
