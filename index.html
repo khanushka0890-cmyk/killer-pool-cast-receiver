@@ -598,7 +598,8 @@
   .nt-lbl.red { color: #FF383C; } .nt-lbl.gold { color: #FFC940; } .nt-lbl.dis { color: #8C8C8C; }
   .nt-hero { font: 700 calc(84 * var(--u))/1 'Doto', monospace; letter-spacing: -0.01em; text-transform: uppercase; color: #fff; overflow-wrap: anywhere; }
   .nt-gold { color: #FFC940; } .nt-grey { color: #8C8C8C; }
-  .nt-big { font: 700 calc(72 * var(--u))/1 'Doto', monospace; color: #FFC940; }
+  /* Money on the TV is Space Mono bold (owner 2026-11-22); scores stay Doto. */
+  .nt-big { font: 700 calc(72 * var(--u))/1 'Space Mono', monospace; letter-spacing: -0.02em; color: #FFC940; font-variant-numeric: tabular-nums; }
   .nt-bar { display: inline-flex; gap: calc(2 * var(--u)); width: calc(240 * var(--u)); }
   .nt-bar i { flex: 1; height: calc(6 * var(--u)); background: #333; }
   .nt-bar i.on { background: #fff; }
@@ -698,7 +699,7 @@
   .nt-chav > span { width: 100%; height: 100%; border-radius: 50%; background: #1A1A1A; display: flex; align-items: center; justify-content: center; overflow: hidden; font: 700 calc(100 * var(--u))/1 'Doto', monospace; color: #fff; }
   .nt-chav img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .nt-chn { font: 700 calc(96 * var(--u))/1 'Space Grotesk', sans-serif; text-transform: uppercase; color: #fff; white-space: nowrap; max-width: 92%; overflow: hidden; text-overflow: ellipsis; }
-  .nt-chp { font: 700 calc(136 * var(--u))/0.9 'Doto', monospace; color: #FFC940; }
+  .nt-chp { font: 700 calc(128 * var(--u))/0.95 'Space Mono', monospace; letter-spacing: -0.03em; color: #FFC940; font-variant-numeric: tabular-nums; }
   .nt-chf { font: 400 calc(20 * var(--u))/1.2 'Space Mono', monospace; letter-spacing: .08em; text-transform: uppercase; color: #B3B3B3; }
   .nt-chf .nt-gold { color: #FFC940; }
   .nt-chpl { position: absolute; left: 0; right: 0; bottom: calc(22 * var(--u)); z-index: 2; display: flex; justify-content: center; gap: calc(16 * var(--u)); }
@@ -706,7 +707,7 @@
   .nt-place .nt-av { width: calc(56 * var(--u)); height: calc(56 * var(--u)); background: #1A1A1A; color: #fff; font-size: calc(24 * var(--u)); }
   .nt-place .t { display: flex; flex-direction: column; gap: calc(4 * var(--u)); text-align: left; flex: 1; min-width: 0; }
   .nt-place .n { font: 700 calc(26 * var(--u))/1 'Space Grotesk', sans-serif; text-transform: uppercase; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .nt-place .p { font: 700 calc(40 * var(--u))/1 'Doto', monospace; color: #FFC940; }
+  .nt-place .p { font: 700 calc(36 * var(--u))/1 'Space Mono', monospace; letter-spacing: -0.02em; color: #FFC940; font-variant-numeric: tabular-nums; }
   .nt-conf { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 1; }
   .nt-conf i { position: absolute; top: 0; display: block; animation: ntFall linear infinite; }
   @keyframes ntFall { from { transform: translateY(calc(-40 * var(--u))) rotate(0deg); } to { transform: translateY(calc(770 * var(--u))) rotate(540deg); } }
@@ -1341,7 +1342,7 @@
       for (let i = 0; i < 56; i++) { const w = 7 + Math.round(rnd() * 8), sq = i % 3 === 1; conf += `<i style="left:${(rnd() * 100).toFixed(1)}%;width:calc(${w} * var(--u));height:calc(${w} * var(--u));border-radius:${sq ? 'calc(2 * var(--u))' : '50%'};background:${i % 3 === 2 ? '#FFFFFF' : '#FFC940'};animation-duration:${(5.5 + rnd() * 5).toFixed(2)}s;animation-delay:${(-rnd() * 10).toFixed(2)}s"></i>`; }
       const face = (n, photo) => photo && /^data:image\//.test(photo) ? `<img src="${escapeHtml(photo)}" alt="">` : escapeHtml((n || '?').trim().charAt(0).toUpperCase());
       const thirds = Array.isArray(c.thirds) ? c.thirds : [];
-      const place = (label, n, photo, amt) => `<div class="nt-place"><span class="nt-av">${face(n, photo)}</span><span class="t"><span class="nt-lbl">${label}</span><span class="n">${escapeHtml(n)}</span></span>${amt > 0 ? `<span class="p">${fmt(amt)}</span>` : ''}</div>`;
+      const place = (label, n, photo, amt) => `<div class="nt-place"><span class="nt-av">${face(n, photo)}</span><span class="t"><span class="nt-lbl">${label}</span><span class="n">${escapeHtml(n)}</span></span>${amt > 0 ? `<span class="p" data-count="${Math.round(amt)}">${fmt(anim ? 0 : amt)}</span>` : ''}</div>`;
       const places = (c.runnerUp ? place('Runner-up', c.runnerUp, c.podium && c.podium[1] && c.podium[1].photo, pays[1]) : '') + thirds.map(t => place(thirds.length > 1 ? 'Joint 3rd' : '3rd', t.name, null, t.amount)).join('');
       const nmSize = Math.max(52, Math.min(88, Math.floor(1000 / (Math.max(5, name.length) * 0.68))));
       stage.innerHTML = `<div class="nt-ch${anim ? ' anim' : ''}">
@@ -1352,16 +1353,21 @@
             <span class="nt-pill nt-pop">${TROPHY_LINE_SVG}Winner</span>
             <div class="nt-chav nt-pop" style="animation-delay:150ms"><span>${face(name, pod.photo)}</span></div>
             <div class="nt-chn nt-in" style="font-size:calc(${nmSize} * var(--u));animation-delay:400ms">${escapeHtml(name)}</div>
-            ${pay > 0 ? `<div class="nt-chp nt-in" id="ntPrize" style="animation-delay:550ms">${fmt(anim ? 0 : pay)}</div>` : ''}
+            ${pay > 0 ? `<div class="nt-chp nt-in" id="ntPrize" data-count="${Math.round(pay)}" style="animation-delay:550ms">${fmt(anim ? 0 : pay)}</div>` : ''}
             ${fact ? `<div class="nt-chf nt-in" style="animation-delay:700ms">${fact}</div>` : ''}
           </div>
           ${places ? `<div class="nt-chpl nt-in" style="animation-delay:900ms">${places}</div>` : ''}
         </div>`;
-      if (anim && pay > 0 && !(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) {
-        const el = document.getElementById('ntPrize'), t0 = performance.now() + 900;
-        const step = (t) => { if (!el.isConnected) return; const k = Math.min(1, Math.max(0, (t - t0) / 1600)); el.textContent = fmt(Math.round(pay * (1 - Math.pow(1 - k, 3)))); if (k < 1) requestAnimationFrame(step); };
+      // Every amount counts up to its value, like Killer's: the prize first,
+      // then the runner-up and 3rd.
+      const still = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+      stage.querySelectorAll('[data-count]').forEach((el, i) => {
+        const end = Number(el.dataset.count) || 0;
+        if (!anim || still) { el.textContent = fmt(end); return; }
+        const t0 = performance.now() + 900 + i * 350, dur = i ? 1100 : 1600;
+        const step = (t) => { if (!el.isConnected) return; const k = Math.min(1, Math.max(0, (t - t0) / dur)); el.textContent = fmt(Math.round(end * (1 - Math.pow(1 - k, 3)))); if (k < 1) requestAnimationFrame(step); };
         requestAnimationFrame(step);
-      } else if (pay > 0) { const el = document.getElementById('ntPrize'); if (el) el.textContent = fmt(pay); }
+      });
       return;
     }
 
