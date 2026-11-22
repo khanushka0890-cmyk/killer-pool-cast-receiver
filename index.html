@@ -684,35 +684,37 @@
   .nt-amt { font: 400 calc(30 * var(--u))/1 'Space Mono', monospace; color: #FFC940; margin-left: auto; flex-shrink: 0; }
   .nt-right .nt-row .nt-lbl { margin-left: auto; flex-shrink: 0; }
   @media (prefers-reduced-motion: reduce) { .nt-card.new { animation: none; } }
-  /* The winner (Poolco, owner 2026-11-22 "a more epic winner screen"):
-     a dot trophy lighting up from the base, the prize counting up, the
-     podium rising and dot confetti, once per winner. Same on the phone. */
-  .nt-champ { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) calc(400 * var(--u)); gap: calc(40 * var(--u)); align-items: center; }
-  .nt-champ__l { display: flex; flex-direction: column; align-items: center; text-align: center; gap: calc(16 * var(--u)); min-width: 0; padding-right: calc(40 * var(--u)); border-right: 1px solid #4D4D4D; }
-  .nt-troph { display: grid; grid-template-columns: repeat(15, calc(13 * var(--u))); gap: calc(5 * var(--u)); flex-shrink: 0; margin-bottom: calc(6 * var(--u)); }
-  .nt-troph i { display: block; width: calc(13 * var(--u)); height: calc(13 * var(--u)); border-radius: 50%; background: #232323; }
-  .nt-troph i.on { background: #FFC940; }
-  .anim .nt-troph i.on { animation: ntDotOn .26s ease-out both; }
-  @keyframes ntDotOn { 0% { background: #232323; transform: scale(.4); } 60% { transform: scale(1.3); } 100% { background: #FFC940; transform: scale(1); } }
-  .nt-champ__n { max-width: 100%; font: 700 calc(104 * var(--u))/0.95 'Space Grotesk', sans-serif; text-transform: uppercase; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  /* The winner (Poolco, owner 2026-11-22: "similar to Killer's winner
+     screen"): the avatar in the middle, the name, the prize in big gold.
+     Dot rays (Killer's sunburst, in dots) turn slowly; dot confetti falls. */
+  .nt-ch { position: absolute; inset: 0; overflow: hidden; }
+  .nt-rays { position: absolute; left: 50%; top: 34%; width: calc(1900 * var(--u)); height: calc(1900 * var(--u)); margin: calc(-950 * var(--u)) 0 0 calc(-950 * var(--u)); fill: #3A3A3A; animation: ntSpin 140s linear infinite; }
+  @keyframes ntSpin { to { transform: rotate(360deg); } }
+  .nt-ch .nt-top { position: absolute; top: calc(40 * var(--u)); left: calc(54 * var(--u)); right: calc(54 * var(--u)); z-index: 3; }
+  .nt-chm { position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: calc(10 * var(--u)); padding: calc(86 * var(--u)) 0 calc(112 * var(--u)); text-align: center; }
+  .nt-pill { display: inline-flex; align-items: center; gap: calc(12 * var(--u)); height: calc(44 * var(--u)); padding: 0 calc(24 * var(--u)); border-radius: 999px; background: #FFC940; color: #000; font: 700 calc(20 * var(--u))/1 'Space Mono', monospace; letter-spacing: .12em; text-transform: uppercase; }
+  .nt-pill svg { width: calc(22 * var(--u)); height: calc(22 * var(--u)); }
+  .nt-chav { width: calc(176 * var(--u)); height: calc(176 * var(--u)); box-sizing: border-box; border-radius: 50%; border: calc(6 * var(--u)) solid #FFC940; background: #000; padding: calc(7 * var(--u)); flex-shrink: 0; }
+  .nt-chav > span { width: 100%; height: 100%; border-radius: 50%; background: #1A1A1A; display: flex; align-items: center; justify-content: center; overflow: hidden; font: 700 calc(100 * var(--u))/1 'Doto', monospace; color: #fff; }
+  .nt-chav img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .nt-chn { font: 700 calc(96 * var(--u))/1 'Space Grotesk', sans-serif; text-transform: uppercase; color: #fff; white-space: nowrap; max-width: 92%; overflow: hidden; text-overflow: ellipsis; }
+  .nt-chp { font: 700 calc(136 * var(--u))/0.9 'Doto', monospace; color: #FFC940; }
+  .nt-chf { font: 400 calc(20 * var(--u))/1.2 'Space Mono', monospace; letter-spacing: .08em; text-transform: uppercase; color: #B3B3B3; }
+  .nt-chf .nt-gold { color: #FFC940; }
+  .nt-chpl { position: absolute; left: 0; right: 0; bottom: calc(22 * var(--u)); z-index: 2; display: flex; justify-content: center; gap: calc(16 * var(--u)); }
+  .nt-place { display: flex; align-items: center; gap: calc(16 * var(--u)); min-width: calc(300 * var(--u)); padding: calc(14 * var(--u)) calc(22 * var(--u)) calc(14 * var(--u)) calc(14 * var(--u)); box-sizing: border-box; border: 1px solid #333; border-radius: calc(7 * var(--u)); background: #0D0D0D; }
+  .nt-place .nt-av { width: calc(56 * var(--u)); height: calc(56 * var(--u)); background: #1A1A1A; color: #fff; font-size: calc(24 * var(--u)); }
+  .nt-place .t { display: flex; flex-direction: column; gap: calc(4 * var(--u)); text-align: left; flex: 1; min-width: 0; }
+  .nt-place .n { font: 700 calc(26 * var(--u))/1 'Space Grotesk', sans-serif; text-transform: uppercase; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .nt-place .p { font: 700 calc(40 * var(--u))/1 'Doto', monospace; color: #FFC940; }
+  .nt-conf { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 1; }
+  .nt-conf i { position: absolute; top: 0; display: block; animation: ntFall linear infinite; }
+  @keyframes ntFall { from { transform: translateY(calc(-40 * var(--u))) rotate(0deg); } to { transform: translateY(calc(770 * var(--u))) rotate(540deg); } }
   .anim .nt-in { animation: ntIn .6s ease-out both; }
+  .anim .nt-pop { animation: ntPop .9s cubic-bezier(.2,1.3,.4,1) both; }
   @keyframes ntIn { from { opacity: 0; transform: translateY(calc(16 * var(--u))); } to { opacity: 1; transform: none; } }
-  .nt-pod { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: calc(12 * var(--u)); align-items: end; }
-  .nt-pod > div { display: flex; flex-direction: column; align-items: center; gap: calc(8 * var(--u)); min-width: 0; }
-  .nt-pod .nm { font: 700 calc(24 * var(--u))/1.1 'Space Grotesk', sans-serif; color: #fff; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .nt-pod .am { font: 400 calc(22 * var(--u))/1 'Space Mono', monospace; color: #FFC940; }
-  .nt-pod .blk { width: 100%; box-sizing: border-box; border: 1px solid #4D4D4D; border-radius: calc(7 * var(--u)); background: #111; display: flex; justify-content: center; padding-top: calc(14 * var(--u)); transform-origin: bottom; }
-  .nt-pod .blk.first { border: calc(2.5 * var(--u)) solid #FFC940; }
-  .nt-pod .blk span { font: 700 calc(64 * var(--u))/1 'Doto', monospace; color: #fff; }
-  .nt-pod .blk.first span { color: #FFC940; font-size: calc(84 * var(--u)); }
-  .anim .nt-pod .blk { animation: ntRise .7s cubic-bezier(.2,.8,.2,1) both; }
-  .anim .nt-pod .nm, .anim .nt-pod .am { animation: ntFade .5s both; }
-  @keyframes ntRise { from { transform: scaleY(0); } to { transform: scaleY(1); } }
-  @keyframes ntFade { from { opacity: 0; } to { opacity: 1; } }
-  .nt-conf { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 5; }
-  .nt-conf i { position: absolute; top: calc(-16 * var(--u)); display: block; animation: ntFall linear both; }
-  @keyframes ntFall { 0% { transform: translateY(0); opacity: 1; } 85% { opacity: 1; } 100% { transform: translateY(calc(760 * var(--u))); opacity: 0; } }
-  @media (prefers-reduced-motion: reduce) { .anim .nt-troph i.on, .anim .nt-in, .anim .nt-pod .blk, .anim .nt-pod .nm, .anim .nt-pod .am { animation: none; } .nt-conf { display: none; } }
+  @keyframes ntPop { from { opacity: 0; transform: scale(.6); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .nt-rays, .anim .nt-in, .anim .nt-pop { animation: none; } .nt-conf { display: none; } }
   /* Poolco knockout bracket (Figma "TV · Knockout bracket"). */
   .nt-br { position: relative; margin-top: calc(14 * var(--u)); flex-shrink: 0; }
   .nt-br > * { position: absolute; }
@@ -1302,8 +1304,7 @@
   // The reveal count last shown, so a card flips once, when it's turned,
   // not again on every update from the phone (owner 2026-11-18).
   let ntLastReveal = -1;
-  let ntWinKey = '';   // the winner screen animates once per winner
-  const NT_TROPHY = ['..XXXXXXXXXXX..', 'XXXXXXXXXXXXXXX', 'X..XXXXXXXXX..X', 'X..XXXXXXXXX..X', '.X.XXXXXXXXX.X.', '..XXXXXXXXXXX..', '...XXXXXXXXX...', '.....XXXXX.....', '......XXX......', '.......X.......', '.......X.......', '.....XXXXX.....', '....XXXXXXX....', '....XXXXXXX....'];
+  let ntWinKey = '', ntWinName = null;   // the winner screen animates once per winner
   function renderNothing(c) {
     stage.className = 'tv-stage nt';
     const fmt = (n) => Math.round(n || 0).toLocaleString();
@@ -1329,30 +1330,38 @@
       const m = M === 1 ? r.matches[0] : null;
       const fact = m && m.w && c.runnerUp ? `Beat ${escapeHtml(c.runnerUp)} <span class="nt-gold">${Math.max(m.sa, m.sb)}–${Math.min(m.sa, m.sb)}</span> in the final` : '';
       const name = pod.name || c.winner;
-      const key = [name, c.pot, (c.standings || []).length, c.name || ''].join('|');
-      const anim = key !== ntWinKey; ntWinKey = key;
-      const trophy = NT_TROPHY.flatMap((row, y) => [...row].map((ch, x) => `<i class="${ch === 'X' ? 'on' : ''}"${ch === 'X' ? ` style="animation-delay:${(13 - y) * 80 + Math.abs(x - 7) * 20}ms"` : ''}></i>`)).join('');
-      // The podium: 2nd, 1st, 3rd (joint 3rd: both names).
+      const key = JSON.stringify([name, pod.photo ? pod.photo.length : 0, c.pot, pays, c.runnerUp, c.thirds, c.title, c.venue, fact]);
+      if (key === ntWinKey && stage.querySelector('.nt-ch')) return; // same result again: leave it running
+      const anim = ntWinName !== name; ntWinName = name; ntWinKey = key;
+      // Dot rays: alternate wedges filled with dots on rings.
+      let rays = ''; const C = 950, span = Math.PI / 12;
+      for (let k = 0; k < 12; k++) for (let rr = 150; rr < C; rr += 30) { const n = Math.max(1, Math.floor(rr * span / 30)); for (let q = 0; q <= n; q++) { const a = k * 2 * span + q / n * span; rays += `<circle cx="${(C + Math.cos(a) * rr).toFixed(0)}" cy="${(C + Math.sin(a) * rr).toFixed(0)}" r="5.5"/>`; } }
+      // Dot confetti: the same pieces every time, falling for good.
+      let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647; let conf = '';
+      for (let i = 0; i < 56; i++) { const w = 7 + Math.round(rnd() * 8), sq = i % 3 === 1; conf += `<i style="left:${(rnd() * 100).toFixed(1)}%;width:calc(${w} * var(--u));height:calc(${w} * var(--u));border-radius:${sq ? 'calc(2 * var(--u))' : '50%'};background:${i % 3 === 2 ? '#FFFFFF' : '#FFC940'};animation-duration:${(5.5 + rnd() * 5).toFixed(2)}s;animation-delay:${(-rnd() * 10).toFixed(2)}s"></i>`; }
+      const face = (n, photo) => photo && /^data:image\//.test(photo) ? `<img src="${escapeHtml(photo)}" alt="">` : escapeHtml((n || '?').trim().charAt(0).toUpperCase());
       const thirds = Array.isArray(c.thirds) ? c.thirds : [];
-      const col = (place, names, amt, h, d) => `<div>${names.map(n => `<span class="nm" style="animation-delay:${d + 400}ms">${escapeHtml(n)}</span>`).join('')}${amt > 0 ? `<span class="am" style="animation-delay:${d + 500}ms">${fmt(amt)}</span>` : ''}<div class="blk${place === 1 ? ' first' : ''}" style="height:calc(${h} * var(--u));animation-delay:${d}ms"><span>${place}</span></div></div>`;
-      const podium = `<div class="nt-pod">${c.runnerUp ? col(2, [c.runnerUp], pays[1], 130, 1700) : '<div></div>'}${col(1, [name], pay, 190, 1500)}${thirds.length ? col(3, thirds.map(t => t.name), thirds[0].amount, 90, 1900) : '<div></div>'}</div>`;
-      const rest = (c.standings || []).filter(p => !p.rank || p.rank > 3).slice(0, 3);
-      const restRows = rest.length ? `<div style="padding-top:calc(24 * var(--u))">${rest.map(p => `<div class="nt-row"><span class="nt-idx">–</span><span class="nt-nm nt-grey">${escapeHtml(p.name)}</span><span class="nt-lbl dis">${up(p.note || '')}</span></div>`).join('')}</div>` : '';
-      const conf = anim ? `<div class="nt-conf">${Array.from({ length: 70 }, (_, i) => { const sz = 6 + Math.round(Math.random() * 7); return `<i style="left:${(Math.random() * 100).toFixed(1)}%;width:calc(${sz} * var(--u));height:calc(${sz} * var(--u));border-radius:${i % 2 ? '50%' : '1px'};background:${i % 3 ? '#FFC940' : '#fff'};animation-delay:${Math.round(400 + Math.random() * 2200)}ms;animation-duration:${Math.round(2600 + Math.random() * 2200)}ms"></i>`; }).join('')}</div>` : '';
-      stage.innerHTML = top + `<div class="nt-champ${anim ? ' anim' : ''}" style="padding-top:calc(24 * var(--u))">
-          <div class="nt-champ__l">
-            <div class="nt-troph" aria-hidden="true">${trophy}</div>
-            <span class="nt-hero nt-in" style="font-size:calc(52 * var(--u));animation-delay:1100ms">Champion</span>
-            <div class="nt-in" style="display:flex;align-items:center;justify-content:center;gap:calc(24 * var(--u));max-width:100%;animation-delay:1250ms">${pod.photo ? av(name, pod.photo, 'nt-av mid') : ''}<div class="nt-champ__n" style="font-size:calc(${heroSize(name, 104, pod.photo ? 570 : 690)} * var(--u))">${escapeHtml(name)}</div></div>
-            <div class="nt-in" style="display:flex;align-items:baseline;gap:calc(28 * var(--u));animation-delay:1350ms">${pay > 0 ? `<span style="display:flex;align-items:baseline;gap:calc(12 * var(--u))"><span class="nt-big" id="ntPrize" style="font-size:calc(72 * var(--u))">${fmt(anim ? 0 : pay)}</span><span class="nt-lbl">Prize</span></span>` : ''}${fact ? `<span style="font:400 calc(28 * var(--u))/1.2 'Space Grotesk',sans-serif;color:#B3B3B3">${fact}</span>` : ''}</div>
+      const place = (label, n, photo, amt) => `<div class="nt-place"><span class="nt-av">${face(n, photo)}</span><span class="t"><span class="nt-lbl">${label}</span><span class="n">${escapeHtml(n)}</span></span>${amt > 0 ? `<span class="p">${fmt(amt)}</span>` : ''}</div>`;
+      const places = (c.runnerUp ? place('Runner-up', c.runnerUp, c.podium && c.podium[1] && c.podium[1].photo, pays[1]) : '') + thirds.map(t => place(thirds.length > 1 ? 'Joint 3rd' : '3rd', t.name, null, t.amount)).join('');
+      const nmSize = Math.max(52, Math.min(88, Math.floor(1000 / (Math.max(5, name.length) * 0.68))));
+      stage.innerHTML = `<div class="nt-ch${anim ? ' anim' : ''}">
+          <svg class="nt-rays" viewBox="0 0 1900 1900" aria-hidden="true">${rays}</svg>
+          <div class="nt-conf" aria-hidden="true">${conf}</div>
+          ${top}
+          <div class="nt-chm">
+            <span class="nt-pill nt-pop">${TROPHY_LINE_SVG}Winner</span>
+            <div class="nt-chav nt-pop" style="animation-delay:150ms"><span>${face(name, pod.photo)}</span></div>
+            <div class="nt-chn nt-in" style="font-size:calc(${nmSize} * var(--u));animation-delay:400ms">${escapeHtml(name)}</div>
+            ${pay > 0 ? `<div class="nt-chp nt-in" id="ntPrize" style="animation-delay:550ms">${fmt(anim ? 0 : pay)}</div>` : ''}
+            ${fact ? `<div class="nt-chf nt-in" style="animation-delay:700ms">${fact}</div>` : ''}
           </div>
-          <div style="min-width:0">${podium}${restRows}</div>
-        </div>${conf}`;
+          ${places ? `<div class="nt-chpl nt-in" style="animation-delay:900ms">${places}</div>` : ''}
+        </div>`;
       if (anim && pay > 0 && !(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) {
         const el = document.getElementById('ntPrize'), t0 = performance.now() + 900;
         const step = (t) => { if (!el.isConnected) return; const k = Math.min(1, Math.max(0, (t - t0) / 1600)); el.textContent = fmt(Math.round(pay * (1 - Math.pow(1 - k, 3)))); if (k < 1) requestAnimationFrame(step); };
         requestAnimationFrame(step);
-      } else if (anim && pay > 0) { const el = document.getElementById('ntPrize'); if (el) el.textContent = fmt(pay); }
+      } else if (pay > 0) { const el = document.getElementById('ntPrize'); if (el) el.textContent = fmt(pay); }
       return;
     }
 
