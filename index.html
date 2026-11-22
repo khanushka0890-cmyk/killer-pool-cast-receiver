@@ -648,6 +648,11 @@
   .nt-card .nm { font: 700 calc(44 * var(--u))/1 'Doto', monospace; text-transform: uppercase; color: #000; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .nt-av { flex-shrink: 0; width: calc(80 * var(--u)); height: calc(80 * var(--u)); border-radius: 50%; background: #FFC940; color: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; font: 400 calc(30 * var(--u))/1 'Space Mono', monospace; }
   .nt-av img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  /* Player photos (Poolco, owner 2026-11-22): big on Now playing and Match won, beside the champion. */
+  .nt-av.big { width: calc(150 * var(--u)); height: calc(150 * var(--u)); font-size: calc(56 * var(--u)); }
+  .nt-av.mid { width: calc(96 * var(--u)); height: calc(96 * var(--u)); font-size: calc(40 * var(--u)); }
+  .nt-av.lose { filter: grayscale(1); opacity: .5; }
+  .nt-pics { display: flex; justify-content: space-between; padding-top: calc(36 * var(--u)); }
   @keyframes ntIn { from { transform: rotateY(90deg); } to { transform: rotateY(0); } }
   /* Waiting */
   .nt-stats { display: flex; align-items: baseline; gap: calc(28 * var(--u)); padding-top: calc(36 * var(--u)); }
@@ -1338,7 +1343,7 @@
           <div class="nt-champ__l">
             <div class="nt-troph" aria-hidden="true">${trophy}</div>
             <span class="nt-hero nt-in" style="font-size:calc(52 * var(--u));animation-delay:1100ms">Champion</span>
-            <div class="nt-champ__n nt-in" style="font-size:calc(${heroSize(name, 104, 690)} * var(--u));animation-delay:1250ms">${escapeHtml(name)}</div>
+            <div class="nt-in" style="display:flex;align-items:center;justify-content:center;gap:calc(24 * var(--u));max-width:100%;animation-delay:1250ms">${pod.photo ? av(name, pod.photo, 'nt-av mid') : ''}<div class="nt-champ__n" style="font-size:calc(${heroSize(name, 104, pod.photo ? 570 : 690)} * var(--u))">${escapeHtml(name)}</div></div>
             <div class="nt-in" style="display:flex;align-items:baseline;gap:calc(28 * var(--u));animation-delay:1350ms">${pay > 0 ? `<span style="display:flex;align-items:baseline;gap:calc(12 * var(--u))"><span class="nt-big" id="ntPrize" style="font-size:calc(72 * var(--u))">${fmt(anim ? 0 : pay)}</span><span class="nt-lbl">Prize</span></span>` : ''}${fact ? `<span style="font:400 calc(28 * var(--u))/1.2 'Space Grotesk',sans-serif;color:#B3B3B3">${fact}</span>` : ''}</div>
           </div>
           <div style="min-width:0">${podium}${restRows}</div>
@@ -1420,7 +1425,8 @@
       const nmSize = Math.max(44, Math.min(84, Math.floor(420 / (Math.max(5, f.a.length, f.b.length) * 0.62))));
       stage.innerHTML = top + `<div class="nt-body">
           <span class="nt-lbl red" style="display:flex;align-items:center;gap:calc(10 * var(--u))"><i class="nt-dot"></i>Now playing${f.tn ? ` · Table ${f.tn}` : ''} · ${up(r.name)}</span>
-          <div class="nt-won" style="padding-top:calc(60 * var(--u))">
+          ${f.pa || f.pb ? `<div class="nt-pics">${av(f.a, f.pa, 'nt-av big')}${av(f.b, f.pb, 'nt-av big')}</div>` : ''}
+          <div class="nt-won" style="padding-top:calc(${f.pa || f.pb ? 24 : 60} * var(--u))">
             <span class="n" style="font-size:calc(${nmSize} * var(--u))">${escapeHtml(f.a)}</span>
             <span class="sc"><span>${f.sa}</span><i></i><span>${f.sb}</span></span>
             <span class="n r" style="font-size:calc(${nmSize} * var(--u))">${escapeHtml(f.b)}</span>
@@ -1436,7 +1442,8 @@
       const nmSize = Math.max(44, Math.min(80, Math.floor(420 / (Math.max(5, w.a.length, w.b.length) * 0.62))));
       stage.innerHTML = top + `<div class="nt-body">
           <span class="nt-lbl red" style="display:flex;align-items:center;gap:calc(10 * var(--u))"><i class="nt-dot"></i>Match won · ${up(r.name)}</span>
-          <div class="nt-won" style="padding-top:calc(60 * var(--u))">
+          ${w.pa || w.pb ? `<div class="nt-pics">${av(w.a, w.pa, 'nt-av big' + (aw ? '' : ' lose'))}${av(w.b, w.pb, 'nt-av big' + (aw ? ' lose' : ''))}</div>` : ''}
+          <div class="nt-won" style="padding-top:calc(${w.pa || w.pb ? 24 : 60} * var(--u))">
             <span class="n${aw ? '' : ' lose'}" style="font-size:calc(${nmSize} * var(--u))">${escapeHtml(w.a)}</span>
             <span class="sc"><span class="${aw ? '' : 'lose'}">${w.sa}</span><i></i><span class="${aw ? 'lose' : ''}">${w.sb}</span></span>
             <span class="n r${aw ? ' lose' : ''}" style="font-size:calc(${nmSize} * var(--u))">${escapeHtml(w.b)}</span>
