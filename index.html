@@ -715,6 +715,25 @@
   .anim .nt-pop { animation: ntPop .9s cubic-bezier(.2,1.3,.4,1) both; }
   @keyframes ntIn { from { opacity: 0; transform: translateY(calc(16 * var(--u))); } to { opacity: 1; transform: none; } }
   @keyframes ntPop { from { opacity: 0; transform: scale(.6); } to { opacity: 1; transform: none; } }
+  /* Leaderboard (Poolco, owner 2026-11-26): money first in gold Space Mono,
+     the top 3 in cards, the rest in two columns. */
+  .nt-lb { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: calc(22 * var(--u)); padding-top: calc(18 * var(--u)); }
+  .nt-lb3 { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr) minmax(0, 1fr); gap: calc(16 * var(--u)); align-items: end; }
+  .nt-lbc { display: flex; align-items: center; gap: calc(18 * var(--u)); padding: calc(18 * var(--u)) calc(22 * var(--u)); border: 1px solid #333; border-radius: calc(7 * var(--u)); background: #0D0D0D; min-width: 0; }
+  .nt-lbc.first { border: calc(2.5 * var(--u)) solid #FFC940; padding: calc(24 * var(--u)) calc(22 * var(--u)); }
+  .nt-lbc .rk { font: 700 calc(48 * var(--u))/1 'Doto', monospace; color: #fff; width: calc(34 * var(--u)); text-align: center; flex-shrink: 0; }
+  .nt-lbc.first .rk { color: #FFC940; font-size: calc(64 * var(--u)); }
+  .nt-lbc .nt-av { width: calc(72 * var(--u)); height: calc(72 * var(--u)); background: #1A1A1A; color: #fff; font-size: calc(30 * var(--u)); }
+  .nt-lbc.first .nt-av { width: calc(88 * var(--u)); height: calc(88 * var(--u)); box-shadow: 0 0 0 calc(3 * var(--u)) #000, 0 0 0 calc(6 * var(--u)) #FFC940; }
+  .nt-lbc .t { display: flex; flex-direction: column; gap: calc(8 * var(--u)); min-width: 0; }
+  .nt-lbc .n { font: 700 calc(28 * var(--u))/1 'Space Grotesk', sans-serif; text-transform: uppercase; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .nt-lbc .m { font: 700 calc(40 * var(--u))/1 'Space Mono', monospace; letter-spacing: -0.02em; color: #FFC940; font-variant-numeric: tabular-nums; }
+  .nt-lbc.first .m { font-size: calc(48 * var(--u)); }
+  .nt-lbr { display: grid; grid-template-rows: repeat(4, auto); grid-auto-flow: column; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: calc(48 * var(--u)); }
+  .nt-lbr .nt-row .w { margin-left: auto; flex-shrink: 0; }
+  .nt-lbr .nt-row .nt-amt { margin-left: calc(24 * var(--u)); font-weight: 700; min-width: calc(120 * var(--u)); text-align: right; }
+  .nt-lbr .nt-row .nt-nm { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .anim .nt-lbc { animation: ntIn .6s ease-out both; }
   @media (prefers-reduced-motion: reduce) { .nt-rays, .anim .nt-in, .anim .nt-pop { animation: none; } .nt-conf { display: none; } }
   /* Poolco knockout bracket (Figma "TV · Knockout bracket"). */
   .nt-br { position: relative; margin-top: calc(14 * var(--u)); flex-shrink: 0; }
@@ -1305,7 +1324,7 @@
   // The reveal count last shown, so a card flips once, when it's turned,
   // not again on every update from the phone (owner 2026-11-18).
   let ntLastReveal = -1;
-  let ntWinKey = '', ntWinName = null;   // the winner screen animates once per winner
+  let ntWinKey = '', ntWinName = null, ntBoardKey = '';   // the winner screen animates once per winner
   function renderNothing(c) {
     stage.className = 'tv-stage nt';
     const fmt = (n) => Math.round(n || 0).toLocaleString();
@@ -1316,6 +1335,31 @@
     const top = `<header class="nt-top"><span><b>POOLCO</b>${c.venue ? up(c.venue) : ''}</span><span>${up(c.title)}<i class="nt-dot"></i><em>LIVE</em></span></header>`;
     // Long words shrink so the hero never runs off the screen.
     const heroSize = (text, max, width) => { const longest = Math.max(4, ...String(text).split(/\s+/).map(w => w.length)); return Math.max(40, Math.min(max, Math.floor(width / (longest * 0.62)))); };
+    // The leaderboard, when the phone puts it on the TV.
+    if (c.leaderboard) {
+      const L = c.leaderboard, rows = Array.isArray(L.rows) ? L.rows : [];
+      const key = JSON.stringify([c.venue, L.when, rows.map(x => [x.name, x.money, x.wins, x.games, x.photo ? x.photo.length : 0]), L.total, L.locked]);
+      if (key === ntBoardKey && stage.querySelector('.nt-lb')) return;
+      const anim = !ntBoardKey.startsWith(JSON.stringify([c.venue, L.when]).slice(0, -1)); ntBoardKey = key;
+      const face = (n, photo) => photo && /^data:image\//.test(photo) ? `<img src="${escapeHtml(photo)}" alt="">` : escapeHtml((n || '?').trim().charAt(0).toUpperCase());
+      const facts = (x) => `${x.wins} ${x.wins === 1 ? 'win' : 'wins'} · ${x.games} ${x.games === 1 ? 'game' : 'games'}`;
+      const card = (x, i) => `<div class="nt-lbc${x.rank === 1 ? ' first' : ''}" style="animation-delay:${i * 120}ms"><span class="rk">${x.rank}</span><span class="nt-av">${face(x.name, x.photo)}</span><span class="t"><span class="n">${escapeHtml(x.name)}</span><span class="m" data-count="${Math.round(x.money || 0)}" style="font-size:calc(${Math.min(x.rank === 1 ? 48 : 40, Math.floor((x.rank === 1 ? 250 : 170) / (Math.max(4, fmt(x.money).length) * 0.62)))} * var(--u))">${fmt(anim ? 0 : x.money)}</span><span class="nt-lbl">${facts(x)}</span></span></div>`;
+      const rest = rows.slice(3, 11).map(x => `<div class="nt-row"><span class="nt-idx">${String(x.rank).padStart(2, '0')}</span><span class="nt-nm">${escapeHtml(x.name)}</span><span class="nt-lbl w">${facts(x)}</span><span class="nt-amt">${fmt(x.money)}</span></div>`).join('');
+      const more = L.locked ? `<span class="nt-lbl dis">+ ${Math.max(0, (L.total || 0) - rows.length)} more players · Poolco Pro</span>` : (L.total > rows.length ? `<span class="nt-lbl dis">+ ${L.total - rows.length} more</span>` : '');
+      stage.innerHTML = top + `<div class="nt-lb${anim ? ' anim' : ''}">
+          <div class="nt-head" style="padding-top:0"><div><span class="nt-lbl red">${escapeHtml(L.when || '')} · ${L.total || 0} players</span><h1 class="nt-hero" style="font-size:calc(72 * var(--u))">Leaderboard</h1></div></div>
+          ${rows.length ? `<div class="nt-lb3">${rows.slice(0, 3).map(card).join('')}</div>${rest ? `<div class="nt-lbr">${rest}</div>` : ''}${more}` : `<span class="nt-lbl">No results yet. Finish a competition and the winners show up here.</span>`}
+        </div>`;
+      const still = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+      stage.querySelectorAll('[data-count]').forEach((el, i) => {
+        const end = Number(el.dataset.count) || 0;
+        if (!anim || still) { el.textContent = fmt(end); return; }
+        const t0 = performance.now() + 500 + i * 200;
+        const step = (t) => { if (!el.isConnected) return; const k = Math.min(1, Math.max(0, (t - t0) / 1200)); el.textContent = fmt(Math.round(end * (1 - Math.pow(1 - k, 3)))); if (k < 1) requestAnimationFrame(step); };
+        requestAnimationFrame(step);
+      });
+      return;
+    }
     if (c.idle) {
       stage.innerHTML = top + `<div class="nt-body"><span class="nt-lbl red">Tonight</span><h1 class="nt-hero" style="padding-top:calc(20 * var(--u))">Waiting for<br>the organiser</h1><div class="nt-foot">${bar(8, 0)}<span class="nt-lbl">Start a competition on the phone</span></div></div>`;
       return;
