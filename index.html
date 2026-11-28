@@ -646,7 +646,8 @@
   .nt-card.on { background: #fff; }
   .nt-card.off { border: 1px dashed #4D4D4D; background: #111; }
   .nt-card.new { animation: ntIn .55s ease-out; }
-  .nt-card .nm { font: 700 calc(44 * var(--u))/1 'Doto', monospace; text-transform: uppercase; color: #000; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  /* Names are never in Doto on the TV (owner 2026-11-28: the draw cards). */
+  .nt-card .nm { font: 700 calc(40 * var(--u))/1.05 'Space Grotesk', sans-serif; text-transform: uppercase; color: #000; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .nt-av { flex-shrink: 0; width: calc(80 * var(--u)); height: calc(80 * var(--u)); border-radius: 50%; background: #FFC940; color: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; font: 400 calc(30 * var(--u))/1 'Space Mono', monospace; }
   .nt-av img { width: 100%; height: 100%; object-fit: cover; display: block; }
   /* Player photos (Poolco, owner 2026-11-22): big on Now playing and Match won, beside the champion. */
@@ -762,9 +763,9 @@
   .nt-ch { box-sizing: border-box; border: 1px dashed #4D4D4D; border-radius: calc(7 * var(--u)); display: flex; align-items: center; justify-content: center; }
   .nt-ch > span:not(.nt-lbl) { font: 700 calc(40 * var(--u))/1 'Doto', monospace; color: #4D4D4D; }
   .nt-ch.on { border: calc(1.5 * var(--u)) solid #FFC940; background: #111; }
-  .nt-ch.on > span { color: #FFC940; text-transform: uppercase; white-space: nowrap; }
+  .nt-ch.on > span { font-family: 'Space Grotesk', sans-serif; color: #FFC940; text-transform: uppercase; white-space: nowrap; }
   .nt-chn { display: flex; flex-direction: column; align-items: center; gap: calc(8 * var(--u)); }
-  .nt-chn b { font: 700 calc(52 * var(--u))/1 'Doto', monospace; color: #FFC940; text-transform: uppercase; white-space: nowrap; }
+  .nt-chn b { font: 700 calc(52 * var(--u))/1 'Space Grotesk', sans-serif; color: #FFC940; text-transform: uppercase; white-space: nowrap; }
   .nt-pz { display: flex; justify-content: space-between; align-items: baseline; }
   .nt-pz span { font: 400 calc(11 * var(--u))/1 'Space Mono', monospace; letter-spacing: .06em; text-transform: uppercase; color: #8C8C8C; }
   .nt-pz b { font: 400 calc(15 * var(--u))/1 'Space Mono', monospace; color: #FFC940; }
@@ -1614,9 +1615,9 @@
     const row = (m) => {
       const started = m.sa > 0 || m.sb > 0;
       const cls = m.w ? ' done' : m.t ? ' t' : started ? '' : ' up';
-      const st = m.w ? '<span class="gold">Finished</span>' : m.t ? `<span class="red">${m.tn ? `Table ${m.tn}` : 'At the table'}</span>` : started ? '<span>Playing</span>' : '<span>Upcoming</span>';
+      const st = m.w && m.wo ? '<span class="gold">Walkover</span>' : m.w ? '<span class="gold">Finished</span>' : m.t ? `<span class="red">${m.tn ? `Table ${m.tn}` : 'At the table'}</span>` : started ? '<span>Playing</span>' : '<span>Upcoming</span>';
       const sa = `<span class="sc${m.w === 'b' ? ' lose' : ''}">${m.sa}</span>`, sb = `<span class="sc${m.w === 'a' ? ' lose' : ''}">${m.sb}</span>`;
-      const mid = started || m.w ? `<span class="mid">${sa}<span class="st"><i></i>${st}</span>${sb}</span>` : `<span class="mid"><span class="st"><i></i>${st}</span></span>`;
+      const mid = m.wo ? `<span class="mid"><span class="st"><i></i>${st}</span></span>` : started || m.w ? `<span class="mid">${sa}<span class="st"><i></i>${st}</span>${sb}</span>` : `<span class="mid"><span class="st"><i></i>${st}</span></span>`;
       return `<div class="nt-m${cls}" style="height:calc(${h} * var(--u))"><span class="n${m.w === 'b' ? ' lose' : ''}">${escapeHtml(m.a)}</span>${mid}<span class="n r${m.w === 'a' ? ' lose' : ''}">${escapeHtml(m.b)}</span></div>`;
     };
     const byes = r.byes && r.byes.length ? `<div class="nt-byes"><span class="nt-lbl red">${r.byes.length === 1 ? 'Bye' : 'Byes'}</span>${r.byes.map(n => `<span class="nt-nm">${escapeHtml(n)}</span>`).join('')}</div>` : '';
@@ -1848,6 +1849,11 @@
 
     const options = new cast.framework.CastReceiverOptions();
     options.disableIdleTimeout = true; // keep the receiver alive between rounds
+    // Owner 2026-11-28 ("the Chromecast was disconnecting", in every app):
+    // wait a minute before deciding a phone has gone, so a bar's Wi-Fi
+    // blip or a phone briefly in the background doesn't drop it. The
+    // apps also rejoin by themselves now.
+    options.maxInactivity = 60;
     context.start(options);
   } else {
     window.__tv = { renderIdle, renderGame, renderWinner, renderRoundEnded, renderBig, renderCompetition, renderChampion, killerChampion, competitionChampion };
