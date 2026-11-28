@@ -23,9 +23,40 @@
     if (/iPhone|iPad|iPod|Android|Macintosh|Windows|CrOS|X11|bot|crawl|spider|slurp/i.test(ua)) location.replace('/home');
   })();
 </script>
+<script>
+  // Poolco (owner 2026-11-28: "it says Killer Pool for a split second" and
+  // "the fonts are jumping"). Mark the page as Poolco before anything is
+  // drawn, so Killer's waiting screen never shows, and keep the screen
+  // black until Poolco's fonts are ready (2.5 s at most).
+  (function () {
+    if (!/[?&]app=poolco\b/.test(location.search)) return;
+    var html = document.documentElement;
+    html.classList.add('poolco');
+    document.title = 'Poolco';
+    setTimeout(function () { html.classList.add('fonts-ready'); }, 2500);
+  })();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Chakra+Petch:wght@500;600;700&family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&family=Doto:wght@700&family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script>
+  // After the font stylesheet (a script here waits for it): load Poolco's
+  // fonts, then show the screen (the 2.5 s limit above still applies).
+  (function () {
+    var html = document.documentElement;
+    if (!html.classList.contains('poolco')) return;
+    function ready() { html.classList.add('fonts-ready'); }
+    if (!document.fonts || !document.fonts.load) return ready();
+    Promise.all(['700 40px Doto', '700 40px "Space Grotesk"', '400 40px "Space Grotesk"', '400 20px "Space Mono"', '700 20px "Space Mono"']
+      .map(function (f) { return document.fonts.load(f); })).then(ready, ready);
+  })();
+</script>
 <style>
+  /* Poolco: never Killer's waiting screen, nothing until the fonts are in. */
+  html.poolco, html.poolco body { background: #000; }
+  html.poolco .tv-idle { display: none !important; }
+  html.poolco .tv-stage { background-color: #000; }
+  html.poolco:not(.fonts-ready) .tv-stage { visibility: hidden; }
   :root {
     /* 1 design px. Stage is designed at 1280x720 and scales to fit any
        screen while keeping 16:9 - letterboxes (never stretches/crops) on
